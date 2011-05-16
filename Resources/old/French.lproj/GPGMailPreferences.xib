@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="158"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -43,7 +44,7 @@
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="619190699">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -979,7 +980,7 @@
 																			<object class="NSTableView" id="559412043">
 																				<reference key="NSNextResponder" ref="257647846"/>
 																				<int key="NSvFlags">256</int>
-																				<string key="NSFrameSize">{458, 1}</string>
+																				<string key="NSFrameSize">{458, 19}</string>
 																				<reference key="NSSuperview" ref="257647846"/>
 																				<bool key="NSEnabled">YES</bool>
 																				<object class="NSTableHeaderView" key="NSHeaderView" id="727036868">
@@ -1261,6 +1262,7 @@
 																<reference key="NSHScroller" ref="820971284"/>
 																<reference key="NSContentView" ref="257647846"/>
 																<reference key="NSHeaderClipView" ref="587700975"/>
+																<reference key="NSCornerView" ref="190797269"/>
 																<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 															</object>
 															<object class="NSPopUpButton" id="921937106">
@@ -1569,7 +1571,7 @@
 																<object class="NSButtonCell" key="NSCell" id="748149561">
 																	<int key="NSCellFlags">-2080244224</int>
 																	<int key="NSCellFlags2">0</int>
-																	<string key="NSContents">Rechercher automatiquement les Mises à jours</string>
+																	<string key="NSContents">rechercher automatiquement les mises à jours</string>
 																	<reference key="NSSupport" ref="706304668"/>
 																	<reference key="NSControlView" ref="25931962"/>
 																	<int key="NSButtonFlags">1211912703</int>
@@ -1709,7 +1711,7 @@
 																<object class="NSButtonCell" key="NSCell" id="1043789552">
 																	<int key="NSCellFlags">-2080244224</int>
 																	<int key="NSCellFlags2">0</int>
-																	<string key="NSContents">Inclure un profil système anonyme</string>
+																	<string key="NSContents">Inclure un profil sytème anonyme</string>
 																	<reference key="NSSupport" ref="706304668"/>
 																	<reference key="NSControlView" ref="812740794"/>
 																	<int key="NSButtonFlags">1211912703</int>
@@ -2038,6 +2040,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{558, 401}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{213, 129}</string>
