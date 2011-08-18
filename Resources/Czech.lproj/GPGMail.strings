@@ -1,0 +1,239 @@
+{
+/* Passphrase panel titles */
+"MESSAGE_AUTHENTICATION_TITLE" = "Ověření zprávy";
+"MESSAGE_DECRYPTION_PASSPHRASE_TITLE" = "Rozšifrování zprávy";
+
+/**/
+"DECRYPTING" = "Rozšifrovávám…";
+"ENCRYPTING" = "Šifruji...";
+
+/* <PGP> submenu title */
+"PGP_MENU" = "OpenPGP";
+/* <PGP Keys> submenu title */
+"PGP_KEYS_MENU" = "Klíče OpenPGP";
+
+/* <PGP> submenu items */
+"DECRYPT_MENU" = "Rozšifrování";
+"AUTHENTICATE_MENU" = "Ověření";
+"ENCRYPT_MENU" = "Zašifrovat novou zprávu";
+"SIGN_MENU" = "Podepsat novou zprávu";
+
+/* Description of version prefixed with <Version:> */
+"VERSION: %@" = "Verse: %@";
+
+/* PGP preferences panel name */
+"PGP_PREFERENCES" = "GPGMail";
+
+/* Alert title and message */
+"MSG_DECRYPTION_ALERT_TITLE_NOT_SIGNED" = "Rozšifrování zprávy";
+"DECRYPTED_MSG_NOT_SIGNED" = "Zpráva byla šifrována ale nepodepsána. Její pravost není možné potvrdit.";
+"MSG_ENCRYPTION_ALERT_TITLE" = "Šifrovaní OpenPGP selhalo";
+"MSG_DECRYPTION_ALERT_TITLE" = "Dešifrování OpenPGP selhalo";
+"MSG_SIGNING_ALERT_TITLE" = "Podepsání OpenPGP selhalo";
+"UNSUPPORTED_ENCRYPTION_FORMAT" = "GPGMail nemůže rozšifrovat tento typ šifrované zprávy.";
+"DATA_NOT_AVAILABLE" = "Obsah zprávy je dočasně nedostupný.";
+
+/* Informational alert title and message */
+"AUTHENTICATION_TITLE_OK" = "Ověření OpenPGP";
+
+/**/
+"AUTHENTICATION_TITLE_FAILED" = "Ověření OpenPGP selhalo";
+"TRY_AGAIN" = "Zkusit znovu";
+"CANCEL_DELIVERY" = "Zrušit";
+"CANCEL_DECRYPTION" = "Zrušit";
+
+/**/
+"AUTHENTICATION_TITLE_UNSIGNED" = "Ověření OpenPGP";
+"UNSIGNED_PGP_MESSAGE" = "Tato zpráva není podepsána OpenPGP.";
+
+/* Toolbar item titles */
+"DECRYPT_ITEM" = "Rozšifrovat";
+"AUTHENTICATE_ITEM" = "Ověřit";
+"MAKE_ENCRYPTED_ITEM" = "Zašifruj";
+"MAKE_CLEAR_ITEM" = "Vyčisti";
+"MAKE_UNSIGNED_ITEM" = "Nepodepisuj";
+"MAKE_SIGNED_ITEM" = "Podepiš";
+"ENCRYPTED_ITEM" = "Zašifrovaný";
+"CLEAR_ITEM" = "Otevřený";
+"SIGNED_ITEM" = "Podepsaný";
+"UNSIGNED_ITEM" = "Nepodepsaný";
+
+/* Toolbar item tooltips  */
+"DECRYPT_ITEM_TOOLTIP" = "Rozšifrovat zprávu zašifrovanou OpenPGP";
+"AUTHENTICATE_ITEM_TOOLTIP" = "Ověřit zprávu podepsanou OpenPGP";
+"MAKE_CLEAR_ITEM_TOOLTIP" = "Klikněte, chcete-li odeslat zprávu jako otevřený text";
+"MAKE_ENCRYPTED_ITEM_TOOLTIP" = "Klikněte, chcete-li použít šifrování OpenPGP";
+"MAKE_UNSIGNED_ITEM_TOOLTIP" = "Klikněte, chcete-li poslat zprávu bez ověření OpenPGP";
+"MAKE_SIGNED_ITEM_TOOLTIP" = "Klikněte, chcete-li použít ověření OpenPGP";
+"ENCRYPTED_ITEM_TOOLTIP" = "Zpráva bude zašifrována; klikněte, chcete-li ji raději odeslat jako otevřený text";
+"CLEAR_ITEM_TOOLTIP" = "Zpráva bude odeslána jako otevřený text; klikněte, chcete-li raději použít šifrování OpenPGP";
+"SIGNED_ITEM_TOOLTIP" = "Zpráva bude podepsána OpenPGP; klikněte, chcete-li raději poslat zprávu bez ověření OpenPGP";
+"UNSIGNED_ITEM_TOOLTIP" = "Zpráva nebude mít podpis OpenPGP; klikněte, chcete-li raději použít ověření OpenPGP";
+
+/* Signature information */
+"Bad policy!"  = "Špatný postup! "; // Followed by a list of policy URLs
+"Policy: " = "Postup: "; // Followed by a list of policy URLs
+"Signed on %@" = "Podepsáno dne %@"; // Param is a date, whose format is set by SIGNATURE_CREATION_DATE_FORMAT
+"SIGNATURE_CREATION_DATE_FORMAT" = "%c"; // See NSCalendarDate documentation for format
+"No signature creation date available" = "Datum podpisu není dostupné";
+"Key fingerprint: %@" = "Otisk klíče: %@";
+"Key ID: 0x%@" = "ID klíče: 0x%@";
+"No key fingerprint/ID available" = "Otisk ani ID klíče nejsou dostupné";
+"Validity: %@" = "Platnost: %@"; // Param is the validity status string
+"Signature expires on %@" = "Platnost podpisu skončí dne %@"; // Param is a date, whose format is set by SIGNATURE_EXPIRATION_DATE_FORMAT
+"SIGNATURE_EXPIRATION_DATE_FORMAT" = "%x"; // See NSCalendarDate documentation for format
+"Key expired on %@" = "Platnost klíče skončila dne %@"; // Param is a date, whose format is set by KEY_EXPIRATION_DATE_FORMAT
+"KEY_EXPIRATION_DATE_FORMAT" = "%x"; // See NSCalendarDate documentation for format
+"Signed by %@." = "Podepsal %@."; // Param is a userID
+"Signature from %@ is bad!" = "Špatný podpis %@!"; // Param is a userID
+"Signature is bad!" = "Špatný podpis!";
+"Signature status error." = "Podpis má chybný stav.";
+"MISSING KEY %@." = "Chybí klíč %@."; // Param is a key ID in hexadecimal
+"Signature summary 0x%04x - Signature status %u." = "Neznámá chyba: shrnutí podpisu 0x%04x - stav podpisu %u."; // Generic error message; first param is a hex status flag value, second is a decimal status value
+"EXCEPTION: %@" = "Vnitřní chyba: %@"; // Generic error message; param is a string (exception reason, maybe not localized)
+"AUTHENTICATING" = "Ověřování podpisu OpenPGP...";
+"UNTRUSTED RECIPIENTS" = "Nejméně jeden z klíčů není důveryhodný";
+
+/* Title */
+/* Error messages */
+"GPGMAIL_CANNOT_WORK" = "GPGMail nemůže pracovat, neboť přidružená aplikace nemohla být spuštěna. Zkuste vypnout a zapnout Mail a pokud problém přetrvává, napište (anglicky) na gpgtools-devel@lists.gpgtools.org";
+"GPGMAIL_CANNOT_WORK_HAS_GPG_%@_VERSION_%@_NEEDS_%@" = "GPGMail nemůže pracovat. Byla nalezena verze %@ GnuPG (%@), ale je třeba nejméně verze %@. Ukončete, prosím, Mail, nainstalujte odpovídající verzi GnuPG (například z webu projektu GPGTools, http://gpgtools.org/), pak znovu spusťte Mail."; // First arg is path to gpg, second and third are version strings
+"GPGMAIL_CANNOT_WORK_MISSING_GPG_%@_VERSION_%@" = "GPGMail nemůže pracovat. Nebyl nalezen GnuPG (%@), nejméně ve verzi %@. Ukončete, prosím, Mail, nainstalujte GnuPG odpovídající verze (například z webu projektu GPGTools, http://gpgtools.org/), pak znovu spusťte Mail."; // First arg is path to gpg, second is version string
+"INVALID_GPGMAIL_VERSION" = "Vaše verze GPGMail není kompatibilní s Vaší verzí aplikace Mail."; /* Title of alert sheet */
+"NEEDS_COMPATIBLE_BUNDLE_VERSION" = "Je třeba stáhnout a nainstalovat takovou verzi GPGMail, která odpovídá verzi Vašeho OS. Navštivte web http://www.gpgtools.org/ .";
+
+/* Validity */
+"VALIDITY: " = "Přesvědčivost: ";
+"Validity=0" = "neznámá";
+"Validity=1" = "neurčitá";
+"Validity=2" = "žádná";
+"Validity=3" = "částečná";
+"Validity=4" = "uplná";
+"Validity=5" = "naprostá";
+
+/* Generic MacGPGME error messages */
+"GPGErrorCode=1" = "Obecná chyba";
+"GPGErrorCode=8" = "Špatný podpis";
+"GPGErrorCode=9" = "Chybí veřejný klíč";
+"GPGErrorCode=10" = "Chyba kontrolního součtu";
+"GPGErrorCode=11" = "Špatné heslo";
+"GPGErrorCode=15" = "Neplatné kódování ASCII";
+"GPGErrorCode=17" = "Chybí tajný klíč";
+"GPGErrorCode=31" = "Špatné heslo";
+"GPGErrorCode=40" = "Chyba serveru klíčů";
+"GPGErrorCode=53" = "Nepoužitelný veřejný klíč";
+"GPGErrorCode=54" = "Nepoužitelný tajný klíč";
+"GPGErrorCode=55" = "Neplatná hodnota";
+"GPGErrorCode=58" = "Data chybí";
+"GPGErrorCode=69" = "Není implementováno";
+"GPGErrorCode=84" = "Nepodporovaný algoritmus";
+"GPGErrorCode=94" = "Odvolaný klíč";
+"GPGErrorCode=99" = "Zrušeno";
+"GPGErrorCode=107" = "Nejednoznačné jméno";
+"GPGErrorCode=116" = "Žádný postup neodpovídá";
+"GPGErrorCode=125" = "Špatné použití klíče";
+"GPGErrorCode=150" = "Neplatný stroj";
+"GPGErrorCode=151" = "Veřejný klíč není důveryhodný";
+"GPGErrorCode=152" = "Rozšifrovávání selhalo";
+"GPGErrorCode=153" = "Platnost klíče vypršela";
+"GPGErrorCode=154" = "Platnost podpisu vypršela";
+"GPGErrorCode=16383" = "EOF";
+
+/* Signature attachment filename (suffixed automatically by .sig) */
+"PGP_SIGNATURE_FILENAME" = "PGP";
+
+/* Signature attachment content-description */
+"This is a digitally signed message part" = "This is a digitally signed message part";
+
+/* Version MIME part content description header */
+"CONTENT_DESCRIPTION_HEADER" = "PGP/MIME version identification";
+
+/* Encrypted attachment filename (suffixed automatically by .asc) */
+"PGP_ENCRYPTED_FILENAME" = "PGP";
+
+/* Encrypted attachment content-description */
+"This is an encrypted message part" = "OpenPGP encrypted message";
+
+/* Multiple-part description */
+"MULTIPART_ENCRYPTED_DESCRIPTION" = "This is an OpenPGP/MIME encrypted message (RFC 2440 and 3156)";
+"MULTIPART_SIGNED_DESCRIPTION" = "This is an OpenPGP/MIME signed message (RFC 2440 and 3156)";
+
+/* Tooltip for banner icons */
+"SIGNATURE_IS_GOOD" = "Podpis OK; zpráva nebyla pozměněna";
+"SIGNATURE_IS_NOT_GOOD" = "Podpis neodpovídá; zpráva byla pozměněna";
+
+/* PGP Key Download panel */
+"PGP_SEARCH_KEYS_MENUITEM" = "Vyhledávání klíče OpenPGP";
+"SEARCH" = "Vyhledat";
+"CANCEL_SEARCH" = "Zrušit";
+"SEARCHING" = "Vyhledávání...";
+"NO_MATCHING_KEYS" = "Žádný klíč neodpovídá";
+"FOUND_%d_KEYS" = "Nalezeno klíčů: %d";
+"DOWNLOAD" = "Stáhnout";
+"DOWNLOADING" = "Stahování...";
+"DOWNLOADED" = "Klíč(e) stažen(y) a načten(y)";
+"SEARCH_KEYS_ON_SERVER" = "Vyhledávat klíče OpenPGP na serveru klíčů";
+"DOWNLOAD_KEYS_FROM_SERVER" = "Stahovat klíče OpenPGP ze serveru klíčů";
+"SEARCH_ERROR" = "Při vyhledávání nastala chyba";
+"DOWNLOAD_ERROR" = "Při stahování nastala chyba";
+" (%u bits)" = " (%u bitů)";
+", created on %@" = ", vytvořen dne %@";
+", expires on %@" = ", platnost skončí dne %@";
+", expired on %@" = ", platnost skončila dne %@";
+"REVOKED_KEY - " = "Odvolané - "; // Prefixes found key description, when necessary; followed by keyID, userID, etc.
+
+/* Unmatched PGP keys for receipts - sheet */
+"MISSING_KEYS: DOWNLOAD" = "Některým adresám neodpovídá žádný klíč OpenPGP. Vyhledat klíče?"; // Title
+"UNMATCHED_ADDRESSES: %@" = "Pro následující adresu není odpovídající klíč OpenPGP:\n%@"; // Message
+"SEARCH_MATCHING_KEYS" = "Vyhledat"; // Default button
+"SEND_IN_CLEAR" = "Poslat jako otevřený text"; // Other button
+
+"INVALID_HASH_%@" = "Hashovací algoritmus '%@' není povolen dle RFC3156.";
+"GPGMAIL_VS_PGPMAIL" = "GPGMail nemůže pracovat, je-li nainstalován PGPmail.";
+"GPGMAIL_%@_VS_PGPMAIL_%@" = "Oba balíčky poskytují tytéž funkce, ale používají různé nástroje a jen jeden z nich může být nainstalován. Je třeba odebrat buď '%@' nebo '%@'.";
+"QUIT" = "Skončit";
+"CONTINUE_ANYWAY" = "Zkus pokračovat";
+
+/* Composer accessory view header, under To:, CC:, Subject: */
+"PGP:" = "OpenPGP:";
+
+/* Key description in popups; prefixes key (actually, primary userID), when necessary; followed by keyID, userID, etc.*/
+"REVOKED_KEY:" = "Odvolán:";
+"EXPIRED_KEY:" = "Platnost skončila:";
+"DISABLED_KEY:" = "Neaktivní:";
+"INVALID_KEY:" = "Neplatný:";
+
+/* UserID description in popups; prefixes userID, when necessary; followed by name, email, etc.*/
+"REVOKED_USER_ID:" = "Odvolán:";
+"INVALID_USER_ID:" = "Neplatný:";
+
+/* GPGMail exception reasons */
+"NO_VALID_PUBLIC_KEY" = "Nebyly nalezeny žádné veřejné klíče. Všechny jsou buď neaktivní, odvolané nebo jim skončila platnost."; // Could be displayed after encryption
+"NO_VALID_PRIVATE_KEY" = "Nebyl nalezen žádný platný osobní klíč. Buď nebyl žádný vybrán, nebo byl vybraný klíč odvolán, neaktivní nebo mu skončila platnost."; // Could be displayed after encryption
+
+/* Alert when user has no PGP key */
+"NO PGP PRIVATE KEY - TITLE" = "Nemáte žádný klíč OpenPGP. Nemůžete použít GPGMail k šifrování ani podepisování zpráv.";
+"NO PGP PRIVATE KEY - MESSAGE" = "Chcete-li použít OpenPGP k šifrování nebo podepisování zpráv, potřebujete svůj osobní klíč OpenPGP. Chcete-li si vytvořit klíč OpenPGP, stáhněte a nainstalujte si aplikaci GPG Keychain Access, dostupnou na http://gpgtools.org/ .";
+
+/* Conflict resolution panel*/
+"<ME>" = "Já";
+"<YES>" = "Ano";
+"<NO>" = "Ne";
+"<ALWAYS>" = "Vždy";
+"<NEVER>" = "Nikdy";
+"<ACCEPTS>" = "Přijmout";
+
+/* Additional info describing key */
+"DISABLED_KEY_QUALIFIER" = "neaktivní";
+"INVALID_KEY_QUALIFIER" = "neplatný";
+"REVOKED_KEY_QUALIFIER" = "odvolaný";
+"EXPIRED_KEY_QUALIFIER" = "propadlý";
+"CANNOT_ENCRYPT_KEY_QUALIFIER" = "nemůže šifrovat";
+"CANNOT_SIGN_KEY_QUALIFIER" = "nemůže podepisovat";
+
+/* Additional info describing userID */
+"INVALID_USER_ID_QUALIFIER" = "neplatný";
+"REVOKED_USER_ID_QUALIFIER" = "odvolaný";
+
+"COPY_MSG_URL_MENUITEM" = "Kopírovat URL zprávy";
+}
