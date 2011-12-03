@@ -117,7 +117,7 @@
 "GPGErrorCode=9" = "Nessuna chiave pubblica";
 "GPGErrorCode=10" = "Errore di checksum";
 "GPGErrorCode=11" = "Frase chiave sbagliata";
-"GPGErrorCode=15" = "Invalid armor";
+"GPGErrorCode=15" = "Armatura ASCII invalida";
 "GPGErrorCode=17" = "Nessuna chiave segreta";
 "GPGErrorCode=31" = "Frase chiave invalida";
 "GPGErrorCode=40" = "Errore del server delle chiavi";
@@ -146,7 +146,7 @@
 "This is a digitally signed message part" = "Questa è un messaggio firmato elettronicamente";
 
 /* Version MIME part content description header */
-"CONTENT_DESCRIPTION_HEADER" = "PGP/MIME version identification";
+"CONTENT_DESCRIPTION_HEADER" = "Identificazione versione PGP/MIME";
 
 /* Encrypted attachment filename (suffixed automatically by .asc) */
 "PGP_ENCRYPTED_FILENAME" = "PGP";
@@ -155,8 +155,8 @@
 "This is an encrypted message part" = "Questo è un messaggio cifrato";
 
 /* Multiple-part description */
-"MULTIPART_ENCRYPTED_DESCRIPTION" = "This is an OpenPGP/MIME encrypted message (RFC 2440 and 3156)";
-"MULTIPART_SIGNED_DESCRIPTION" = "This is an OpenPGP/MIME signed message (RFC 2440 and 3156)";
+"MULTIPART_ENCRYPTED_DESCRIPTION" = "Questo è un messaggio cifrato con OpenPGP/MIME (RFC 2440 e 3156)";
+"MULTIPART_SIGNED_DESCRIPTION" = "Questo è un messaggio firmato con OpenPGP/MIME (RFC 2440 e 3156)";
 
 /* Tooltip for banner icons */
 "SIGNATURE_IS_GOOD" = "La firma è stata verificata; il messaggio non è stato modificato";
@@ -179,7 +179,7 @@
 " (%u bits)" = " (%u bits)";
 ", created on %@" = ", creata il %@";
 ", expires on %@" = ", scade il %@";
-", expired on %@" = ", expired on %@";
+", expired on %@" = ", scaduta il %@";
 "REVOKED_KEY - " = "Revocata - "; // Prefixes found key description, when necessary; followed by keyID, userID, etc.
 
 /* Unmatched PGP keys for receipts - sheet */
@@ -216,24 +216,24 @@
 "NO PGP PRIVATE KEY - MESSAGE" = "Se vuoi cifrare o firmare i messaggi con PGP hai bisogno di una chiave PGP personale. Per creare una chiave PGP personale scarica e utilizza il programma GPG Keychain Access di MacGPG2 che puoi trovare a  http://gpgtools.org/";
 
 /* Conflict resolution panel*/
-"<ME>" = "Me";
-"<YES>" = "Yes";
+"<ME>" = "Io";
+"<YES>" = "Si";
 "<NO>" = "No";
-"<ALWAYS>" = "Always";
-"<NEVER>" = "Never";
-"<ACCEPTS>" = "Accepts";
+"<ALWAYS>" = "Sempre";
+"<NEVER>" = "Mai";
+"<ACCEPTS>" = "Accetta";
 
 /* Additional info describing key */
 "DISABLED_KEY_QUALIFIER" = "disabilitata";
 "INVALID_KEY_QUALIFIER" = "invalida";
 "REVOKED_KEY_QUALIFIER" = "revocata";
 "EXPIRED_KEY_QUALIFIER" = "scaduta";
-"CANNOT_ENCRYPT_KEY_QUALIFIER" = "cannot encrypt";
-"CANNOT_SIGN_KEY_QUALIFIER" = "cannot sign";
+"CANNOT_ENCRYPT_KEY_QUALIFIER" = "non può essere cifrato";
+"CANNOT_SIGN_KEY_QUALIFIER" = "non può essere firmato";
 
 /* Additional info describing userID */
 "INVALID_USER_ID_QUALIFIER" = "invalida";
 "REVOKED_USER_ID_QUALIFIER" = "revocata";
 
-"COPY_MSG_URL_MENUITEM" = "Copy Message URL";
+"COPY_MSG_URL_MENUITEM" = "Copia l'URL del messaggio";
 }
