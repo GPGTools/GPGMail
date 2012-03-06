@@ -48,6 +48,7 @@
 #import <Message.h>
 #import <MessageWriter.h>
 #import <MimeBody.h>
+#import "MimePartResult.h"
 #import <MutableMessageHeaders.h>
 #import "GPGMailBundle.h"
 
@@ -165,8 +166,9 @@
         return [self MADecodeWithContext:ctx];
     
     id ret = nil;
+    MimePartResult *result = [[[MimePartResult alloc] init] autorelease];
     if([self isPGPMimeEncrypted]) {
-        MimeBody *decryptedBody = [self decodeMultipartEncryptedWithContext:ctx];
+        MimeBody *decryptedBody = [self decodeMultipartEncryptedWithContext:ctx toResult:result];
         // Add PGP information from mime parts.
         ((MFMimeDecodeContext *)ctx).shouldSkipUpdatingMessageFlags = YES;
         ret = [decryptedBody parsedMessageWithContext:ctx];
@@ -209,6 +211,23 @@
 //    }
 //    else
 //        NSLog(@"[NON Parsed Message]: %@ - %@ - %@", [[[self mimeBody] message] subject], [ret class], ret);
+    if (result.decryptedBody) self.PGPDecryptedBody = result.decryptedBody;
+    if (result.decryptedContent) self.PGPDecryptedContent = result.decryptedContent;
+    if (result.decryptedData) self.PGPDecryptedData = result.decryptedData;
+    self.PGPError = result.pgpError;
+    self.PGPSignatures = result.pgpSignatures;
+    if (result.isPGPSigned) self.PGPSigned = [result.isPGPSigned boolValue];
+    if (result.isPGPEncrypted) self.PGPEncrypted = [result.isPGPEncrypted boolValue];
+    if (result.isPGPDecrypted) self.PGPDecrypted = [result.isPGPDecrypted boolValue];
+    if (result.isPGPVerified) self.PGPVerified = [result.isPGPVerified boolValue];
+    if (result.isPGPPartlySigned) self.PGPPartlySigned = [result.isPGPPartlySigned boolValue];
+    if (result.isPGPEncrypted) self.PGPEncrypted = [result.isPGPEncrypted boolValue];
+    if (result.decryptedMessageBody) {
+        // Top Level part reparses the message. This method doesn't.
+        MimePart *topPart = [self topPart];
+        // Set the decrypted message here, otherwise we run into a memory problem.
+        [topPart setDecryptedMessageBody:result.decryptedMessageBody isEncrypted:self.PGPEncrypted isSigned:self.PGPSigned error:self.PGPError];
+    }
     return ret;
 }
 
@@ -420,10 +439,10 @@
     return PGPExtensionFound;
 }
 
-- (id)decodeMultipartEncryptedWithContext:(id)ctx {
+- (id)decodeMultipartEncryptedWithContext:(id)ctx toResult:(MimePartResult *)result {
     // 1. Step, check if the message was already decrypted.
     if(self.PGPDecryptedBody || self.PGPError)
-        return self.PGPDecryptedBody ? self.PGPDecryptedBody : nil;
+        return self.PGPDecryptedBody;
     
     // 2. Fetch the data part.
     // To support exchange server modified messages, the first found octect-stream part
@@ -452,7 +471,9 @@
     
     // The message is definitely encrypted, otherwise this method would never
     // be entered, so set that flag.
-    decryptedMessageBody = [self decryptedMessageBodyOrDataForEncryptedData:encryptedData encryptedInlineRange:NSMakeRange(NSNotFound, 0)];
+    decryptedMessageBody = [self decryptedMessageBodyOrDataForEncryptedData:encryptedData 
+                                                       encryptedInlineRange:NSMakeRange(NSNotFound, 0)
+                                                                   toResult:result];
     
     return decryptedMessageBody;
 }
@@ -522,7 +543,7 @@
     return decryptedMimeBody;
 }
 
-- (id)decryptData:(NSData *)encryptedData {
+- (id)decryptData:(NSData *)encryptedData toResult:(MimePartResult *)result {
     // Decrypt data should not run if Mail.app is generating snippets
     // and NeverCreateSnippetPreviews is set or the passphrase is not in cache
     // and CreatePreviewSnippets is not set.
@@ -539,26 +560,26 @@
     
     // Part is encrypted, otherwise we wouldn't come here, so
     // set that status.
-    self.PGPEncrypted = YES;
+    result.isPGPEncrypted = [NSNumber numberWithBool:YES];
     
     // No error for decryption? Check the signatures for errors.
     if(!error) {
         // Decryption succeed, so set that status.
-        self.PGPDecrypted = YES;
+        result.isPGPDecrypted = [NSNumber numberWithBool:YES];
         error = [self errorFromGPGOperation:GPG_OPERATION_VERIFICATION controller:gpgc];
     }
     
     // Signatures found, set is signed status, also store the signatures.
     if([signatures count]) {
-        self.PGPSigned = YES;
-        self.PGPSignatures = signatures;
+        result.isPGPSigned = [NSNumber numberWithBool:YES];
+        result.pgpSignatures = signatures;
     }
     // If there is an error and decrypted is yes, there was an error
     // with a signature. Set verified to false.
-    self.PGPVerified = success && error ? NO : YES;
+    result.isPGPVerified = [NSNumber numberWithBool:success && error ? NO : YES];
     
     // Last, store the error itself.
-    self.PGPError = error;
+    result.pgpError = error;
     
     [gpgc release];
     
@@ -729,7 +750,8 @@
     return NO;
 }                           
 
-- (MimeBody *)decryptedMessageBodyFromDecryptedData:(NSData *)decryptedData {
+- (MimeBody *)decryptedMessageBodyFromDecryptedData:(NSData *)decryptedData 
+                                           toResult:(MimePartResult *)result {
     if([decryptedData length] == 0)
         return nil;
     // 1. Create a new Message using messageWithRFC822Data:
@@ -756,17 +778,17 @@
     [decryptedMessage setIvar:@"MimeEncrypted" value:[NSNumber numberWithBool:YES]];
     decryptedMimeBody = [decryptedMessage messageBodyUpdatingFlags:YES];
     
-    // Top Level part reparses the message. This method doesn't.
-    MimePart *topPart = [self topPart];
-    // Set the decrypted message here, otherwise we run into a memory problem.
-    [topPart setDecryptedMessageBody:decryptedMimeBody isEncrypted:self.PGPEncrypted isSigned:self.PGPSigned error:self.PGPError];
-    self.PGPDecryptedBody = self.decryptedMessageBody;
+    result.decryptedMessageBody = decryptedMimeBody;
+    result.decryptedBody = decryptedMimeBody;
           
     return decryptedMimeBody;
 }
 
-- (NSData *)partDataByReplacingEncryptedData:(NSData *)originalPartData decryptedData:(NSData *)decryptedData encryptedRange:(NSRange)encryptedRange {
-    NSMutableData *partData = [[NSMutableData alloc] init];
+- (NSData *)partDataByReplacingEncryptedData:(NSData *)originalPartData 
+                               decryptedData:(NSData *)decryptedData 
+                              encryptedRange:(NSRange)encryptedRange 
+                                    toResult:(MimePartResult *)result {
+    NSMutableData *partData = [[[NSMutableData alloc] init] autorelease];
     NSData *inlineEncryptedData = [originalPartData subdataWithRange:encryptedRange];
     
     BOOL (^otherDataFound)(NSData *) = ^(NSData *data) {
@@ -806,8 +828,8 @@
         if(signatureRange.location != NSNotFound)
             [self _verifyPGPInlineSignatureInData:decryptedData range:signatureRange];
     }
-    
-    self.PGPDecryptedData = partData;
+
+    result.decryptedData = partData;
     // Decrypted content is a HTML string generated from the decrypted data
     // If the content is only partly encrypted or partly signed, that information
     // is added to the HTML as well.
@@ -817,23 +839,21 @@
     // If that's the case the armor is stripped from the data and stored
     // under decryptedPGPContent.
     if(self.PGPSigned)
-        self.PGPDecryptedContent = [self stripSignatureFromContent:decryptedContent];
+        result.decryptedContent = [self stripSignatureFromContent:decryptedContent];
     else
-        self.PGPDecryptedContent = decryptedContent;
+        result.decryptedContent = decryptedContent;
     
     if([self containsPGPMarker:partData]) {
-        self.PGPPartlySigned = self.PGPSigned;
-        self.PGPPartlyEncrypted = self.PGPEncrypted;
+        result.isPGPPartlySigned = [NSNumber numberWithBool:self.PGPSigned];
+        result.isPGPPartlyEncrypted = [NSNumber numberWithBool:self.PGPEncrypted];
     }
     
-    [partData release];
-    
-    return self.PGPDecryptedData;
+    return result.decryptedData;
 }
 
-- (id)decryptedMessageBodyOrDataForEncryptedData:(NSData *)encryptedData encryptedInlineRange:(NSRange)encryptedRange {
-    __block NSData *decryptedData = nil;
-    __block id decryptedMimeBody = nil;
+- (id)decryptedMessageBodyOrDataForEncryptedData:(NSData *)encryptedData 
+                            encryptedInlineRange:(NSRange)encryptedRange 
+                                        toResult:(MimePartResult*)result {
     __block NSData *partDecryptedData = nil;
     
     BOOL inlineEncrypted = encryptedRange.location != NSNotFound ? YES : NO;
@@ -845,7 +865,7 @@
     // Decrypt the data. This will already set the most important flags on the part.
     // decryptData used to be run in a serial queue. This is no longer necessary due to
     // the fact that the password dialog blocks just fine.
-    partDecryptedData = [self decryptData:inlineEncrypted ? inlineEncryptedData : encryptedData];
+    partDecryptedData = [self decryptData:inlineEncrypted ? inlineEncryptedData : encryptedData toResult:result];
     
     // Creating a new message from the PGP decrypted data for PGP/MIME encrypted messages
     // is not supposed to happen within the decryption task.
@@ -877,14 +897,16 @@
 			}
 		}
 		
-        decryptedData = [self partDataByReplacingEncryptedData:encryptedData decryptedData:partDecryptedData encryptedRange:encryptedRange];
-    } else
-        decryptedMimeBody = [self decryptedMessageBodyFromDecryptedData:partDecryptedData];
-    
-    if(inlineEncrypted)
-        return decryptedData;
-    
-    return decryptedMimeBody;    
+        result.decryptedData = [self partDataByReplacingEncryptedData:encryptedData 
+                                                        decryptedData:partDecryptedData 
+                                                       encryptedRange:encryptedRange
+                                                             toResult:result];
+    } else {
+        result.decryptedMessageBody = [self decryptedMessageBodyFromDecryptedData:partDecryptedData toResult:result];
+        result.decryptedBody = result.decryptedMessageBody;
+    }
+
+    return result.decryptedMessageBody;
 }
 
 #pragma mark Methods for verification
@@ -901,9 +923,9 @@
         signatures = [gpgc verifySignedData:signedData];
     
     MFError *error = [self errorFromGPGOperation:GPG_OPERATION_VERIFICATION controller:gpgc];
-    self.PGPError = error;
-    self.PGPSigned = YES;
     self.PGPVerified = self.PGPError ? NO : YES;
+    self.PGPSigned = YES;
+    self.PGPError = error;
     self.PGPSignatures = signatures;
     if([self hasPGPInlineSignature:signedData])
         self.PGPVerifiedContent = [self stripSignatureFromContent:[[signedData stringByGuessingEncoding] markupString]];
@@ -933,14 +955,9 @@
     }
     
     if(self.PGPVerified || self.PGPError || self.PGPVerifiedData) {
-        // Save the status for isMimeSigned call.
-        [[self topPart] setIvar:@"MimeSigned" value:[NSNumber numberWithBool:self.PGPSigned]];
         return;
     }
-    
-    // Set the signed status, otherwise we wouldn't be in here.
-    self.PGPSigned = YES;
-    
+        
     // Now on to fetching the signed data.
     NSData *signedData = [self signedData];
     // And last finding the signature.
