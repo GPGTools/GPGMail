@@ -31,7 +31,7 @@
 #import <MimePart.h>
 #import <Libmacgpg/Libmacgpg.h>
 
-@class MimeBody;
+@class MimeBody, MimePartResult;
 
 #define PGP_ATTACHMENT_EXTENSION @"pgp"
 #define PGP_PART_MARKER_START @"::gpgmail-start-pgp-part::"
@@ -160,7 +160,7 @@ typedef enum {
  Is called by GPGDecodeWithContext if a multipart/encrypted mime part
  is found. Performs the decryption and returns the result.
  */
-- (id)decodeMultipartEncryptedWithContext:(id)ctx;
+- (id)decodeMultipartEncryptedWithContext:(id)ctx toResult:(MimePartResult*)result;
 
 /**
  Fixes an issue with a very early alpha of GPGMail 2.0
@@ -203,13 +203,17 @@ typedef enum {
 /**
  Creates a new message similar the way S/MIME does it, from the decryptedData.
  */
-- (MimeBody *)decryptedMessageBodyFromDecryptedData:(NSData *)decryptedData;
+- (MimeBody *)decryptedMessageBodyFromDecryptedData:(NSData *)decryptedData
+                                           toResult:(MimePartResult *)result;
 
 /**
  Returns the complete part data but replaces the encrypted data with the decrypted
  first or leaves the encrypted data in, if there was an decryption error.
  */
-- (NSData *)partDataByReplacingEncryptedData:(NSData *)originalPartData decryptedData:(NSData *)decryptedData encryptedRange:(NSRange)encryptedRange;
+- (NSData *)partDataByReplacingEncryptedData:(NSData *)originalPartData 
+                               decryptedData:(NSData *)decryptedData 
+                              encryptedRange:(NSRange)encryptedRange
+                                    toResult:(MimePartResult *)result;
 
 /**
  Calls decryptData: for either PGP/MIME or PGP/Inline encrypted data.
