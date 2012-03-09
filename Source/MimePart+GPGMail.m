@@ -280,8 +280,8 @@
     // otherwise out of here!
     if(![[(MimeBody *)[self mimeBody] message] shouldBePGPProcessed])
         return [self MADecodeTextHtmlWithContext:ctx];
-    
-    if([[self bodyData] mightContainPGPEncryptedData] || [[self bodyData] rangeOfPGPSignatures].location != NSNotFound) {
+
+    if([[self bodyData] mightContainPGPEncryptedDataOrSignatures]) {
         // HTML is a bit hard to decrypt, so check if the parent part, if exists is a
         // multipart/alternative.
         // If that's the case, look for a text/plain part
@@ -309,8 +309,9 @@
     if(![[(MimeBody *)[self mimeBody] message] shouldBePGPProcessed])
         return [self MADecodeApplicationOctet_streamWithContext:ctx];
     
-    BOOL mightBeEncrypted = [self attachmentMightBePGPEncrypted];
-    BOOL mightBeSignature = [self attachmentMightBePGPSignature];
+    BOOL mightBeEncrypted;
+    BOOL mightBeSignature;
+    [self attachmentMightBePGPEncrypted:&mightBeEncrypted orSigned:&mightBeSignature];
     if(!mightBeEncrypted && !mightBeSignature)
         return [self MADecodeApplicationOctet_streamWithContext:ctx];
     
@@ -394,17 +395,9 @@
     return [[(MimeBody *)[self mimeBody] message] getIvar:@"PGPSignatureAttachmentsToRemove"];
 }
 
-- (BOOL)attachmentMightBePGPEncrypted {
-    NSArray *PGPExtensions = [NSArray arrayWithObjects:@"pgp", @"gpg", @"asc", nil];
-    return [self attachmentMightBePGPProcessed:PGPExtensions];
-}
-
-- (BOOL)attachmentMightBePGPSignature {
-    NSArray *PGPExtensions = [NSArray arrayWithObjects:@"sig", nil];
-    return [self attachmentMightBePGPProcessed:PGPExtensions];
-}
-
-- (BOOL)attachmentMightBePGPProcessed:(NSArray *)extensions {
+- (void)attachmentMightBePGPEncrypted:(BOOL *)mightEnc orSigned:(BOOL *)mightSig {
+    *mightEnc = NO;
+    *mightSig = NO;
     NSString *nameExt = [[self bodyParameterForKey:@"name"] pathExtension];
     NSString *filenameExt = [[self dispositionParameterForKey:@"filename"] pathExtension];
     
@@ -412,24 +405,23 @@
     // In that case, don't try to inline decrypt it.
     // This is necessary since decodeMultipartWithContext checks the attachments
     // first and after that runs decodeWithContext apparently.
-    if([[[self mimeBody] topLevelPart] isType:@"multipart" subtype:@"encrypted"])
-        return NO;
-    
-    BOOL PGPExtensionFound = NO;
-    for(NSString *extension in extensions) {
-        if([nameExt isEqualToString:extension] || [filenameExt isEqualToString:extension]) {
-            PGPExtensionFound = YES;
-            break;
-        }
-    }
+    if([[self topPart] isType:@"multipart" subtype:@"encrypted"])
+        return;
+
+    NSArray *encExtensions = [NSArray arrayWithObjects:@"pgp", @"gpg", @"asc", nil];
+    *mightEnc = ([encExtensions containsObject:nameExt] || [encExtensions containsObject:filenameExt]);
+    NSArray *sigExtensions = [NSArray arrayWithObjects:@"sig", nil];
+    *mightSig = ([sigExtensions containsObject:nameExt] || [sigExtensions containsObject:filenameExt]);
     
     // .asc attachments might contain a public key. See #123.
     // So to avoid decrypting such attachments, check if the attachment
     // contains a public key.
-    if([[self bodyData] rangeOfPGPPublicKey].location != NSNotFound)
-        return NO;
-    
-    return PGPExtensionFound;
+    if((*mightEnc || *mightSig) 
+       && [[self bodyData] rangeOfPGPPublicKey].location != NSNotFound) {
+        *mightEnc = NO;
+        *mightSig = NO;
+        return;
+    }
 }
 
 - (id)decodeMultipartEncryptedWithContext:(id)ctx {
@@ -1395,16 +1387,7 @@
     if([[[versionPart type] lowercaseString] isEqualToString:@"application"] && [[[versionPart subtype] lowercaseString] isEqualToString:@"pgp-encrypted"] &&
        [[[dataPart type] lowercaseString] isEqualToString:@"application"] && ([[[dataPart subtype] lowercaseString] isEqualToString:@"octet-stream"] ||
                                                                               [[[dataPart subtype] lowercaseString] isEqualToString:@"pgp-signature"])) {
-           // For some strange reason version is NSUTF8 encoded, not ascii... hmm...
-           NSString *version = [[versionPart bodyData] stringByGuessingEncoding];
-           // All conditions matched.
-           if([[version lowercaseString] rangeOfString:@"version: 1"].location != NSNotFound || 
-              [[version lowercaseString] rangeOfString:@"version : 1"].location != NSNotFound) {
-               return YES;
-           }
-           else {
-               return NO;
-           }
+           return [[versionPart bodyData] containsPGPVersionMarker:1];
        }
     
     return NO;

@@ -27,6 +27,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define PGP_BEGIN_PGP_PREFIX @"-----BEGIN PGP "
+#define PGP_MESSAGE_PREFIX_TAIL @"MESSAGE-----"
+#define PGP_SIGNATURE_PREFIX_TAIL @"SIGNATURE-----"
+
 #define PGP_MESSAGE_BEGIN @"-----BEGIN PGP MESSAGE-----"
 #define PGP_MESSAGE_END @"-----END PGP MESSAGE-----"
 #define PGP_SIGNED_MESSAGE_BEGIN @"-----BEGIN PGP SIGNED MESSAGE-----"
@@ -66,18 +70,23 @@
 - (NSRange)rangeOfPGPInlineEncryptedData;
 
 /**
- Checks if the data might contain PGP encrypted data
+ Checks if the data might contain PGP encrypted data and/or sigs
  by looking for the ----BEGIN PGP MESSAGE---- header.
  
  This method detects the data even if the header is prefixed
  by other chars. (important to detect the header in text/html parts)
  */
-- (BOOL)mightContainPGPEncryptedData;
+- (BOOL)mightContainPGPEncryptedDataOrSignatures;
 
 /**
  Finds public keys in the data.
  */
 - (NSRange)rangeOfPGPPublicKey;
+
+/**
+ Finds "version ?: \d"
+ */
+- (BOOL)containsPGPVersionMarker:(int)version;
 
 /**
  Checks the pgp packets for a signature packet.

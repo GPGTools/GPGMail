@@ -151,20 +151,9 @@ typedef enum {
 - (NSArray *)signatureAttachmentScheduledForRemoval;
 
 /**
- Internally calls attachmentMightBePGPProcessed: passing the extensions to be checked.
+ Checks the extension for known PGP Data extensions and sets the values
  */
-- (BOOL)attachmentMightBePGPEncrypted;
-
-/**
- Internally calls attachmentMightBePGPProcessed: passing the extensions to be checked.
- */
-- (BOOL)attachmentMightBePGPSignature;
-
-/**
- Checks the extension for known PGP Data extensions and only if this returns true,
- the mime part is tried to process.
- */
-- (BOOL)attachmentMightBePGPProcessed:(NSArray *)extensions;
+- (void)attachmentMightBePGPEncrypted:(BOOL *)mightEnc orSigned:(BOOL *)mightSig;
 
 /**
  Is called by GPGDecodeWithContext if a multipart/encrypted mime part

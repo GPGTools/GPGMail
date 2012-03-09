@@ -1,0 +1,9 @@
+Überprüft die OpenPGP Signatur der E-Mail
+
+>>-----BEGIN PGP MESSAGE-----
+>>
+>>the contents here are not being tested
+>>
+>>-----END PGP SIGNATURE-----
+
+Überprüft die OpenPGP Signatur der E-Mail
