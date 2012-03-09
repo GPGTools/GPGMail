@@ -10,48 +10,48 @@
 "MESSAGE_BANNER_PGP_DECRYPT_ERROR_MESSAGE" = "There was a problem decrypting this message. Verify that you have a valid key in your GPG Keychain.";
 "MESSAGE_BANNER_PGP_VERIFY_ERROR_TITLE" = "Unable to verify PGP message signature.";
 "MESSAGE_BANNER_PGP_VERIFY_ERROR_MESSAGE" = "There was a problem reading the PGP signature for this message.";
-"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_TITLE" = "Message PGP key is not in your keychain.";
-"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_MESSAGE" = "It was possible to read the PGP signature for this message, but the PGP key is not in your keychain. Please use GPG Keychain to add it to your keychain.";
-"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_TITLE" = "No additional information available for this PGP key.";
-"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_MESSAGE" = "It's not possible to display additional information about this PGP key, because it's not in your keychain.";
+"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_TITLE" = "PGP key for this message is not in your keychain.";
+"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_MESSAGE" = "The message has a valid PGP signature, but the PGP key is not in your keychain. Please use GPG Keychain Access to add it.";
+"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_TITLE" = "No information is available for this PGP key.";
+"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_MESSAGE" = "No additional information is known about this PGP key, because it's not in your keychain.";
 
     "MESSAGE_BANNER_PGP_DECRYPT_SECKEY_ERROR_TITLE" = "Secret key to decrypt the message is missing.";
-    "MESSAGE_BANNER_PGP_DECRYPT_SECKEY_ERROR_MESSAGE" = "The secret key to decrypt this message is not in your keychain.\n\nCheck with the sender if they used your correct public key.\nCheck if you still have a backup of your keychain and import the secret key from there.";
+    "MESSAGE_BANNER_PGP_DECRYPT_SECKEY_ERROR_MESSAGE" = "The secret key to decrypt this message is not in your keychain.\n\nCheck with the sender that they used your correct public key.\nCheck any backup of your keychain, and try to import the secret key from there.";
     
     "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_TITLE" = "Decryption failed with unknown error!";
-    "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_MESSAGE" = "An unknown error occured while decrypting this message.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while decrypting this message.\n\nPlease contact us at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_TITLE" = "Decryption failed with unknown error!";
-    "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_MESSAGE" = "An unknown error occured while decrypting this message.\n\nGPG error message:\n%@\nPlease contact us including the GPG error message at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_MESSAGE" = "An unknown error occurred while decrypting this message.\n\nGPG error message:\n%@\nPlease contact us, including the GPG error message, at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_TITLE" = "Wrong key used to encrypt this message.";
     "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_MESSAGE" = "This message could not be decrypted, since the wrong public key was used to encrypt it.\n\nPlease contact us at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_TITLE" = "The encrypted message is damaged.";
-    "MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "This encrypted message is damaged and could not be decrypted.\n\nPlease ask the sender to send you the message again.";
+    "MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "This encrypted message is damaged and could not be decrypted.\n\nPlease ask the sender to re-send the message.";
     
     "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Signature key was revoked.";
     "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "ATTENTION: The key which was used to sign this message was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain Access to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";
-    "MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to this signature is not in your GPG Keychain.";
+    "MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to this message signature is not in your GPG Keychain.";
     "MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The message could not be verified, since the key which was used to sign this message is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain Access and import it to verify the message.";
     
-    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_TITLE" = "The key to this signature was created with an algorithm, which is not supported.";
-    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This message could not be verified, since the key to the signature was created with an algorithm which is not supported.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_TITLE" = "The message signature was created with an algorithm which is not supported.";
+    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This message could not be verified, since the signature was created with an algorithm which is not supported.\n\nPlease contact us at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The signature of this message is invalid!";
-    "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "ATTENTION: This message might have been modified after the signature was created.\n\nPlease contact the sender and make sure the content of the message matches the original.\n\nPlease contact us at support.gpgtools.org, if you're sure the message was not modified.";
+    "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "ATTENTION: This message might have been modified after the signature was created.\n\nPlease contact the sender to make sure the content of the message matches the original.\n\nPlease contact us at support.gpgtools.org if you're sure the message was not modified.";
     
-    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification failed with unknown error!";
-    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occured while verifying this message.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of message signature failed with unknown error!";
+    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this message's signature.\n\nPlease contact us at support.gpgtools.org";
     
-    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Signature data error!";
-    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "This message could not be verified, since the signature data is invalid.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Message signature data error!";
+    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "This message's signature is invalid and could not be verified.\n\nPlease contact us at support.gpgtools.org";
     
-    "MESSAGE_BANNER_PGP_VERIFY_KEY_EXPIRED_ERROR_TITLE" = "The key of the signature is expired.";
+    "MESSAGE_BANNER_PGP_VERIFY_KEY_EXPIRED_ERROR_TITLE" = "Message signature's key is expired.";
     "MESSAGE_BANNER_PGP_VERIFY_KEY_EXPIRED_ERROR_MESSAGE" = "ATTENTION: The key which was used to sign this message is expired.\n\nYou can try to refresh the key with ID %@ in GPG Keychain Access and ask the sender why the key is expired.";
     
-    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "The signature of the message is expired.";
-    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "The signature could not be verified, since the signature is expired.\n\nAsk the sender why the signature is expired.";
+    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "The message signature is expired.";
+    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "The signature is expired and could not be verified.\n\nAsk the sender why the signature is expired.";
     
     "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_VERIFY_ERROR_TITLE" = "%d attachments failed to decrypt or verify.";
     "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_VERIFY_ERROR_MESSAGE" = "Please click on the attachment icon in the message header security part for further details.";
@@ -70,13 +70,13 @@
     
     /* Message Error Banner Attachment messages. */
     "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SECKEY_ERROR_TITLE" = "Secret key to decrypt the attachment is missing.";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SECKEY_ERROR_MESSAGE" = "The secret key to decrypt this attachment is not in your keychain.\n\nCheck with the sender if they used your correct public key.\nCheck if you still have a backup of your keychain and import the secret key from there.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SECKEY_ERROR_MESSAGE" = "The secret key to decrypt this attachment is not in your keychain.\n\nCheck with the sender if they used your correct public key.\nCheck any backup of your keychain, and try to import the secret key from there.";
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SYSTEM_ERROR_TITLE" = "Decryption failed with unknown error!";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SYSTEM_ERROR_MESSAGE" = "An unknown error occured while decrypting this attachment.\n\nPlease contact us at support.gpgtools.org";    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while decrypting this attachment.\n\nPlease contact us at support.gpgtools.org";    
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_GENERAL_ERROR_TITLE" = "Decryption failed with unknown error!";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_GENERAL_ERROR_MESSAGE" = "An unknown error occured while decrypting this attachment.\n\nGPG error message:\n%@\nPlease contact us including the GPG error message at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_GENERAL_ERROR_MESSAGE" = "An unknown error occurred while decrypting this attachment.\n\nGPG error message:\n%@\nPlease contact us, including the GPG error message, at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_WRONG_SECKEY_ERROR_TITLE" = "Wrong key used to encrypt this attachment.";
     "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_WRONG_SECKEY_ERROR_MESSAGE" = "This attachment could not be decrypted, since the wrong public key was used to encrypt it.\n\nPlease contact us at support.gpgtools.org";    
@@ -87,29 +87,29 @@
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Signature key was revoked.";
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "ATTENTION: The key which was used to sign this attachment was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain Access to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";    
     
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to this signature is not in your GPG Keychain.";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment could not be verified, since the key which was used to sign this attachment is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain Access and import it to verify the attachment.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The signature key is not in your GPG Keychain.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment signature could not be verified, since the key which was used to sign is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain Access and import it to verify the attachment.";
     
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_TITLE" = "The key to this signature was created with an algorithm, which is not supported.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_TITLE" = "The attachment signature was created with an algorithm which is not supported.";
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This attachment could not be verified, since the key to the signature was created with an algorithm which is not supported.\n\nPlease contact us at support.gpgtools.org";
     
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The signature of this attachment is invalid!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The attachment signature is invalid!";
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "ATTENTION: This attachment might have been modified after the signature was created.\n\nPlease contact the sender and make sure the content of the attachment matches the original.\n\nPlease contact us at support.gpgtools.org, if you're sure the attachment was not modified.";
     
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Verification failed with unknown error!";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occured while verifying this attachment.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Signature verification failed with unknown error!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this attachment signature.\n\nPlease contact us at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Signature data error!";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "This attachment could not be verified, since the signature data is invalid.\n\nPlease contact us at support.gpgtools.org";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "This attachment signature is invalid and could not be verified.\n\nPlease contact us at support.gpgtools.org";
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_KEY_EXPIRED_ERROR_TITLE" = "The key of the signature is expired.";
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_KEY_EXPIRED_ERROR_MESSAGE" = "ATTENTION: The key which was used to sign this attachment is expired.\n\nYou can try to refresh the key with ID %@ in GPG Keychain Access and ask the sender why the key is expired.";
     
     "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "The signature of the attachment is expired.";
-    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "The signature could not be verified, since the signature is expired.\n\nAsk the sender why the signature is expired.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "The attachment signature is expired and could not be verified.\n\nAsk the sender why the signature is expired.";
     
 "MESSAGE_IS_PGP_PARTLY_ENCRYPTED" = "Partly Encrypted";
-"MESSAGE_IS_PGP_PARTLY_SIGNED" = "Parly Signed";
+"MESSAGE_IS_PGP_PARTLY_SIGNED" = "Partly Signed";
 "MESSAGE_IS_PGP_ENCRYPTED" = "Encrypted";
 "MESSAGE_IS_PGP_SIGNED" = "Signed";
 "MESSAGE_IS_PGP_SIGNED_INVALID" = "Invalid Signature";
@@ -129,7 +129,7 @@
     "MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_TITLE" = "signed attachments";
     
     /* Compose Window encrypt/sign button tooltips. */
-    "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_SIGN" = "This message can't be signed, since there's no private key for %@.\n\nPlease make sure that a private key for this address exists in GPG Keychain Access. Add a new UID to an existing key for this address if necessary or create a new key for this address.\n\nIf a key for the address exists, make sure that the address in Mail Preferences is correct and exactly matches the address of your key.";
+    "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_SIGN" = "This message can't be signed, since there's no private key for %@.\n\nPlease make sure that a private key for this address exists in GPG Keychain Access. Add a new UID to an existing key for this address if necessary, or create a new key for this address.\n\nIf a key for the address exists, make sure that the address in Mail Preferences is correct and exactly matches the address of your key.";
     "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT" = "This message can't be encrypted, since there are no public keys available for the following addresses: %@.\n\nPlease use GPG Keychain Access to search and import the keys for those addresses.";
     "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT_NO_RECIPIENTS" = "This message can't be encrypted. You have to enter at least one recipient first.";
 
@@ -140,10 +140,10 @@
     
 /* GPGMail Preferences strings. */
 "GPG_STATUS_NO_ERROR_TITLE" = "GPGMail is ready.";
-"GPG_STATUS_NO_ERROR_TOOLTIP" = "Your MacGPG installation shows no errors."; 
+"GPG_STATUS_NO_ERROR_TOOLTIP" = "Your MacGPG installation is working with no errors."; 
 "GPG_STATUS_NOT_FOUND_TITLE" = "MacGPG2 is not installed. Check your installation.";
 "GPG_STATUS_NOT_FOUND_TOOLTIP" = "Please download the GPGTools installer from http://www.gpgtools.org to install all GPGTools.";
 "GPG_STATUS_OTHER_ERROR_TITLE" = "Please check your installation and configuration.";
-"GPG_STATUS_NOT_FOUND_TOOLTIP" = "Your MacGPG installation is not working properly. Please contact us along with your GPG configuration file, which you'll find in your User directory under .gnupg, at http://support.gpgtools.org";
+"GPG_STATUS_NOT_FOUND_TOOLTIP" = "Your MacGPG installation is not working properly. Please contact us, including your GPG configuration file found in your home directory at ~/.gnupg/gpg.conf, at http://support.gpgtools.org";
 
 }
