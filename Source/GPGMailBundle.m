@@ -590,7 +590,10 @@ static BOOL gpgMailWorks = NO;
 		
         [allGPGKeys minusSet:keysToRemove];
         [allGPGKeys unionSet:updatedKeys];
-        
+
+        [keysToRemove release];
+        keysToRemove = nil;
+
         //Flush caches.
         self.secretGPGKeys = nil;
         self.publicGPGKeys = nil;
@@ -751,7 +754,8 @@ static BOOL gpgMailWorks = NO;
         sortedUserIDs = [trustedUserIDs sortedArrayUsingDescriptors:[NSArray arrayWithObjects:dateSorter, nil]];
     else
         sortedUserIDs = [untrustedUserIDs sortedArrayUsingDescriptors:[NSArray arrayWithObjects:dateSorter, nil]];
-    
+
+    [dateSorter release];
     [trustedUserIDs release];
     [untrustedUserIDs release];
     
@@ -777,6 +781,7 @@ static BOOL gpgMailWorks = NO;
                 [idMap setValue:subkey forKey:subkey.keyID];
         }
         self.publicGPGKeysByID = idMap;
+        [idMap release];
     }
     return _publicGPGKeysByID;
 }

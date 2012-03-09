@@ -408,12 +408,14 @@
 }
 
 - (Subdata *)_newPGPInlineBodyDataWithData:(NSData *)data headers:(MutableMessageHeaders *)headers shouldSign:(BOOL)shouldSign shouldEncrypt:(BOOL)shouldEncrypt {
+    if (!data)
+        return nil;
     // Now on to creating a new body and replacing the old one. 
     NSString *boundary = (NSString *)[MimeBody newMimeBoundary];
     NSData *topData = nil;
     MimePart *topPart;
     
-    NSData *signedData = nil;
+    NSData *signedData = data;
     NSData *encryptedData = nil;
     
     topPart = [[MimePart alloc] init];
@@ -423,22 +425,30 @@
     [topPart setBodyParameter:@"utf8" forKey:@"charset"];
     
     if(shouldSign) {
-        signedData = [topPart newInlineSignedDataForData:data sender:[headers firstHeaderForKey:@"from"]];
+        signedData = [topPart inlineSignedDataForData:data sender:[headers firstHeaderForKey:@"from"]];
+        if (!signedData) {
+            [boundary release];
+            [topPart release];
+            return nil;
+        }
         topData = signedData;
     }
+
+    id newlyEncryptedPart = nil;
     if(shouldEncrypt) {
         NSMutableArray *recipients = [[NSMutableArray alloc] init];
         [recipients addObjectsFromArray:[headers headersForKey:@"to"]];
         [recipients addObjectsFromArray:[headers headersForKey:@"cc"]];
         [recipients addObjectsFromArray:[headers headersForKey:@"bcc"]];
-        [topPart newEncryptedPartWithData:signedData recipients:recipients encryptedData:&encryptedData];
+        newlyEncryptedPart = [topPart newEncryptedPartWithData:signedData recipients:recipients encryptedData:&encryptedData];
         [recipients release];
         topData = encryptedData;
     }
-    
+
     if(!topData) {
         [boundary release];
         [topPart release];
+        [newlyEncryptedPart release];
         return nil;
     }
     
@@ -479,6 +489,7 @@
                                        ([bodyData length] - [headerData length]));
     Subdata *contentSubdata = [[Subdata alloc] initWithParent:bodyData range:contentRange];
     [bodyData release];
+    [newlyEncryptedPart release];
     return contentSubdata;
 }
 

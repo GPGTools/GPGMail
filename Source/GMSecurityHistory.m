@@ -124,18 +124,15 @@
     // Next, check if signing from S/MIME is not possible. That automatically means
     // S/MIME can't encrypt either, due to implementation details of Apple's S/MIME.
     else {
-        NSString *securityMethodName = nil; 
         BOOL canEncrypt = NO;
         BOOL canSign = NO;
         if(!canSMIMESign && PGPKeyAvailable) {
             securityMethod = GPGMAIL_SECURITY_METHOD_OPENPGP;
-            securityMethodName = @"PGP";
             canEncrypt = canPGPEncrypt;
             canSign = canPGPSign;
         }
         else {
             securityMethod = GPGMAIL_SECURITY_METHOD_SMIME;
-            securityMethodName = @"SMIME";
             canEncrypt = canSMIMEEncrypt;
             canSign = canSMIMESign;
         }
@@ -165,7 +162,6 @@
         NSUInteger didEncryptCount =  [[encryptHistory objectForKey:@"DidEncryptCount"] unsignedIntValue];
         NSUInteger didNotEncryptCount = [[encryptHistory objectForKey:@"DidNotEncryptCount"] unsignedIntValue];
         BOOL didLastEncrypt = [[encryptHistory objectForKey:@"DidLastEncrypt"] boolValue];
-        encrypt = NO;
         if(didEncryptCount == didNotEncryptCount)
             encrypt = didLastEncrypt;
         else if(didEncryptCount > didNotEncryptCount)

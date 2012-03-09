@@ -345,10 +345,10 @@ typedef enum {
 - (id)MANewSignedPartWithData:(id)data sender:(id)sender signatureData:(id *)signatureData;
 
 /**
- Create the data for a new PGP/Inline signed message.
+ Get the (autoreleased) data for a new PGP/Inline signed message.
  EXPERIMENTAL!
  */
-- (NSData *)newInlineSignedDataForData:(id)data sender:(id)sender;
+- (NSData *)inlineSignedDataForData:(id)data sender:(id)sender;
 
 /**
  Uses the ActivityMonitor to display an error message if the signing process failed.

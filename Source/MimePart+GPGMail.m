@@ -1498,8 +1498,8 @@
 	}
 
 	// Split the recipients in normal and bcc recipients.
-    NSMutableArray *normalRecipients = [[NSMutableArray alloc] initWithCapacity:1];
-    NSMutableArray *bccRecipients = [[NSMutableArray alloc] initWithCapacity:1];
+    NSMutableArray *normalRecipients = [NSMutableArray arrayWithCapacity:1];
+    NSMutableArray *bccRecipients = [NSMutableArray arrayWithCapacity:1];
     for(NSString *recipient in recipients) {
 		
         if([@"bcc" isEqualTo:[recipient valueForFlag:@"recipientType"]])
@@ -1665,7 +1665,7 @@
     return topPart;
 }
 
-- (NSData *)newInlineSignedDataForData:(id)data sender:(id)sender {
+- (NSData *)inlineSignedDataForData:(id)data sender:(id)sender {
 //    DebugLog(@"[DEBUG] %s enter", __PRETTY_FUNCTION__);
 //    DebugLog(@"[DEBUG] %s data: [%@] %@", __PRETTY_FUNCTION__, [data class], data);
 //    DebugLog(@"[DEBUG] %s sender: [%@] %@", __PRETTY_FUNCTION__, [sender class], sender);

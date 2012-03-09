@@ -169,8 +169,10 @@
     NSArray *packets = [GPGPacket packetsWithData:packetData];
     
     // Parsing packets failed due to unsupported packets.
-    if(![packets count])
+    if(![packets count]) {
+        [packetData release];
         return signaturePacketsExpected;
+    }
     
     BOOL hasSignature = NO;
     

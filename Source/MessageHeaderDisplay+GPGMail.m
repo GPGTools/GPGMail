@@ -86,6 +86,7 @@
     [attachmentController beginSheetModalForWindow:[NSApp mainWindow] completionHandler:^(NSInteger result) {
 //        DebugLog(@"Attachment panel was closed: %d", result);
     }];
+    [attachmentController release];
 }
 
 - (void)_showSignaturePanel {
@@ -234,7 +235,6 @@
 
 - (NSAttributedString *)securityHeaderSignaturePartForMessage:(Message *)message {
     GPGErrorCode errorCode = GPGErrorNoError;
-    GPGSignature *signatureWithError = nil;
     BOOL errorFound = NO;
     NSImage *signedImage = nil;
     NSSet *signatures = [NSSet setWithArray:message.PGPSignatures];
@@ -245,7 +245,6 @@
     for(GPGSignature *signature in signatures) {
         if(signature.status != GPGErrorNoError) {
             errorCode = signature.status;
-            signatureWithError = signature;
             break;
         }
     }

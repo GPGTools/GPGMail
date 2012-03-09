@@ -51,8 +51,8 @@ GPGSignatureView *_sharedInstance;
 	static NSArray *images = nil;
 	if (!images) {
 		images = [[NSArray alloc] initWithObjects:
-				  [[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/ValidBadge.tif"],
-				  [[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/InvalidBadge.tif"],
+				  [[[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/ValidBadge.tif"] autorelease],
+				  [[[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/InvalidBadge.tif"] autorelease],
 				  nil];
 	}
 	if (signature.status != 0 || signature.trust <= 1) {
@@ -107,8 +107,8 @@ GPGSignatureView *_sharedInstance;
 	static NSArray *images = nil;
 	if (!images) {
 		images = [[NSArray alloc] initWithObjects:
-				  [[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertLargeStd.tif"],
-				  [[NSImage alloc] initWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForImageResource:@"GPGCertLargeNotTrusted"]],
+				  [[[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertLargeStd.tif"] autorelease],
+				  [[[NSImage alloc] initWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForImageResource:@"GPGCertLargeNotTrusted"]] autorelease],
 				  nil];
 	}
 
@@ -334,8 +334,8 @@ GPGSignatureView *_sharedInstance;
 NSArray *images;
 + (void)initialize {
 	images = [[NSArray alloc] initWithObjects:
-			  [[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertSmallStd.tif"],
-			  [[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertSmallStd_Invalid.tif"],
+			  [[[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertSmallStd.tif"] autorelease],
+			  [[[NSImage alloc] initWithContentsOfFile:@"/System/Library/Frameworks/SecurityInterface.framework/Resources/CertSmallStd_Invalid.tif"] autorelease],
 			  nil];
 }
 + (Class)transformedValueClass { return [NSImage class]; }
