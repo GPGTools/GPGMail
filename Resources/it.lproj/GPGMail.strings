@@ -1,0 +1,384 @@
+{
+/* Passphrase panel titles */
+"MESSAGE_AUTHENTICATION_TITLE" = "Autenticazione Messaggio";
+"MESSAGE_DECRYPTION_PASSPHRASE_TITLE" = "Decifrazione Messaggio";
+
+/**/
+"DECRYPTING" = "Sto Decifrando...";
+"ENCRYPTING" = "Sto Criptando...";
+
+/* <PGP> submenu title */
+"PGP_MENU" = "OpenPGP";
+/* <PGP Keys> submenu title */
+"PGP_KEYS_MENU" = "Chiavi OpenPGP";
+
+/* <PGP> submenu items */
+"DECRYPT_MENU" = "Decifra";
+"AUTHENTICATE_MENU" = "Autentica";
+"ENCRYPT_MENU" = "Cripta Nuovo Messaggio";
+"SIGN_MENU" = "Firma Nuovo Messaggio";
+
+/* Description of version prefixed with <Version:> */
+"VERSION: %@" = "Versione: %@";
+
+/* PGP preferences panel name */
+"PGP_PREFERENCES" = "GPGMail";
+
+/* Alert title and message */
+"MSG_DECRYPTION_ALERT_TITLE_NOT_SIGNED" = "Decifrazione Messaggio";
+"DECRYPTED_MSG_NOT_SIGNED" = "Il Messaggio è stato criptato ma non firmato. La sua autenticità non può essere provata.";
+"MSG_ENCRYPTION_ALERT_TITLE" = "Criptaggio OpenPGP Fallito";
+"MSG_DECRYPTION_ALERT_TITLE" = "Decifrazione OpenPGP Fallita";
+"MSG_SIGNING_ALERT_TITLE" = "Firma OpenPGP Fallita";
+"UNSUPPORTED_ENCRYPTION_FORMAT" = "GPGMail è incapace di decifrare questo tipo di messaggio criptato.";
+"DATA_NOT_AVAILABLE" = "Il contenuto del messaggio è temporaneamente non disponibile.";
+
+/* Informational alert title and message */
+"AUTHENTICATION_TITLE_OK" = "Autenticazione OpenPGP";
+
+/**/
+"AUTHENTICATION_TITLE_FAILED" = "Autenticazione OpenPGP Fallita";
+"TRY_AGAIN" = "Prova ancora";
+"CANCEL_DELIVERY" = "Annulla";
+"CANCEL_DECRYPTION" = "Annulla";
+
+/**/
+"AUTHENTICATION_TITLE_UNSIGNED" = "Autenticazione OpenPGP";
+"UNSIGNED_PGP_MESSAGE" = "Questo messaggio non e' firmato con OpenPGP.";
+
+/* Toolbar item titles */
+"DECRYPT_ITEM" = "Decifra";
+"AUTHENTICATE_ITEM" = "Autentica";
+"MAKE_ENCRYPTED_ITEM" = "Crea Messaggio Criptato";
+"MAKE_CLEAR_ITEM" = "Crea Messaggio in Chiaro";
+"MAKE_UNSIGNED_ITEM" = "Crea Messaggio Non Firmato";
+"MAKE_SIGNED_ITEM" = "Crea Messaggio Firmato";
+"ENCRYPTED_ITEM" = "Criptato";
+"CLEAR_ITEM" = "In Chiaro";
+"SIGNED_ITEM" = "Firmato";
+"UNSIGNED_ITEM" = "Non Firmato";
+
+/* Toolbar item tooltips  */
+"DECRYPT_ITEM_TOOLTIP" = "Decifra messaggio criptato con OpenPGP";
+"AUTHENTICATE_ITEM_TOOLTIP" = "Autentica messaggio firmato con OpenPGP";
+"MAKE_CLEAR_ITEM_TOOLTIP" = "Clicca qui per mandare messaggio in chiaro";
+"MAKE_ENCRYPTED_ITEM_TOOLTIP" = "Clicca qui per usare il criptaggio OpenPGP";
+"MAKE_UNSIGNED_ITEM_TOOLTIP" = "Clicca qui per mandare un messaggio senza l'autenticazione OpenPGP";
+"MAKE_SIGNED_ITEM_TOOLTIP" = "Clicca qui per usare l'autenticazione OpenPGP";
+"ENCRYPTED_ITEM_TOOLTIP" = "Il messaggio sarà criptato; clicca qui per mandare il messaggio in chiaro";
+"CLEAR_ITEM_TOOLTIP" = "Il messaggio sarà in chiaro; clicca qui per usare il criptaggio OpenPGP";
+"SIGNED_ITEM_TOOLTIP" = "Il messaggio sarà firmato con OpenPGP; clicca qui per mandare un messaggio senza l'autenticazione OpenPGP";
+"UNSIGNED_ITEM_TOOLTIP" = "Il messaggio non avrà la firma OpenPGP; clicca qui per usare l'autenticazione OpenPGP";
+
+/* Signature information */
+"Bad policy!"  = "Policy errata! "; // Followed by a list of policy URLs
+"Policy: " = "Policy: "; // Followed by a list of policy URLs
+"Signed on %@" = "Firmato il %@"; // Param is a date, whose format is set by SIGNATURE_CREATION_DATE_FORMAT
+"SIGNATURE_CREATION_DATE_FORMAT" = "%c"; // See NSCalendarDate documentation for format
+"No signature creation date available" = "Nessuna data di creazione firma disponibile";
+"Key fingerprint: %@" = "Impronta chiave: %@";
+"Key ID: 0x%@" = "ID Chiave: 0x%@";
+"No key fingerprint/ID available" = "Nessuna impronta/ID chiave disponibile";
+"Validity: %@" = "Validità: %@"; // Param is the validity status string
+"Signature expires on %@" = "La firma scade il %@"; // Param is a date, whose format is set by SIGNATURE_EXPIRATION_DATE_FORMAT
+"SIGNATURE_EXPIRATION_DATE_FORMAT" = "%x"; // See NSCalendarDate documentation for format
+"Key expired on %@" = "La chiave scade il %@"; // Param is a date, whose format is set by KEY_EXPIRATION_DATE_FORMAT
+"KEY_EXPIRATION_DATE_FORMAT" = "%x"; // See NSCalendarDate documentation for format
+"Signed by %@." = "Firmato da %@."; // Param is a userID
+"Signature from %@ is bad!" = "Firma da %@ non valida!"; // Param is a userID
+"Signature is bad!" = "Firma non valida!";
+"Signature status error." = "Errore stato firma.";
+"MISSING KEY %@." = "Manca chiave %@."; // Param is a key ID in hexadecimal
+"Signature summary 0x%04x - Signature status %u." = "Errore sconosciuto: sommario firma 0x%04x - stato firma %u."; // Generic error message; first param is a hex status flag value, second is a decimal status value
+"EXCEPTION: %@" = "Errore interno: %@"; // Generic error message; param is a string (exception reason, maybe not localized)
+"AUTHENTICATING" = "Verificando la firma OpenPGP...";
+"UNTRUSTED RECIPIENTS" = "Una delle chiavi utilizzate non è sicura";
+
+/* Title */
+/* Error messages */
+"GPGMAIL_CANNOT_WORK" = "GPGMail ha smesso di funzionare perché l'applicazione associata non riesce ad aprirsi. Prova a riaprire Mail e se l'errore persiste, manda un messaggio a gpgtools-devel@lists.gpgtools.org";
+"GPGMAIL_CANNOT_WORK_HAS_GPG_%@_VERSION_%@_NEEDS_%@" = "GPGMail ha smesso di funzionare. È stata trovato GnuPG (%@) versione %@, ma si richiede almeno la versione %@. Per favore chiudi Mail, installa una versione recente di GnuPG (per esempio dal progetto GPGTools, http://gpgtools.org/), quindi riavvia Mail."; // First arg is path to gpg, second and third are version strings
+"GPGMAIL_CANNOT_WORK_MISSING_GPG_%@_VERSION_%@" = "GPGMail ha smesso di funzionare. Non è stato trovato GnuPG (%@) almeno alla versione %@. Per favore esci da Mail, installa una versione recente di GnuPG (per esempio dal progetto GPGTools, http://gpgtools.org/), quindi riavvia Mail."; // First arg is path to gpg, second is version string
+"INVALID_GPGMAIL_VERSION" = "La tua versione di GPGMail non è compatibile con questa versione di Mail."; /* Title of alert sheet */
+"NEEDS_COMPATIBLE_BUNDLE_VERSION" = "Devi scaricare e installare la versione compatibile di GPGMail con il tuo OS. Vai su http://www.gpgtools.org/ per prenderla.";
+
+/* Validity */
+"VALIDITY: " = "validità: ";
+"Validity=0" = "sconosciuto";
+"Validity=1" = "indefinito";
+"Validity=2" = "mai";
+"Validity=3" = "marginale";
+"Validity=4" = "piena";
+"Validity=5" = "ultimate";
+
+/* Generic MacGPGME error messages */
+"GPGErrorCode=1" = "Errore generale";
+"GPGErrorCode=8" = "Firma non valida";
+"GPGErrorCode=9" = "Nessuna chiave pubblica";
+"GPGErrorCode=10" = "Errore Checksum";
+"GPGErrorCode=11" = "Passphrase non valida";
+"GPGErrorCode=15" = "Armatura non valida";
+"GPGErrorCode=17" = "Nessuna chiave privata";
+"GPGErrorCode=31" = "Passphrase non valida";
+"GPGErrorCode=40" = "Errore nel server delle chiavi";
+"GPGErrorCode=53" = "Chiave pubblica inutilizzabile";
+"GPGErrorCode=54" = "Chiave privata inutilizzabile";
+"GPGErrorCode=55" = "Valore errato";
+"GPGErrorCode=58" = "Nessun dato";
+"GPGErrorCode=69" = "Non implementato";
+"GPGErrorCode=84" = "Algoritmo non supportato";
+"GPGErrorCode=94" = "Chiave revocata";
+"GPGErrorCode=99" = "Cancellato";
+"GPGErrorCode=107" = "Nome ambiguo";
+"GPGErrorCode=116" = "Nessuna policy rispettata";
+"GPGErrorCode=125" = "Utilizzo chiave errato";
+"GPGErrorCode=150" = "Engine non valido";
+"GPGErrorCode=151" = "Chiave pubblica non affidabile";
+"GPGErrorCode=152" = "Decifrazione fallita";
+"GPGErrorCode=153" = "Chiave scaduta";
+"GPGErrorCode=154" = "Firma scaduta";
+"GPGErrorCode=16383" = "EOF";
+
+/* Signature attachment filename (suffixed automatically by .sig) */
+"PGP_SIGNATURE_FILENAME" = "PGP";
+
+/* Signature attachment content-description */
+"This is a digitally signed message part" = "Questa parte di messaggio è stata firmata digitalmente";
+
+/* Version MIME part content description header */
+"CONTENT_DESCRIPTION_HEADER" = "Identificativo versione PGP/MIME";
+
+/* Encrypted attachment filename (suffixed automatically by .asc) */
+"PGP_ENCRYPTED_FILENAME" = "PGP";
+
+/* Encrypted attachment content-description */
+"This is an encrypted message part" = "Messaggio criptato con OpenPGP";
+
+/* Multiple-part description */
+"MULTIPART_ENCRYPTED_DESCRIPTION" = "Questo è un messaggio criptato con OpenPGP/MIME (RFC 2440 e 3156)";
+"MULTIPART_SIGNED_DESCRIPTION" = "Questo è un messaggio firmato con OpenPGP/MIME (RFC 2440 e 3156)";
+
+/* Tooltip for banner icons */
+"SIGNATURE_IS_GOOD" = "La firma è valida; il messaggio non è stato modificato";
+"SIGNATURE_IS_NOT_GOOD" = "La firma non è valida; il messaggio è stato modificato";
+
+/* PGP Key Download panel */
+"PGP_SEARCH_KEYS_MENUITEM" = "Ricerca Chiave OpenPGP";
+"SEARCH" = "Ricerca";
+"CANCEL_SEARCH" = "Annulla";
+"SEARCHING" = "Cercando...";
+"NO_MATCHING_KEYS" = "Nessuna chiave trovata";
+"FOUND_%d_KEYS" = "Trovata/e %d chiave/i";
+"DOWNLOAD" = "Scarica";
+"DOWNLOADING" = "Download in corso...";
+"DOWNLOADED" = "Chiavi scaricate e importate";
+"SEARCH_KEYS_ON_SERVER" = "Ricerca di chiavi OpenPGP sul server delle chiavi";
+"DOWNLOAD_KEYS_FROM_SERVER" = "Scarico chiavi OpenPGP dal server delle chiavi";
+"SEARCH_ERROR" = "È stato riscontrato un errore durante la ricerca";
+"DOWNLOAD_ERROR" = "È stato riscontrato un errore durante il download";
+" (%u bits)" = " (%u bits)";
+", created on %@" = ", creata il %@";
+", expires on %@" = ", scade il %@";
+", expired on %@" = ", scaduta il %@";
+"REVOKED_KEY - " = "Revocata - "; // Prefixes found key description, when necessary; followed by keyID, userID, etc.
+
+/* Unmatched PGP keys for receipts - sheet */
+"MISSING_KEYS: DOWNLOAD" = "Alcuni indirizzi non hanno nessuna chiave OpenPGP. Ricercare chiavi?"; // Title
+"UNMATCHED_ADDRESSES: %@" = "I seguenti indirizzi email non hanno chiavi OpenPGP:\n%@"; // Message
+"SEARCH_MATCHING_KEYS" = "Ricerca"; // Default button
+"SEND_IN_CLEAR" = "Invia in Chiaro"; // Other button
+
+"INVALID_HASH_%@" = "L'algoritmo di hash '%@' non è permesso dalla RFC3156.";
+"GPGMAIL_VS_PGPMAIL" = "GPGMail non può funzionare con PGPmail installato";
+"GPGMAIL_%@_VS_PGPMAIL_%@" = "Entrambi i bundles forniscono le stesse funzionalità, con differenti engines, e solo uno di essi può essere installato. Devi rimuovere '%@', o '%@'.";
+"QUIT" = "Esci";
+"CONTINUE_ANYWAY" = "Riprova per continuare";
+
+/* Composer accessory view header, under To:, CC:, Subject: */
+"PGP:" = "OpenPGP:";
+
+/* Key description in popups; prefixes key (actually, primary userID), when necessary; followed by keyID, userID, etc.*/
+"REVOKED_KEY:" = "Revocata:";
+"EXPIRED_KEY:" = "Scaduta:";
+"DISABLED_KEY:" = "Disabilitata:";
+"INVALID_KEY:" = "Non Valida:";
+
+/* UserID description in popups; prefixes userID, when necessary; followed by name, email, etc.*/
+"REVOKED_USER_ID:" = "Revocato:";
+"INVALID_USER_ID:" = "Non Valido:";
+
+/* GPGMail exception reasons */
+"NO_VALID_PUBLIC_KEY" = "Non è stata trovata nessuna chiave pubblica valida. Sono tutte scadute, disabilitate o revocate."; // Could be displayed after encryption
+"NO_VALID_PRIVATE_KEY" = "Non è stata trovata nessuna chiave personale valida. O non è stata selezionata, o la chiave scelta è revocata, disabilitata o è scaduta."; // Could be displayed after encryption
+
+/* Alert when user has no PGP key */
+"NO PGP PRIVATE KEY - TITLE" = "Non hai nessuna chiave OpenPGP. Non puoi utilizzare GPGMail per criptare o firmare messaggi.";
+"NO PGP PRIVATE KEY - MESSAGE" = "Se vuoi essere in grado di criptare o firmare messaggi con OpenPGP, hai bisogno della tua chiave OpenPGP personale. Per creare una chiave OpenPGP, scarica e installa Accesso Portachiavi contenuto in GPGTools da http://gpgtools.org/";
+
+/* Conflict resolution panel*/
+"<ME>" = "Io";
+"<YES>" = "Sì";
+"<NO>" = "No";
+"<ALWAYS>" = "Sempre";
+"<NEVER>" = "Mai";
+"<ACCEPTS>" = "Accetto";
+
+/* Additional info describing key */
+"DISABLED_KEY_QUALIFIER" = "disabilitata";
+"INVALID_KEY_QUALIFIER" = "invalida";
+"REVOKED_KEY_QUALIFIER" = "revocata";
+"EXPIRED_KEY_QUALIFIER" = "scaduta";
+"CANNOT_ENCRYPT_KEY_QUALIFIER" = "non posso criptare";
+"CANNOT_SIGN_KEY_QUALIFIER" = "non posso firmare";
+
+/* Additional info describing userID */
+"INVALID_USER_ID_QUALIFIER" = "non valido";
+"REVOKED_USER_ID_QUALIFIER" = "revocato";
+
+"COPY_MSG_URL_MENUITEM" = "Copia l'URL del messaggio";
+
+/* Message Error Banner messages. */
+"MESSAGE_BANNER_PGP_DECRYPT_ERROR_TITLE" = "Non abilitato a decifrare il messaggio PGP.";
+"MESSAGE_BANNER_PGP_DECRYPT_ERROR_MESSAGE" = "Si è verificato un problema nel decifrare questo messaggio. Verifica di avere una chiave valida nel tuo Portachiavi GPG.";
+"MESSAGE_BANNER_PGP_VERIFY_ERROR_TITLE" = "Non abilitato a verificare la firma PGP del messaggio.";
+"MESSAGE_BANNER_PGP_VERIFY_ERROR_MESSAGE" = "Si è verificato un problema nella lettura della firma PGP per questo messaggio.";
+"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_TITLE" = "La chiave PGP del messaggio non è nel tuo portachiavi.";
+"MESSAGE_BANNER_PGP_VERIFY_NOT_IN_KEYCHAIN_ERROR_MESSAGE" = "Era possibile leggere la firma PGP per questo messaggio, ma la chiave PGP non è nel tuo portachiavi. Per favore usa Accesso Portachiavi GPG per aggiungerla al tuo portachiavi.";
+"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_TITLE" = "Nessuna informazione aggiuntiva per questa chiave PGP.";
+"MESSAGE_ERROR_ALERT_PGP_VERIFY_NOT_IN_KEYCHAIN_MESSAGE" = "Non è possibile mostrare informazioni aggiuntive per questa chiave PGP, poiché non è nel tuo portachiavi.";
+
+    "MESSAGE_BANNER_PGP_DECRYPT_SECKEY_ERROR_TITLE" = "Non è stata trovata la chiave privata per decifrare questo messaggio.";
+    "MESSAGE_BANNER_PGP_DECRYPT_SECKEY_ERROR_MESSAGE" = "La chiave privata per decifrare questo messaggio non è nel tuo portachiavi.\n\nControlla con il mittente se ha utilizzato la chiave pubblica corretta.\nControlla se hai ancora un backup del tuo portachiavi e importa la chiave privata da li.";
+    
+    "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_TITLE" = "Errore sconosciuto durante la decifrazione!";
+    "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_MESSAGE" = "Si è verificato un errore sconosciuto durante la decifrazione del messaggio.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_TITLE" = "Errore sconosciuto durante la decifrazione!";
+    "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_MESSAGE" = "Si è verificato un errore sconosciuto durante la decifrazione del messaggio.\n\nGPG error message:\n%@\nPer favore contattaci includendo il messaggio di errore di GPG su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_TITLE" = "È stata utilizzata una chiave errata per criptare questo messaggio.";
+    "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_MESSAGE" = "Questo messaggio non può essere decifrato, dato che è stata utilizzata una chiave pubblica errata per criptarlo.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_TITLE" = "Il messaggio criptato è danneggiato.";
+    "MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "Questo messaggio criptato è danneggiato e non può essere decifrato.\n\nPer favore chiedi al mittente di inviare di nuovo il messaggio.";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "La chiave utilizzata per firmare è stata revocata.";
+    "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "ATTENZIONE: La chiave che è stata utilizzata per firmare questo messaggio è stata revocata.\n\nDevi rinnovare la chiave utilizzando l'ID chive %@ tramite Accesso Portachiavi GPG per controllare se una nuova chiave è disponibile. Se la nuova chiave è ancora revocata, controlla con il mittente perché la chiave è revocata.";
+    "MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "La chiave per questa firma non è nel tuo portachiavi GPG.";
+    "MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "Il messaggio non può essere verificato, dato che la chiave utilizzata per firmarlo non è nel tuo portachiavi GPG.\n\nRicerca la chiave con l'ID %@ tramite Accesso Portachiavi GPG e importala per verificare il messaggio.";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_TITLE" = "La chiave per questa firma è stata creata con un algoritmo non supportato.";
+    "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_MESSAGE" = "Questo messaggio non può essere verificato, dato che la firma è stata creata con un algoritmo non supportato.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENZIONE: La firma per questo messaggio non è valida!";
+    "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "ATTENZIONE: Questo messaggio può essere stato modificato dopo che la firma è stata creata.\n\nPer favore contatta il mittente e assicurati che il contenuto del messaggio combaci con l'originale.\n\nPer favore contattaci su support.gpgtools.org, se sei sicuro che il messaggio non è stato modificato.";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Errore sconosciuto durante la verifica!";
+    "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_MESSAGE" = "Si è verificato un errore sconosciuto durante la verifica di questo messaggio.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Errore nei dati della firma!";
+    "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "Questo messaggio non può essere verificato, visto che i dati della firma non sono validi.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_KEY_EXPIRED_ERROR_TITLE" = "La chiave della firma è scaduta.";
+    "MESSAGE_BANNER_PGP_VERIFY_KEY_EXPIRED_ERROR_MESSAGE" = "ATTENZIONE: La chiave usata per firmare questo messaggio è scaduta.\n\nProva a rinnovare la chiave con l'ID %@ tramite Accesso Portachiavi GPG e chiedi al mittente perché la sua chiave è scaduta.";
+    
+    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "La firma del messaggio è scaduta.";
+    "MESSAGE_BANNER_PGP_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "La firma non può essere verificata, dato che la firma è scaduta.\n\nChiedi al mittente perché la sua firma è scaduta.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_VERIFY_ERROR_TITLE" = "%d allegati non sono stati decifrati o verificati.";
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_VERIFY_ERROR_MESSAGE" = "Per favore clicca sull'icona dell'allegato nella parte dedicata alla sicurezza nell'header del messaggio per ulteriori dettagli.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_VERIFY_ERROR_TITLE" = "%d allegati non sono stati verificati.";
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_VERIFY_ERROR_MESSAGE" = "Per favore clicca sull'icona dell'allegato nella parte dedicata alla sicurezza nell'header del messaggio per ulteriori dettagli.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_ERROR_TITLE" = "%d allegati non sono stati decifrati.";
+    "MESSAGE_BANNER_PGP_ATTACHMENTS_DECRYPT_ERROR_MESSAGE" = "Per favore clicca sull'icona dell'allegato nella parte dedicata alla sicurezza nell'header del messaggio per ulteriori dettagli.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ERROR_TITLE" = "%d allegato non è stato verificato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ERROR_MESSAGE" = "Per favore clicca sull'icona dell'allegato nella parte dedicata alla sicurezza nell'header del messaggio per ulteriori dettagli.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_ERROR_TITLE" = "%d allegato non è stato decifrato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_ERROR_MESSAGE" = "Per favore clicca sull'icona dell'allegato nella parte dedicata alla sicurezza nell'header del messaggio per ulteriori dettagli.";
+    
+    /* Message Error Banner Attachment messages. */
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SECKEY_ERROR_TITLE" = "Non è stata trovata la chiave privata per decifrare questo allegato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SECKEY_ERROR_MESSAGE" = "La chiave privata per decifrare questo allegato non è nel tuo portachiavi.\n\nControlla con il mittente che abbia utilizzato la chiave pubblica corretta.\nControlla di avere ancora un backup del tuo portachiavi ed importa la chiave privata mancante.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SYSTEM_ERROR_TITLE" = "Errore sconosciuto durante la decifrazione!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_SYSTEM_ERROR_MESSAGE" = "Si è verificato un errore sconosciuto durante la decifrazione di questo allegato.\n\nPer favore contattaci su support.gpgtools.org";    
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_GENERAL_ERROR_TITLE" = "Errore sconosciuto durante la decifrazione!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_GENERAL_ERROR_MESSAGE" = "Si è verificato un errore sconosciuto durante la decifrazione di questo allegato.\n\nGPG error message:\n%@\nPer favore contattaci includento il messaggio d'errore di GPG su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_WRONG_SECKEY_ERROR_TITLE" = "Utilizzata chiave errata per criptare questo allegato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_WRONG_SECKEY_ERROR_MESSAGE" = "Questo allegato non può essere decifrato, dato che è stata utilizzata una chiave pubblica errata per criptarlo.\n\nPer favore contattaci su support.gpgtools.org";    
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_CORRUPTED_DATA_ERROR_TITLE" = "L'allegato criptato è danneggiato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "Questo allegato criptato è danneggiato e non è possibile decifrarlo.\n\nPer favore chiedi al mittente di inviare di nuovo il messaggio.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "La chiave della firma è stata revocata.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "ATTENZIONE: La chiave utilizzata per firmare questo allegato è stata revocata.\n\nProva a rinnovare la chiave con l'ID %@ tramite Accesso Portachiavi GPG per vedere se una nuova chiave è disponibile. Se la nuova chiave è ancora revocata chiedi al mittente perché la sua chiave è revocata.";    
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "La chiave di questa firma non è nel tuo Portachiavi GPG.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "L'allegato non può essere verificato, dato che la chiave utilizzata per firmare l'allegato non è nel Portachiavi GPG.\n\nRicerca la chiave con l'ID %@ tramite Accesso Portachiavi GPG e importa la chiave per verificare l'allegato.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_TITLE" = "La chiave utilizzata per la firma è stata creata con un algoritmo non supportato.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_MESSAGE" = "Questo allegato non può essere verificato, dato che la chiave utilizzata è stata creata con un algoritmo non supportato.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENZIONE: La firma per questo allegato non è valida!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "ATTENZIONE: Questo allegato può essere stato modificato dopo la creazione della firma.\n\nPer favore contatta il mittente e assicurati che il contenuto dell'allegato combaci con l'originale.\n\nPer favore contattaci su support.gpgtools.org, se sei sicuro che l'allegato non è stato modificato.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Errore sconosciuto durante la verifica dell'allegato!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_MESSAGE" = "È stato riscontrato un errore sconosciuto durante la verifica dell'allegato.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Errore nei dati della firma!";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_MESSAGE" = "Questo allegato non è stato verificato, visto che i dati della firma non sono validi.\n\nPer favore contattaci su support.gpgtools.org";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_KEY_EXPIRED_ERROR_TITLE" = "La chiave della firma è scaduta.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_KEY_EXPIRED_ERROR_MESSAGE" = "ATTENZIONE: La chiave utilizzata per firmare l'allegato è scaduta.\n\nProva a rinnovare la chiave con l'ID %@ tramite Accesso Portachiavi GPG e chiedi al mittente perché la sua chiave è scaduta.";
+    
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "La firma dell'allegato è scaduta.";
+    "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "La firma non può essere verificata, dato che la firma è scaduta.\n\nChiedi al mittente perché la sua firma è scaduta.";
+    
+"GPG_CONFIG_ERROR_NO_PINENTRY_TITLE" = "Pinentry-mac non è installato.";
+"GPG_CONFIG_ERROR_NO_PINENTRY_MESSAGE" = "Pinentry-mac, un componente importante utilizzato da GPGMail non è stato trovato. Per favore assicurati di avere installato l'ultima versione di GPGTools (http://www.gpgtools.org/installer/index.html)";
+
+"MESSAGE_IS_PGP_PARTLY_ENCRYPTED" = "Parzialmente Criptato";
+"MESSAGE_IS_PGP_PARTLY_SIGNED" = "Parzialmente Firmato";
+"MESSAGE_IS_PGP_ENCRYPTED" = "Criptato";
+"MESSAGE_IS_PGP_SIGNED" = "Firmato";
+"MESSAGE_IS_PGP_SIGNED_INVALID" = "Firma Non Valida";
+
+/* Security Header signature related. */
+"MESSAGE_SECURITY_HEADER_SIGNATURE_NO_PUBLIC_KEY_TITLE" = "Firmato con una chiave sconosciuta";
+"MESSAGE_SECURITY_HEADER_SIGNATURE_REVOKED_TITLE" = "Firmato con una chiave revocata";
+"MESSAGE_SECURITY_HEADER_SIGNATURE_BAD_TITLE" = "Firma non valida";
+"MESSAGE_SECURITY_HEADER_SIGNATURE_TITLE" = "Firmato";
+
+    /* Security header attachments related. */
+    "MESSAGE_SECURITY_HEADER_ATTACHMENT_SIGNED_ENCRYPTED_TITLE" = "allegato criptato/firmato";
+    "MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_ENCRYPTED_TITLE" = "allegati criptati/firmati";
+    "MESSAGE_SECURITY_HEADER_ATTACHMENT_ENCRYPTED_TITLE" = "allegato decifrato";
+    "MESSAGE_SECURITY_HEADER_ATTACHMENTS_ENCRYPTED_TITLE" = "allegati decifrati";
+    "MESSAGE_SECURITY_HEADER_ATTACHMENT_SIGNED_TITLE" = "allegato firmato";
+    "MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_TITLE" = "allegati firmati";
+    
+    /* Compose Window encrypt/sign button tooltips. */
+    "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_SIGN" = "Questo messaggio non può essere firmato, dato che che non esiste una chiave privata per %@.\n\nPer favore assicurati che una chiave privata per questo indirizzo esista in Accesso Protachiavi GPG. Aggiungi un nuovo UID a una chiave esistente per questo indirizzo se necessario o crea una nuova chiave per questo indirizzo.\n\nSe la chiave per questo indirizzo esiste, assicurati che l'indirizzo nelle Preferenze di Mail sia corretto e combaci esattamente con l'indirizzo della tua chiave.";
+    "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT" = "Questo messaggio non può essere criptato, dato che non ci sono chiavi pubbliche disponibili per il seguente indirizzo: %@.\n\nPer favore usa Accesso Portachiavi GPG per cercare e importare le chiavi per questi indirizzi.";
+    "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT_NO_RECIPIENTS" = "Questo messaggio non può essere criptato. Devi prima inserire almeno un destinatario.";
+
+/* Message view pgp part. */
+    "MESSAGE_VIEW_PGP_PART_ENCRYPTED" = "Decifrato";
+    "MESSAGE_VIEW_PGP_PART_SIGNED" = "Firmato";    
+    "MESSAGE_VIEW_PGP_PART" = "Parte PGP";
+    
+/* GPGMail Preferences strings. */
+"GPG_STATUS_NO_ERROR_TITLE" = "GPGMail è pronto.";
+"GPG_STATUS_NOT_FOUND_TITLE" = "MacGPG2 non è installato. Controlla la tua installazione.";
+"GPG_STATUS_OTHER_ERROR_TITLE" = "Per favore controlla le tue chiavi e l'installazione.";
+
+/* Signature view key status. */
+    "VALIDITY_KEY_REVOKED" = "Questa chiave è stata revocata.";
+    
+}

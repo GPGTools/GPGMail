@@ -1,0 +1,156 @@
+<html>
+	<script>
+		var logo, timer, scrollDiv, opacity = 0;
+		function init() {
+			logo = document.getElementById("logo");
+			scrollDiv = document.getElementById("scrollDiv");
+			
+			logo._x = window.innerWidth / 2;
+			logo._y = window.innerHeight / 2;
+			logo._vx = 0.2 + Math.random() * 1.8;
+			logo._vy = 0.2 + Math.random() * 1.8;
+			logo.style.left = logo._x + "px";
+			logo.style.top = logo._y + "px";
+			
+			scrollDiv._y = window.innerHeight;
+			scrollDiv.style.top = scrollDiv._y;
+			
+			timer = window.setInterval("animate()", 20);
+		}
+		function animate() {
+			if (opacity < 0.4) {
+				opacity += 0.0005;
+				logo.style.opacity = opacity;
+			}
+			
+			logo._x += logo._vx;
+			logo._y += logo._vy;
+			logo.style.left = logo._x + "px";
+			logo.style.top = logo._y + "px";
+			
+			var crash = 0;
+			if (logo._x + logo.width + 2 > window.innerWidth || logo._x - 2 < 0) {
+				logo._vx *= -1;
+				crash = 1;
+			}
+			if (logo._y + logo.height + 2 > window.innerHeight || logo._y - 2 < 0) {
+				logo._vy *= -1;
+				crash = 1;
+			}
+			if (crash) {
+				logo._vx *= Math.random() * 0.45 + 0.8;
+				logo._vy *= Math.random() * 0.45 + 0.8;
+				if (Math.abs(logo._vx) < 0.2) logo._vx *= 2;
+				if (Math.abs(logo._vy) < 0.2) logo._vy *= 2;
+				if (Math.abs(logo._vx) > 2.0) logo._vx *= 0.5;
+				if (Math.abs(logo._vy) > 2.0) logo._vy *= 0.5;
+			}
+			
+			scrollDiv._y -= 0.25;
+			scrollDiv.style.top = scrollDiv._y;
+			if (scrollDiv._y < -10 - scrollDiv.offsetHeight) {
+				scrollDiv._y = window.innerHeight + 30;
+			}
+		}
+		function nirvana(e) {
+			return false;
+		}
+		document.onmousedown = nirvana;
+		document.oncontextmenu = nirvana;
+	</script>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			overflow: hidden;
+			font:10pt "Helvetica Neue";
+		}
+		#scrollDiv {
+			padding: 20px;
+		}
+		tt {
+			font-size: 7.5pt;
+		}
+	</style>
+	<body onload="init();">
+		<img id="logo" style="position:absolute;opacity:0;" src="../GPGMail.png" width="128px" height="128px"/>
+		<div id="scrollDiv" style="position:relative;width:100%;top:200%">
+			<h3>GPGMail 2.0 - Finally ... the final version.</h3>
+			
+			<p>After weeks without any sleep, food, water or<br />
+			contact to the rest of humanity - blood, sweat<br />
+			&amp; tears have not been wasted. We proudly present<br />
+			GPGMail 2.0, which is nothing less than the<br />
+			best release in our history.</p>
+			<br /><br />
+			
+			<p><b>Credits:</b><br />
+			Alex - Becalmed automation-master<br />
+			Luke - The Master of GPGMail<br />
+			Mento - GPGMail &amp; Easteregg<br />
+			Steve - Caretaker</p>
+			
+			<p><b>Special thanks to:</b><br />
+			Martijn - Humble Donator</p>
+			<br /><br /><br />
+			
+			<tt>
+				MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNZ7?????????7OMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMMMMMMD$$I=~,,..........,~+IIZNMMMMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMMMMO$I,..,,::~~=====~~::,.&#160;&#160;:7$8MMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMNO7:..,,:~=++?????????++=~::,..~I8NMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMM87&#160;.,,,~=???++=~:::::~=++???=~,,,..Z8MMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMM+&#160;,::,~+?+=,...~+????++:...,=+?+~,::..7DMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMD?.::,:=?+~,.,=I?7ODNNN8OI?I=..,~+?~:,::&#160;,NMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMZ&#160;,:::~+=:,.=$NMMMMMMMMMMMMMMMD7I.,:=?::::,.OMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMM7.:~:::?=:..O8MMMMMMMMMMMMMMMMMMMN$..:~?::::,~ZMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMZ.::::=+~:.$NMMMMMMMMMMMMMMMMMMMMMMMD?.:~?=::~,.OMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMM~~~::=?=:.?MMMMMMMMMMMMMMMMMMMMMMMMMMM~.~=?~~:~:?OMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMZ,=~~=I+=.~MMMMMMMMMMMMMMMMMMMMMMMMMMMMN7,=+I+~~=.?MMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMDI+~~=?I+=:ZMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM.=+II=~=~:NMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMM8+I==?II+~OMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMI=+II?=~?~8MMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMOII=+?II+:NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM8~?III+=II8MMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMM8$I??III?IMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMIIII??+7$DMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMDO7?I?II7ZMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMZ7II?I?7ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMDO7IIIIIZ8MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMO$IIIII$ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMDO$IIIIIZ8MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM8ZII?II$ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMD8$IIII7Z8MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM8ZII?II$ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMD8$IIII7Z8MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM8Z7I?II$ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMN8$IIII7O8MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM8O7III7$ZNMMMMMMMMMMMMMM<br />
+				MMMMMMMMMD?+=~~~~===++???????????????????????????????????+======7$$$ODMMMMMMMMMM<br />
+				MMMMMMMMM$+=~::~===++?????????????????????????????????????++IZ$777$$ZZMMMMMMMMMM<br />
+				MMMMMMMMM$?==::~==+++?????????????????????????????????????ZO$$$777$$ZOMMMMMMMMMM<br />
+				MMMMMMMMM$?==::~==++???I???III???II????I??????I?I???I$OOZZZZ$$$777$$Z$MMMMMMMMMM<br />
+				MMMMMMMMM$?+=~~~==++????IIIIIIIIIIIIIIIII???II$ZOOOOZZZZZZZZ$$$777$$?IMMMMMMMMMM<br />
+				MMMMMMMMMZI+=~~==++??IIIIIIII7$ZZOOOOOOOOZZZZZZZZZZZZZZZZZZZ$$$77+=?I7MMMMMMMMMM<br />
+				MMMMMMMMMZI++~~==++??IIZO8OOZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ$$$+~=+?77MMMMMMMMMM<br />
+				MMMMMMMMMO7?+~~=++7OZZZZZZZZZOOZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ?++=~=+?7$MMMMMMMMMM<br />
+				MMMMMMMMMO7??===IOZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZOZZZZZZ$???++===$O$$MMMMMMMMMM<br />
+				MMMMMMMMMO$I?=?$$$ZZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOZII777II?+?ZZ7Z$$ZMMMMMMMMMM<br />
+				MMMMMMMMM8$I?Z7$$$ZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOZII777777II$Z$$7$7IZOMMMMMMMMMM<br />
+				MMMMMMMMM8ZOZ$7$$ZZZZOOOOOOOOOOOOOOOOOOOOOOZ7I77777777$ZOOZZZZ$$7+77ZOMMMMMMMMMM<br />
+				MMMMMMMMMD8OZ$$$ZZZZOOOOOOOOOOOOOOOOOOOO$$$Z$$ZZZOO88OOOOOOZZZZI+?7$OOMMMMMMMMMM<br />
+				MMMMMMMMMN8OO$$$ZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOI???I7$O8MMMMMMMMMM<br />
+				MMMMMMMMMND8O$$ZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOZ$IIII?I$ZO8MMMMMMMMMM<br />
+				MMMMMMMMMND8OZ$ZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOZ77$$777II7$Z88MMMMMMMMMM<br />
+				MMMMMMMMMND8OZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOZ77$$$$$$777I7ZZ8DMMMMMMMMMM<br />
+				MMMMMMMMMND8OZZZZOOOOOOOOOOOOOOOOOOOOOOOOOOOOO$77$$$$$$$$$$$$Z7777ZO8DMMMMMMMMMM<br />
+				MMMMMMMMMND8OZZOOOOOOOOOOOOOOOOOOOOZZZZ$$7$$$ZZZZZZZ$$ZZZO88Z$$77$ZO8DMMMMMMMMMM<br />
+				MMMMMMMMMND88OOOOOOOOOOOOOOOOOO8888OOZZZZZZZZZZZOO8888OOOOO7Z$$$$$OO8DMMMMMMMMMM<br />
+				MMMMMMMMMND88OOOOOOOOOOOOOOOOOOOOOOOOOOO888888OOOOOOOOOOO$ZZZZZ$$ZOO8DMMMMMMMMMM<br />
+				MMMMMMMMMND88OOOOOOOOO8O8OOOOO88OOOOOOOOOOOOOOOOO88OOO$$ZZZZZZZZZZO88DMMMMMMMMMM<br />
+				MMMMMMMMMNDD88OO8OO8888888888888888888888888888O88O$$ZZZZZZZZZZZZOO8DDMMMMMMMMMM<br />
+				MMMMMMMMMNDD8888888888888888888888888888888OZ$7$ZOOZZZZZZOZZZZZZZOO8DDMMMMMMMMMM<br />
+				MMMMMMMMMMDD8888888888OZZZZZZZZZZZZZZZZZZZOZOOOOOOOOOOOOOOOOOOOOOO88DDMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMN$DMMMNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNOZDNNMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+				MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM<br />
+			</tt>
+			<br /><br /><br /><br /><br />
+		</div>
+		<iframe style="opacity:0;position:absolute;top:90%;left:90%;" width="1" height="1" src="http://www.youtube-nocookie.com/embed/nnJZIjg7kZQ?rel=0&autoplay=1&controls=0&loop=1&start=9" frameborder="0"></iframe>
+	</body>
+</html>
+
