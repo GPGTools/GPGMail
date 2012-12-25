@@ -222,7 +222,7 @@
 										<key>LANGUAGE</key>
 										<string>English</string>
 										<key>VALUE</key>
-										<string>Adds the GPGTolls public OpenPGP key to the keychain.</string>
+										<string>Adds the GPGTools public OpenPGP key to the keychain.</string>
 									</dict>
 								</array>
 								<key>OPTIONS</key>
