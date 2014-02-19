@@ -29,7 +29,7 @@ make
 ```
 
 ### Install
-To copy GPGMail into Mail's Bundles folder.
+To copy GPGMail into Mail's Bundles folder (as root if neccessary):
 ```bash
 make install
 ```
@@ -41,12 +41,12 @@ make help
 
 Don't forget to install [MacGPG2](https://github.com/GPGTools/MacGPG2)
 and [Libmacgpg](https://github.com/GPGTools/Libmacgpg).  
-Enjoy your custom GPGMail.
+Enjoy your custom GPGMail!
 
 
 System Requirements
 -------------------
 
 * Mac OS X >= 10.7
-* Libmacgpg
-* GnuPG
+* libmacgpg
+* MacGPG2
