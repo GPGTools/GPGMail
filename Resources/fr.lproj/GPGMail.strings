@@ -20,14 +20,14 @@
 "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_TITLE" = "Le déchiffrement a échoué sur une erreur inconnue !";
 "MESSAGE_BANNER_PGP_DECRYPT_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while decrypting this message.\n\nPlease contact us at http://support.gpgtools.org";
 
-"MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_TITLE" = "Décryptation échouée pour une raison inconnue!";
+"MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_TITLE" = "Déchiffrement échouée pour une raison inconnue!";
 "MESSAGE_BANNER_PGP_DECRYPT_GENERAL_ERROR_MESSAGE" = "An unknown error occurred while decrypting this message.\n\nGPG error message:\n%@\nPlease contact us, including the GPG error message, at http://support.gpgtools.org";
 
 "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_TITLE" = "Clé erronée utilisée pour chiffrer ce message.";
 "MESSAGE_BANNER_PGP_DECRYPT_WRONG_SECKEY_ERROR_MESSAGE" = "This message could not be decrypted, since the wrong public key was used to encrypt it.\n\nPlease contact us at http://support.gpgtools.org";
 
-"MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_TITLE" = "Le message crypté est endommagé";
-"MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "Le message crypté est endommagé et ne peut être décrypté.\n\nVeuillez demander à l'expéditeur de l'envoyer à nouveau.";
+"MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_TITLE" = "Le message chiffré est endommagé";
+"MESSAGE_BANNER_PGP_DECRYPT_CORRUPTED_DATA_ERROR_MESSAGE" = "Le message chiffré est endommagé et ne peut être déchiffré.\n\nVeuillez demander à l'expéditeur de l'envoyer à nouveau.";
 
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "La clé de la signature a été révoquée.";
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "ATTENTION: La clé utilisée pour signer ce message a été révoquée.\n\nVous devriez rafraichir la clé avec l'identifiant de clé %@ dans GPG Keychain Access pour vérifier si une clé plus récente est disponible. Si la nouvelle est également révoquée, vérifiez la raison de la révocation auprès de l'expéditeur.";
@@ -113,9 +113,9 @@
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_TITLE" = "La signature du fichier joint est expirée.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SIGNATURE_EXPIRED_ERROR_MESSAGE" = "La signature du fichier joint est expirée et n'a pu être vérifiée.\n\nDemandez à l'expéditeur la raison de son expiration.";
 
-"MESSAGE_IS_PGP_PARTLY_ENCRYPTED" = "Partiellement crypté";
+"MESSAGE_IS_PGP_PARTLY_ENCRYPTED" = "Partiellement chiffré";
 "MESSAGE_IS_PGP_PARTLY_SIGNED" = "Partiellement signé";
-"MESSAGE_IS_PGP_ENCRYPTED" = "Crypté";
+"MESSAGE_IS_PGP_ENCRYPTED" = "Chiffré";
 "MESSAGE_IS_PGP_SIGNED" = "Signé";
 "MESSAGE_IS_PGP_SIGNED_INVALID" = "Signature non valide";
 
@@ -126,17 +126,17 @@
 "MESSAGE_SECURITY_HEADER_SIGNATURE_TITLE" = "Signé";
 
 /* Security header attachments related. */
-"MESSAGE_SECURITY_HEADER_ATTACHMENT_SIGNED_ENCRYPTED_TITLE" = "fichier joint crypté/signé";
-"MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_ENCRYPTED_TITLE" = "fichiers joints cryptés/signés";
-"MESSAGE_SECURITY_HEADER_ATTACHMENT_ENCRYPTED_TITLE" = "fichier joint crypté";
-"MESSAGE_SECURITY_HEADER_ATTACHMENTS_ENCRYPTED_TITLE" = "fichiers joints cryptés";
+"MESSAGE_SECURITY_HEADER_ATTACHMENT_SIGNED_ENCRYPTED_TITLE" = "fichier joint chiffré/signé";
+"MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_ENCRYPTED_TITLE" = "fichiers joints chiffrés/signés";
+"MESSAGE_SECURITY_HEADER_ATTACHMENT_ENCRYPTED_TITLE" = "fichier joint chiffré";
+"MESSAGE_SECURITY_HEADER_ATTACHMENTS_ENCRYPTED_TITLE" = "fichiers joints chiffrés";
 "MESSAGE_SECURITY_HEADER_ATTACHMENT_SIGNED_TITLE" = "fichier joint signé";
 "MESSAGE_SECURITY_HEADER_ATTACHMENTS_SIGNED_TITLE" = "fichiers joints signés";
 
 /* Compose Window encrypt/sign button tooltips. */
 "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_SIGN" = "Ce message ne peut-être signé car il n'existe pas de clé privée pour %@.\n\nMerci de vous assurer qu'une clé privée existe pour cette adresse dans GPG Keychain Access. Ajouter si nécessaire un nouvel UID à une clé existante pour cette adresse, ou créez une nouvelle clé pour cette adresse.\n\nSi une clé existe pour cette adresse, merci de vous assurer que l'adresse est correctement saisie dans les préférences de Mail et correspond exactment à l'adresse de la clé.";
-"COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT" = "Ce message ne peut être crypté, il n'existe pas de clés publiques disponibles pour les adresses suivantes: %@.\n\nVeuillez utiliser GPG Keychain Access pour rechercher et importer les clés pour ces adresses.";
-"COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT_NO_RECIPIENTS" = "Ce message ne peut être crypté. Vous devez d'abord indiquer un destinataire.";
+"COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT" = "Ce message ne peut être chiffré, il n'existe pas de clés publiques disponibles pour les adresses suivantes: %@.\n\nVeuillez utiliser GPG Keychain Access pour rechercher et importer les clés pour ces adresses.";
+"COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT_NO_RECIPIENTS" = "Ce message ne peut être chiffré. Vous devez d'abord indiquer un destinataire.";
 
 /* Message view pgp part. */
 "MESSAGE_VIEW_PGP_PART_ENCRYPTED" = "Crypté";
