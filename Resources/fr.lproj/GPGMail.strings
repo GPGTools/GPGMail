@@ -139,7 +139,7 @@
 "COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_ENCRYPT_NO_RECIPIENTS" = "Ce message ne peut être chiffré. Vous devez d'abord indiquer un destinataire.";
 
 /* Message view pgp part. */
-"MESSAGE_VIEW_PGP_PART_ENCRYPTED" = "Crypté";
+"MESSAGE_VIEW_PGP_PART_ENCRYPTED" = "Chiffré";
 "MESSAGE_VIEW_PGP_PART_SIGNED" = "Signé";    
 "MESSAGE_VIEW_PGP_PART" = "partie PGP";
 
