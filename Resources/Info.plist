@@ -44,6 +44,7 @@
 	<string>dsa_pub.pem</string>
 	<key>SupportedPluginCompatibilityUUIDs</key>
 	<array>
+		<string>AE92CD58-4077-43D8-849D-350AF338F4CC</string>
 		<string>427E6BAF-DE6C-4181-BB6D-1147337CD73A</string>
 		<string>1A6064D1-D261-4A15-ACE8-C3743D5DF95B</string>
 		<string>0C8D41E1-BE6E-44EC-AF91-5A08068B4359</string>
