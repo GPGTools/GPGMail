@@ -208,9 +208,6 @@
     NSLog(@"Loading Stage: %d", message.PGPSigned);
     
     if(message.PGPInfoCollected && (message.PGPEncrypted || message.PGPSigned) && [message getIvar:@"LoadingStage"]) {
-        [self setIvar:@"RealDetailsHidden" value:[self valueForKey:@"_detailsHidden"]];
-        [self setValue:@(0) forKey:@"_detailsHidden"];
-        [(HeaderViewController *)self _updateDetailsButton];
         [self MA_updateTextStorageWithHardInvalidation:YES];
         return;
     }
