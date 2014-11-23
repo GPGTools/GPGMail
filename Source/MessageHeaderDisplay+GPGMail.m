@@ -207,21 +207,7 @@
     NSLog(@"Loading Stage: %d", message.PGPEncrypted);
     NSLog(@"Loading Stage: %d", message.PGPSigned);
     
-    if(floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_9) {
-        [self setIvar:@"RealShowDetails" value:[self valueForKey:@"_showDetails"]];
-        [self setShowDetails:1];
-    }
-    
     if(message.PGPInfoCollected && (message.PGPEncrypted || message.PGPSigned) && [message getIvar:@"LoadingStage"]) {
-        if(floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_9) {
-            [self setIvar:@"RealShowDetails" value:[self valueForKey:@"_showDetails"]];
-            [self setShowDetails:1];
-        }
-        else {
-            [self setIvar:@"RealDetailsHidden" value:[self valueForKey:@"_detailsHidden"]];
-            [self setValue:@(0) forKey:@"_detailsHidden"];
-            [(HeaderViewController *)self _updateDetailsButton];
-        }
         [self MA_updateTextStorageWithHardInvalidation:YES];
         return;
     }

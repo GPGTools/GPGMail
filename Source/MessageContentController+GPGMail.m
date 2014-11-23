@@ -60,8 +60,6 @@
     // forced the details to be shown.
     if([self getIvar:@"RealDetailsHidden"])
         [self setValue:[self getIvar:@"RealDetailsHidden"] forKey:@"_detailsHidden"];
-    if([self getIvar:@"RealShowDetails"])
-        [self setValue:[self getIvar:@"RealShowDetails"] forKey:@"_showDetails"];
     
     [[representedObject originalMessage] setIvar:@"UserSelectedMessage" value:[NSNumber numberWithBool:YES]];
     [[representedObject originalMessage] setIvar:@"LoadingStage" value:[NSNumber numberWithBool:YES]];

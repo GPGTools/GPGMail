@@ -590,7 +590,7 @@
 
 - (BOOL)isPGPMimeEncryptedAttachment {
     // application/pgp-encrypted is also considered to be an attachment.
-    if([[self dispositionParameterForKey:@"filename"] isEqualToString:@"encrypted.asc"] ||
+    if([[self dispositionParameterForKey:@"filename"] hasSuffix:@".asc"] ||
        [self isType:@"application" subtype:@"pgp-encrypted"])
         return YES;
     
