@@ -58,7 +58,7 @@
 
 
 - (void)symmetricEncryptClicked:(id)sender {
-	ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+	ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     NSMutableDictionary *updatedSecurityProperties = [@{} mutableCopy];
 
@@ -82,7 +82,7 @@
 	if (![[self getIvar:@"AllowSymmetricEncryption"] boolValue]) {
 		return;
 	}
-	ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+	ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     NSMutableDictionary *updatedSecurityProperties = [@{} mutableCopy];
 
@@ -242,7 +242,7 @@
     
     // If any luck, the security option should be known by now.
     // It's not, but it still works as assumed.
-    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd];
     GPGMAIL_SECURITY_METHOD securityMethod = ((ComposeBackEnd_GPGMail *)backEnd).guessedSecurityMethod;
     if(((ComposeBackEnd_GPGMail *)backEnd).securityMethod)
         securityMethod = ((ComposeBackEnd_GPGMail *)backEnd).securityMethod;
@@ -315,7 +315,7 @@
 	// Belongs to: #624.
     // MailApp seems to call S in Yosemite to cancel previous updates.
     // That's highly interesting!.
-	if(![self valueForKey:@"_documentEditor"])
+	if(![self valueForKey:@"_composeViewController"])
 		return;
 	
 	[self MAUpdateSecurityControls];
@@ -344,7 +344,7 @@
     // this canSign property. Since canSignFromAddress always returns true in GPGMail,
     // because otherwise, canEncrypt would not always be evaluated, we have
     // to set the real value here, which is contained in SignIsPossible.
-    ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     if(securityProperties[@"SignIsPossible"])
         canSign = [securityProperties[@"SignIsPossible"] boolValue];
@@ -353,7 +353,7 @@
 
 - (void)MASetCanEncrypt:(BOOL)canEncrypt {
     // Only on Yosemite. See MASetCanSign for explanation.
-    ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     if(securityProperties[@"EncryptIsPossible"])
         canEncrypt = [securityProperties[@"EncryptIsPossible"] boolValue];
@@ -365,7 +365,7 @@
     // On Yosemite, the encrypt and sign button states are no longer directly set
     // in _updateSecurityStateInBackgroundForRecipients, but instead in setMessageIsToBeEncrypted.
     // So we set our preferred state in here.
-    ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     
     // It's possible that SetEncrypt is set to true, since that only reflects the defaults
@@ -390,7 +390,7 @@
     // On Yosemite, the encrypt and sign button states are no longer directly set
     // in _updateSecurityStateInBackgroundForRecipients, but instead in setMessageIsToBeSigned.
     // So we set our preferred state in here.
-    ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     
     if(securityProperties[@"SetSign"])
@@ -532,7 +532,7 @@
 		}
 	}
 	
-	ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+	ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
 	
     // Select a valid item if needed.
     if (selectedItem.isHidden) {
@@ -591,14 +591,14 @@
         [button addItemWithTitle:(parentItem ? parentItem : item).title];
     
     // Set the selected key in the back-end.
-	[[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd] setIvar:@"gpgKeyForSigning" value:[item getIvar:@"gpgKey"]];
+	[[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd] setIvar:@"gpgKeyForSigning" value:[item getIvar:@"gpgKey"]];
     
     // Only reset the status if this method is called from a user generated event.
     // Otherwise there's a notification loop, because the security method is set and reset again 
     // and again.
     // Also don't reset it, if the user chose the security method beforehand.
-    if(!calledFromGPGMail && !((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]).userDidChooseSecurityMethod) {
-        ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]).securityMethod = 0;
+    if(!calledFromGPGMail && !((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]).userDidChooseSecurityMethod) {
+        ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]).securityMethod = 0;
     }
 
 	[self MAChangeFromHeader:button];
@@ -611,9 +611,9 @@
 		return;
 	}
 	
-	GPGMAIL_SECURITY_METHOD securityMethod = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]).guessedSecurityMethod;
-    if(((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]).securityMethod)
-        securityMethod = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]).securityMethod;
+	GPGMAIL_SECURITY_METHOD securityMethod = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]).guessedSecurityMethod;
+    if(((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]).securityMethod)
+        securityMethod = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]).securityMethod;
 	// It seems calling updateSecurityControls at this point is most reliable.
     if([GPGMailBundle isYosemite]) {
         [self _updateSecurityControls];
@@ -627,7 +627,7 @@
     // This method is currently only used on Yosemite, since Apple
     // switched to a ValueTransformer which is not really adequate for
     // our more advanced tool tips.
-    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]);
+    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]);
     GPGMAIL_SECURITY_METHOD securityMethod = backEnd.securityMethod;
     if(securityMethod == 0)
         securityMethod = backEnd.guessedSecurityMethod;
@@ -658,7 +658,7 @@
     // [[[self signButton] control] setToolTip:@"Whatever we want to be written here."];
     // The binding listens to messageIsToBeEncrypted and messageIsToBeSigned, so maybe we should as well.
     
-    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]);
+    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]);
     if(backEnd.securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
         NSString *signToolTip = [self signButtonToolTip];
         GMSecurityControl *signControl = [self valueForKey:@"_signButton"];
@@ -670,7 +670,7 @@
 }
 
 - (NSString *)encryptButtonToolTip {
-    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]);
+    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]);
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     
     NSString *toolTip = @"";
@@ -689,7 +689,7 @@
 }
 
 - (NSString *)signButtonToolTip {
-    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]);
+    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]);
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     
     NSString *toolTip = @"";
@@ -708,7 +708,7 @@
 }
 
 - (void)MA_updateEncryptButtonTooltip {
-    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_documentEditor"] backEnd]);
+    ComposeBackEnd_GPGMail *backEnd = ((ComposeBackEnd_GPGMail *)[(MailDocumentEditor *)[self valueForKey:@"_composeViewController"] backEnd]);
     
     GPGMAIL_SECURITY_METHOD securityMethod = backEnd.guessedSecurityMethod;
     if(backEnd.securityMethod)
@@ -739,12 +739,12 @@
 /* ORIGINAL SOURCE OF MAIL.APP FOR LEARING. */
 
 //- (void)configureButtonsAndPopUps {
-//    WebViewEditor *webViewEditor = [[self valueForKey:@"_documentEditor"] webViewEditor];
+//    WebViewEditor *webViewEditor = [[self valueForKey:@"_composeViewController"] webViewEditor];
 //	[webViewEditor updateIgnoredWordsForHeader:NO];
 //	[webViewEditor updateSecurityControls];
 //	[webViewEditor updatePriorityPopUpMakeActive:YES];
 //
-//	ComposeBackEnd *backEnd = [self _valueForKey:@"_documentEditor"];
+//	ComposeBackEnd *backEnd = [self _valueForKey:@"_composeViewController"];
 //	long long messagePriority = [backEnd displayableMessagePriority];
 //
 //	if(messagePriority != 3) {
@@ -763,11 +763,11 @@
 //	if([self valueForKey:@"_subjectField"] != headerField) {
 //		NSString *attributedStringValue = [headerField attributedStringValue];
 //		NSString *unatomicAddress = [attributedStringValue unatomicAddresses];
-//		[[[self valueForKey:@"_documentEditor"] backEnd] setAddressList:unatomicAddress forHeader:headerKey];
+//		[[[self valueForKey:@"_composeViewController"] backEnd] setAddressList:unatomicAddress forHeader:headerKey];
 //
 //		if([self valueForKey:@"_toField"] != headerField && [self valueForKey:@"_ccField"] != headerField) {
 //			if([self valueForKey:@"_bccField"] == headerField) {
-//				[[self valueForKey:@"_documentEditor"] updateSendButtonStateInToolbar];
+//				[[self valueForKey:@"_composeViewController"] updateSendButtonStateInToolbar];
 //				[self updateSecurityControls];
 //				[self updatePresenceButtonState];
 //			}
@@ -775,7 +775,7 @@
 //				return;
 //		}
 //		else {
-//			[[self valueForKey:@"_documentEditor"] updateSendButtonStateInToolbar];
+//			[[self valueForKey:@"_composeViewController"] updateSendButtonStateInToolbar];
 //			[self updateSecurityControls];
 //			[self updatePresenceButtonState];
 //		}
@@ -783,7 +783,7 @@
 //}
 //
 //- (void)changeFromHeader:(id)header {
-//	ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd]; // r15
+//	ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd]; // r15
 //	NSString *title = [header titleOfSelectedItem];
 //	if(title) {
 //		NSString *sender = [backEnd sender];
@@ -793,14 +793,14 @@
 //		[sender release];
 //		[self updateSecurityControls];
 //		[self updateSignatureControlOverridingExistingSignature:YES];
-//		[[self valueForKey:@"_documentEditor"] updateAttachmentStatus];
+//		[[self valueForKey:@"_composeViewController"] updateAttachmentStatus];
 //	}
 //	// And some more stuff which shall not be our concern currently.
 //
 //}
 //
 //- (void)updateSecurityControls {
-//	ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+//	ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
 //	NSArray *recipients = [backEnd allRecipients];
 //	NSString *sender = [backEnd sender];
 //    NSInvocation *invocation = [NSInvocation invocationWithSelector:@selector(_updateSecurityStateInBackgroundForRecipients:sender:) target:self object1:recipients	object2:sender];
@@ -814,7 +814,7 @@
 //	BOOL canSignFromAddress = NO;
 //	BOOL canEncryptFromAddress = NO;
 //	if(canSignFromAnyAccount) {
-//		ComposeBackEnd *backEnd = [[self valueForKey:@"_documentEditor"] backEnd];
+//		ComposeBackEnd *backEnd = [[self valueForKey:@"_composeViewController"] backEnd];
 //		canSignFromAddress = [backEnd canSignFromAddress:sender];
 //		if(canSignFromAddress) {
 //			canEncryptFromAddress = [backEnd canEncryptForRecipients:recipients sender:sender];
@@ -829,7 +829,7 @@
 //				[[self valueForKey:@"_signButton"] setEnabled:NO];
 //				[[self valueForKey:@"_encryptButton"] setEnabled:NO];
 //
-//				[[[self valueForKey:@"_documentEditor"] backEnd] setSignIfPossible:NO];
+//				[[[self valueForKey:@"_composeViewController"] backEnd] setSignIfPossible:NO];
 //			}
 //			else {
 //				BOOL sign = (BOOL)[NSApp signOutgoingMessages]; // r15
@@ -843,13 +843,13 @@
 //
 //				[[self valueForKey:@"_signButton"] setImage:signImage forSegment:0];
 //				[[self valueForKey:@"_signButton"] setEnabled:YES];
-//				[[[self valueForKey:@"_documentEditor"] backEnd] setSignIfPossible:sign];
+//				[[[self valueForKey:@"_composeViewController"] backEnd] setSignIfPossible:sign];
 //
 //				if(!canEncryptFromAddress) {
 //					[[self valueForKey:@"_encryptButton"] setEnabled:canEncryptFromAddress];
 //					[[self valueForKey:@"_encryptButton"] setImage:encryptImage forSegment:0];
 //
-//					[[[self valueForKey:@"_documentEditor"] backEnd] setEncryptIfPossible:NO];
+//					[[[self valueForKey:@"_composeViewController"] backEnd] setEncryptIfPossible:NO];
 //				}
 //				else {
 //					[[self valueForKey:@"_encryptButton"] setEnabled:YES];
@@ -858,12 +858,12 @@
 //					if(encrypt)
 //						encryptImage = nil; // some other image.
 //					[[self valueForKey:@"_encryptButton"] setImage:encryptImage forSegment:0];
-//					[[[self valueForKey:@"_documentEditor"] backEnd] setEncryptIfPossible:encrypt];
+//					[[[self valueForKey:@"_composeViewController"] backEnd] setEncryptIfPossible:encrypt];
 //
 //					[self _updateSignButtonTooltip];
 //					[self _updateEncryptButtonTooltip];
 //
-//					[[self valueForKey:@"_documentEditor"] encryptionStatusDidChange];
+//					[[self valueForKey:@"_composeViewController"] encryptionStatusDidChange];
 //				}
 //			}
 //		}

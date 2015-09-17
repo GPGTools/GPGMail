@@ -100,7 +100,7 @@
     [self updateSecurityProperties:@{@"shouldEncrypt": @(encryptIfPossible)}];
     
     [self MASetEncryptIfPossible:encryptIfPossible];
-    [(MailDocumentEditor_GPGMail *)[((ComposeBackEnd *)self) delegate] updateSecurityMethodHighlight];
+    //[(MailDocumentEditor_GPGMail *)[((ComposeBackEnd *)self) delegate] updateSecurityMethodHighlight];
 	
 	HeadersEditor_GPGMail *headersEditor = ((MailDocumentEditor *)[((ComposeBackEnd *)self) delegate]).headersEditor;
 	[headersEditor updateSymmetricButton];
@@ -171,7 +171,7 @@
     updatedSecurityProperties[@"shouldSign"] = @(signIfPossible);
     [self updateSecurityProperties:updatedSecurityProperties];
     [self MASetSignIfPossible:signIfPossible];
-    [(MailDocumentEditor_GPGMail *)[((ComposeBackEnd *)self) delegate] updateSecurityMethodHighlight];
+    //[(MailDocumentEditor_GPGMail *)[((ComposeBackEnd *)self) delegate] updateSecurityMethodHighlight];
 }
 
 - (id)MASender {
@@ -1048,16 +1048,13 @@
 
 - (NSDictionary *)securityProperties {
     __block NSDictionary *_securityProperties = nil;
-    dispatch_queue_t securityPropertiesQueue = [self securityPropertiesQueue];
 
     ComposeBackEnd_GPGMail __weak *weakSelf = self;
-    dispatch_sync(securityPropertiesQueue, ^{
-        ComposeBackEnd_GPGMail __strong *strongSelf = weakSelf;
-        if(![strongSelf ivarExists:@"GMSecurityProperties"])
-            [strongSelf setIvar:@"GMSecurityProperties" value:[NSMutableDictionary new]];
-        
-        _securityProperties = [strongSelf getIvar:@"GMSecurityProperties"];
-    });
+    ComposeBackEnd_GPGMail __strong *strongSelf = weakSelf;
+    if(![strongSelf ivarExists:@"GMSecurityProperties"])
+           [strongSelf setIvar:@"GMSecurityProperties" value:[NSMutableDictionary new]];
+
+    _securityProperties = [strongSelf getIvar:@"GMSecurityProperties"];
     return _securityProperties;
 }
 
@@ -1081,13 +1078,10 @@
 }
 
 - (void)setSecurityProperties:(NSDictionary *)securityProperties {
-    dispatch_queue_t securityPropertiesQueue = [self securityPropertiesQueue];
 
 	ComposeBackEnd_GPGMail __weak *weakSelf = self;
-    dispatch_barrier_async(securityPropertiesQueue, ^{
-        ComposeBackEnd_GPGMail __strong *strongSelf = weakSelf;
-        [strongSelf setIvar:@"GMSecurityProperties" value:securityProperties];
-    });
+    ComposeBackEnd_GPGMail __strong *strongSelf = weakSelf;
+    [strongSelf setIvar:@"GMSecurityProperties" value:securityProperties];
 }
 
 - (BOOL)wasInitialized {
