@@ -51,7 +51,7 @@
 }
 
 - (void)setEnabled:(BOOL)enabled {
-    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[self.control target] valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[self.control target] valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     
     if(self.securityTag == SECURITY_BUTTON_SIGN_TAG) {
@@ -72,7 +72,7 @@
 }
 
 - (void)setImage:(id)image forSegment:(NSInteger)segment {
-    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[((NSSegmentedControl *)self.control) target] valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[((NSSegmentedControl *)self.control) target] valueForKey:@"_composeViewController"] backEnd];
     NSDictionary *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).securityProperties;
     // forcedImageName is not nil if the user clicked on the control.
     // In that case always change the control to the forced image.
@@ -136,7 +136,7 @@
     // to change it to the old status (before the click).
     // That's why GPGMail forces the right image to be always set regardless from what the HeadersEditor
     // wants.
-    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[((NSSegmentedControl *)self.control) target] valueForKey:@"_documentEditor"] backEnd];
+    ComposeBackEnd *backEnd = [(MailDocumentEditor *)[[((NSSegmentedControl *)self.control) target] valueForKey:@"_composeViewController"] backEnd];
     NSMutableDictionary *updatedSecurityProperties = [@{} mutableCopy];
     
     if(self.securityTag == SECURITY_BUTTON_SIGN_TAG) {
