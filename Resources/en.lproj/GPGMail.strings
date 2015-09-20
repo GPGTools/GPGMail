@@ -153,7 +153,8 @@
 "GPG_STATUS_NOT_FOUND_TOOLTIP" = "Your MacGPG installation is not working properly. Please contact us, including your GPG configuration file found in your home directory at ~/.gnupg/gpg.conf, at https://gpgtools.tenderapp.com/";
 "DISABLE_ENCRYPT_DRAFTS_TITLE" = "Warning: Disabling this option might lead to the leak of sensitive information while composing a message";
 "DISABLE_ENCRYPT_DRAFTS_MESSAGE" = "If the option \"Store drafts on server\" is enabled for your accounts, OS X Mail automatically stores your drafts on your mail server while you're composing a message.\nBy disabling \"Encrypt drafts\", your drafts will be stored in plain text (not encrypted) so that anyone with access to the mail server can read them.\n\nIf you keep \"Encrypt drafts\" enabled, your drafts will be encrypted before they are stored on a mail server and only you will be able to read them.\n\nDo you still want to disable \"Encrypt drafts\"?";
-"DISABLE_ENCRYPT_DRAFTS_CONFIRM" = "Yes";
+"DISABLE_ENCRYPT_DRAFTS_CONFIRM" = "Disable Encryption";
+"DISABLE_ENCRYPT_DRAFTS_CANCEL" = "Cancel";
 
 
 /* Multiple GPGMail installations. */

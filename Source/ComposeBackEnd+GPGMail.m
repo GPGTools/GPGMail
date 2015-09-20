@@ -506,7 +506,6 @@
 		[headers setHeader:[GPGMailBundle agentHeader] forKey:@"X-PGP-Agent"];
 	if([contents ivarExists:@"IsDraft"] && isDraft) {
 		[headers setHeader:@"com.apple.mail-draft" forKey:@"x-uniform-type-identifier"];
-		[headers setHeader:@"yes" forKey:@"x-apple-mail-plain-text-draft"];
 		// Mail doesn't pass in the sign status, when saving a draft, so we have to get it ourselves.
 		// For encrypt we also use the state of the button, shouldEncrypt is overriden by our own
 		// logic to always encrypt drafts if possible.

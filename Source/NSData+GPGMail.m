@@ -190,7 +190,7 @@
     BOOL hasSignature = NO;
     
     for(GPGPacket *packet in packets) {
-        if(packet.type == GPGSignaturePacket) {
+        if(packet.tag == GPGSignaturePacketTag) {
             hasSignature = YES;
             break;
         }

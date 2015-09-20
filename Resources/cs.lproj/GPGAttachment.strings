@@ -6,7 +6,7 @@
  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
  */
 "SIGNATURE_ERROR_GENERAL_TITLE" = "Ověřování podpisu selhalo.";
-"SIGNATURE_ERROR_NO_PUBKEY_MESSAGE" = "The public key to verify the signature of this attachment is not in your keychain.\n\nPlease download the public key %@ using GPG Keychain.";
+"SIGNATURE_ERROR_NO_PUBKEY_MESSAGE" = "Tajný klíč pro ověření podpisu zprávy není ve vaši Klíčence.\n\nZkopírujte si prosím veřejný klíč %@ pomocí Klíčenky GPG.";
 "DECRYPT_ERROR_GENERAL_TITLE" = "Dešifrování přílohy selhalo.";
 "DECRYPT_ERROR_GENERAL_MESSAGE" = "Tajný klíč pro dešifrování zprávy není ve vaši Klíčence.";
 "ATTACHMENT_DECRYPTED_SUCCESSFULLY_TITLE" = "Příloha byla úspěšně dešifrována.";

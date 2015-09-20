@@ -1,4 +1,4 @@
-"2ul-d0-5ir.title" = "Sign new messages by default";
+"2ul-d0-5ir.title" = "Podepisovat nové zprávy";
 "698.ibShadowedToolTip" = "Automaticky ověřovat dostupnost nových verzí GPGMail";
 "699.ibShadowedToolTip" = "Automaticky kopírovat nové verze GPGMail.";
 "700.ibShadowedToolTip" = "Ověřit dostupnost aktualizací ihned.";
@@ -11,16 +11,16 @@
 "728.title" = "Příprava";
 "733.ibShadowedToolTip" = "Často kladené dotazy.";
 "734.alternateTitle" = "Často kladené dotazy";
-"734.title" = "Knowledge Base";
+"734.title" = "Kniha znalostí";
 "744.title" = "Čtení";
-"781.title" = "Encrypt drafts";
+"781.title" = "Šifrovat rozepsané zprávy";
 "786.ibShadowedToolTip" = "Předvolby –> Zobrazení –> Seznam náhledů.";
 "787.title" = "Vytvořit seznam náhledů";
 "834.title" = "Tlačítko";
-"930.ibShadowedToolTip" = "Click to copy version into clipboard.";
+"930.ibShadowedToolTip" = "Klepnutím zkopírujete verzi do Schránky.";
 "931.title" = "Verze: xxx";
-"935.ibShadowedToolTip" = "Click to copy version into clipboard.";
+"935.ibShadowedToolTip" = "Klepnutím zkopírujete verzi do Schránky.";
 "936.title" = "Sestavení:";
 "1051.ibShadowedToolTip" = "Jestliže máte nějakou další otázku.";
 "1053.title" = "Podpora";
-"yJs-2y-8Cb.title" = "Encrypt new messages by default";
+"yJs-2y-8Cb.title" = "Šifrovat nové zprávy.";

@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">101000</int>
-		<string key="IBDocument.SystemVersion">13F1066</string>
-		<string key="IBDocument.InterfaceBuilderVersion">6751</string>
+		<string key="IBDocument.SystemVersion">13E28</string>
+		<string key="IBDocument.InterfaceBuilderVersion">6254</string>
 		<string key="IBDocument.AppKitVersion">1265.21</string>
 		<string key="IBDocument.HIToolboxVersion">698.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">6751</string>
+			<string key="NS.object.0">6254</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSArrayController</string>
@@ -689,7 +689,7 @@ xbx5d2FqxIVjIEdQRyBLZXljaGFpbi4</string>
 																<object class="NSTextField" id="834668756">
 																	<reference key="NSNextResponder" ref="210185846"/>
 																	<int key="NSvFlags">284</int>
-																	<string key="NSFrame">{{50, 90.999999663409056}, {370, 17}}</string>
+																	<string key="NSFrame">{{50, 90.999999289419122}, {370, 17}}</string>
 																	<reference key="NSSuperview" ref="210185846"/>
 																	<reference key="NSNextKeyView" ref="1051878768"/>
 																	<string key="NSReuseIdentifierKey">_NS:3944</string>

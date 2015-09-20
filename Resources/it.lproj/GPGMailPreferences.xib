@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">13F1066</string>
-		<string key="IBDocument.InterfaceBuilderVersion">6751</string>
+		<string key="IBDocument.SystemVersion">13E28</string>
+		<string key="IBDocument.InterfaceBuilderVersion">6254</string>
 		<string key="IBDocument.AppKitVersion">1265.21</string>
 		<string key="IBDocument.HIToolboxVersion">698.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">6751</string>
+			<string key="NS.object.0">6254</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSBox</string>
@@ -344,7 +344,7 @@
 								<object class="NSButtonCell" key="NSCell" id="80202346">
 									<int key="NSCellFlags">-2080374784</int>
 									<int key="NSCellFlags2">0</int>
-									<string key="NSContents">Encrypt drafts</string>
+									<string key="NSContents">Crittografare bozze</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<string key="NSCellIdentifier">_NS:717</string>
 									<reference key="NSControlView" ref="915859109"/>
@@ -478,7 +478,7 @@
 								<object class="NSButtonCell" key="NSCell" id="1015833167">
 									<int key="NSCellFlags">-2080374784</int>
 									<int key="NSCellFlags2">268435456</int>
-									<string key="NSContents">Encrypt new messages by default</string>
+									<string key="NSContents">Crittografare nuovi messaggi per impostazione predefinita</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<string key="NSCellIdentifier">_NS:9</string>
 									<reference key="NSControlView" ref="714016839"/>

@@ -197,6 +197,11 @@
         if(!ret)
             ret = [self MADecodeWithContext:ctx];
     }
+	else if([self isType:@"application" subtype:@"pgp"]) {
+		// Special case application/pgp seems to be inline PGP with a weird content type.
+		// In order to handle it, it's treated like any other text/plain message.
+		ret = [(id)self decodeTextPlainWithContext:ctx];
+	}
     else {
 		// Set a flag that this is not a PGPMimeEncrypted message
 		// and thus snippets should not be created.
@@ -471,37 +476,37 @@
 }
 
 - (id)MADecodeTextHtmlWithContext:(MFMimeDecodeContext *)ctx {
-    // Check if message should be processed (-[Message shouldBePGPProcessed] - Snippet generation check)
-    // otherwise out of here!
-    if(![[(MimeBody *)[self mimeBody] message] shouldBePGPProcessed])
-        return [self MADecodeTextHtmlWithContext:ctx];
-
+	// Check if message should be processed (-[Message shouldBePGPProcessed] - Snippet generation check)
+	// otherwise out of here!
+	if(![[(MimeBody *)[self mimeBody] message] shouldBePGPProcessed])
+		return [self MADecodeTextHtmlWithContext:ctx];
 	
+	
+	// HTML is a bit hard to decrypt, so check if the parent part,
+	// if exists is a multipart/alternative.
+	// If that's the case, look for a text/plain part, check if
+	// it contains a pgp message and decode it.
+	MimePart *parentPart = [self parentPart];
+	if (parentPart && [parentPart isType:@"multipart" subtype:@"alternative"]) {
+		for (MimePart *tmpPart in [parentPart subparts]) {
+			if ([tmpPart isType:@"text" subtype:@"plain"]) {
+				if ([tmpPart.bodyData mightContainPGPEncryptedDataOrSignatures]) {
+					return [tmpPart decodeTextPlainWithContext:ctx];
+				}
+				break;
+			}
+		}
+	}
+	
+	// Check if the HTML contains a decodeable pgp message,
+	// if that's the case decode it like plain text.
 	NSData *bodyData = [self bodyData];
-    if([bodyData mightContainPGPEncryptedDataOrSignatures]) {
-        // HTML is a bit hard to decrypt, so check if the parent part, if exists is a
-        // multipart/alternative.
-        // If that's the case, look for a text/plain part
-        MimePart *parentPart = [self parentPart];
-        MimePart *textPart = nil;
-        if(parentPart && [parentPart isType:@"multipart" subtype:@"alternative"]) {
-            for(MimePart *tmpPart in [parentPart subparts]) {
-                if([tmpPart isType:@"text" subtype:@"plain"]) {
-                    textPart = tmpPart;
-                    break;
-                }
-            }
-            if(textPart) {
-                return [textPart decodeTextPlainWithContext:ctx];
-            }
-        }
-        
-        if ([bodyData rangeOfPGPInlineEncryptedData].length > 0 || [bodyData rangeOfPGPInlineSignatures].length > 0) {
-            return [(MimePart *)self decodeTextPlainWithContext:ctx];
-        }
-    }
-    
-    return [self MADecodeTextHtmlWithContext:ctx];
+	if ([bodyData rangeOfPGPInlineEncryptedData].length > 0 || [bodyData rangeOfPGPInlineSignatures].length > 0) {
+		return [(MimePart *)self decodeTextPlainWithContext:ctx];
+	}
+	
+	
+	return [self MADecodeTextHtmlWithContext:ctx];
 }
 
 - (id)MADecodeApplicationOctet_streamWithContext:(MFMimeDecodeContext *)ctx {
@@ -787,7 +792,7 @@
 	NSData *deArmoredEncryptedData = nil;
     // De-armor the message and catch any CRC-Errors.
     @try {
-        deArmoredEncryptedData = [GPGPacket unArmor:encryptedData];
+        deArmoredEncryptedData = [[GPGUnArmor unArmor:[GPGMemoryStream memoryStreamForReading:encryptedData]] readAllData];
     }
     @catch (NSException *exception) {
 		self.PGPError = [self errorForDecryptionError:exception status:nil errorText:nil];
@@ -799,13 +804,18 @@
 	__block NSString *decryptKey = nil;
 	
 	[GPGPacket enumeratePacketsWithData:deArmoredEncryptedData block:^(GPGPacket *packet, BOOL *stop) {
-		GPGKey *key = [[GPGMailBundle sharedInstance] secretGPGKeyForKeyID:packet.keyID includeDisabled:YES];
+		if(packet.tag != GPGPublicKeyEncryptedSessionKeyPacketTag) {
+			return;
+		}
+		
+		GPGPublicKeyEncryptedSessionKeyPacket *keyPacket = (GPGPublicKeyEncryptedSessionKeyPacket *)packet;
+		GPGKey *key = [[GPGMailBundle sharedInstance] secretGPGKeyForKeyID:keyPacket.keyID includeDisabled:YES];
 		if (key) {
 			decryptKey = [key description];
 			*stop = YES;
 		}
 	}];
-	
+
 	
 	GPGController *gpgc = [[GPGController alloc] init];
 	NSData *decryptedData = nil;
@@ -1366,13 +1376,13 @@
 	[(GM_CAST_CLASS(MimePart *, id))[self topPart] enumerateSubpartsWithBlock:^(MimePart *part) {
 		if ([part isType:@"application" subtype:@"pgp-keys"] && ![[part getIvar:@"pgp-keys-imported"] boolValue]) {
 			
-			NSData *unArmored = [GPGPacket unArmor:part.bodyData];
+			NSData *unArmored = [[GPGUnArmor unArmor:[GPGMemoryStream memoryStreamForReading:part.bodyData]] readAllData];
 			
 			if (unArmored) {
 				NSDictionary *keysByID = [[GPGKeyManager sharedInstance] keysByKeyID];
 				
 				[GPGPacket enumeratePacketsWithData:unArmored block:^(GPGPacket *packet, BOOL *stop) {
-					if (packet.type == GPGPublicKeyPacket && !keysByID[packet.keyID]) {
+					if (packet.tag == GPGPublicKeyPacketTag && !keysByID[((GPGPublicKeyPacket *)packet).keyID]) {
 						*stop = YES;
 						[part setIvar:@"pgp-keys-imported" value:@(YES)];
 						[gpgc importFromData:unArmored fullImport:NO];
@@ -1396,8 +1406,13 @@
 		// If the signature is type 0x00 and the text doesn't contain a \r\n, convert \n to \r\n.
 		// This is needed because Mail converts \r\n to \n.
 		NSArray *packets = [GPGPacket packetsWithData:signatureData];
-		if ([packets count] && [((GPGPacket *)packets[0]) signatureType] == 0 && [signedData rangeOfData:[NSData dataWithBytes:"\r\n" length:2] options:0 range:NSMakeRange(0, [signedData length])].location == NSNotFound) {
-				signedData = [[NSData alloc] initWithDataConvertingLineEndingsFromUnixToNetwork:signedData];
+		if([packets count]) {
+			GPGSignaturePacket *packet = packets[0];
+			if(packet.tag == GPGSignaturePacketTag && packet.type == 0) {
+				if([signedData rangeOfData:[NSData dataWithBytes:"\r\n" length:2] options:0 range:NSMakeRange(0, [signedData length])].location == NSNotFound) {
+					signedData = [[NSData alloc] initWithDataConvertingLineEndingsFromUnixToNetwork:signedData];
+				}
+			}
 		}
 		
         signatures = [gpgc verifySignature:signatureData originalData:signedData];
@@ -1421,8 +1436,10 @@
 				NSData *subData = [signedData subdataWithRange:range];
 				
 				// Unarmor and get cleartext.
+				GPGMemoryStream *subDataStream = [GPGMemoryStream memoryStreamForReading:subData];
 				NSData *cleartext = nil;
-				NSData *sigData = [GPGPacket unArmor:subData clearText:&cleartext];
+				NSData *sigData = [[GPGUnArmor unArmor:subDataStream clearText:&cleartext] readAllData];
+				
 				
 				// Verify signature and add the GPGSignatures to our set.
 				[allSignatures addObjectsFromArray:[gpgc verifySignature:sigData originalData:cleartext]];

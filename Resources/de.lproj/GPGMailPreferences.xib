@@ -370,7 +370,7 @@
 								<object class="NSButtonCell" key="NSCell" id="1059606293">
 									<int key="NSCellFlags">67108864</int>
 									<int key="NSCellFlags2">32768</int>
-									<string key="NSContents">Button</string>
+									<string key="NSContents">Knopf</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<string key="NSCellIdentifier">_NS:9</string>
 									<reference key="NSControlView" ref="263145191"/>

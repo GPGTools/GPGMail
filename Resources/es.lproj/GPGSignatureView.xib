@@ -398,7 +398,7 @@
 																	<object class="NSTextFieldCell" key="NSCell" id="312190895">
 																		<int key="NSCellFlags">68157504</int>
 																		<int key="NSCellFlags2">272761856</int>
-																		<string key="NSContents">Created:</string>
+																		<string key="NSContents">Creado:</string>
 																		<reference key="NSSupport" ref="26"/>
 																		<reference key="NSControlView" ref="56396529"/>
 																		<reference key="NSBackgroundColor" ref="840157489"/>
@@ -1039,7 +1039,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="78130997">
 							<int key="NSCellFlags">68157504</int>
 							<int key="NSCellFlags2">71435264</int>
-							<string key="NSContents">E-Mail:</string>
+							<string key="NSContents">Correo electrónico:</string>
 							<reference key="NSSupport" ref="27"/>
 							<reference key="NSControlView" ref="635132357"/>
 							<reference key="NSBackgroundColor" ref="840157489"/>

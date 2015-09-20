@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">13F1077</string>
-		<string key="IBDocument.InterfaceBuilderVersion">6751</string>
+		<string key="IBDocument.SystemVersion">13E28</string>
+		<string key="IBDocument.InterfaceBuilderVersion">6254</string>
 		<string key="IBDocument.AppKitVersion">1265.21</string>
 		<string key="IBDocument.HIToolboxVersion">698.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">6751</string>
+			<string key="NS.object.0">6254</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>NSBox</string>
@@ -133,7 +133,7 @@
 								<object class="NSButtonCell" key="NSCell" id="411323674">
 									<int key="NSCellFlags">67108864</int>
 									<int key="NSCellFlags2">134217728</int>
-									<string key="NSContents">Knowledge Base</string>
+									<string key="NSContents">Base de conocimiento</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<reference key="NSControlView" ref="758835818"/>
 									<int key="NSButtonFlags">-2038284288</int>
@@ -431,7 +431,7 @@
 								<object class="NSButtonCell" key="NSCell" id="684714656">
 									<int key="NSCellFlags">67108864</int>
 									<int key="NSCellFlags2">131072</int>
-									<string key="NSContents">Build: </string>
+									<string key="NSContents">Versión:</string>
 									<reference key="NSSupport" ref="26"/>
 									<string key="NSCellIdentifier">_NS:9</string>
 									<reference key="NSControlView" ref="386760937"/>
@@ -455,7 +455,7 @@
 								<object class="NSButtonCell" key="NSCell" id="942140521">
 									<int key="NSCellFlags">67108864</int>
 									<int key="NSCellFlags2">134217728</int>
-									<string key="NSContents">Support</string>
+									<string key="NSContents">Soporte</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<reference key="NSControlView" ref="632062900"/>
 									<int key="NSButtonFlags">-2038284288</int>
@@ -478,7 +478,7 @@
 								<object class="NSButtonCell" key="NSCell" id="1015833167">
 									<int key="NSCellFlags">-2080374784</int>
 									<int key="NSCellFlags2">268435456</int>
-									<string key="NSContents">Encrypt new messages by default</string>
+									<string key="NSContents">Cifrar nuevos mensajes por defecto</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<string key="NSCellIdentifier">_NS:9</string>
 									<reference key="NSControlView" ref="714016839"/>
@@ -1090,7 +1090,7 @@
 					<object class="IBToolTipAttribute" key="NS.object.0">
 						<string key="name">ToolTip</string>
 						<reference key="object" ref="632062900"/>
-						<string key="toolTip">If you've any other question.</string>
+						<string key="toolTip">Si tiene alguna otra pregunta.</string>
 					</object>
 				</object>
 				<string key="1051.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>

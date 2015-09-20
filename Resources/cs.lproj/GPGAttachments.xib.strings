@@ -15,10 +15,10 @@
 "256.title" = "Podpis";
 "257.title" = "Vytvořen:";
 "259.title" = "Vyprší:";
-"291.title" = "The signature could not be verified.";
-"293.title" = "The signature could not be verified because the public key is not in your keychain.\nPlease download the key using GPG Keychain.";
+"291.title" = "Podpis nelze ověřit.";
+"293.title" = "Podpis nelze ověřit protože vyřejný klíč není ve vaší Klíčence.\nZkopírujte si prosím klíč pomocí Klíčenky GPG.";
 "325.ibShadowedIsNilPlaceholder" = "Podpisu nebyl přiřazen datum vypršení platnosti";
 "353.ibShadowedIsNilPlaceholder" = "Podpisu nebyl přiřazen datum vypršení platnosti";
 "366.ibShadowedIsNilPlaceholder" = "Podpisu nebyl přiřazen datum vypršení platnosti";
-"382.title" = "The signature could not be verified.";
-"383.title" = "The signature could not be verified because the public key is not in your keychain.\nPlease download the key using GPG Keychain.";
+"382.title" = "Podpis nelze ověřit.";
+"383.title" = "Podpis nelze ověřit protože vyřejný klíč není ve vaší Klíčence.\nZkopírujte si prosím klíč pomocí Klíčenky GPG.";

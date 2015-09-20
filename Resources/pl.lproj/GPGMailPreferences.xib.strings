@@ -1,4 +1,4 @@
-"2ul-d0-5ir.title" = "Sign new messages by default";
+"2ul-d0-5ir.title" = "Domyślnie podpisuj nowe wiadomości";
 "698.ibShadowedToolTip" = "Sprawdzaj automatycznie wersje GPGMail.";
 "699.ibShadowedToolTip" = "Pobieraj automatycznie nowe wersje GPGMail.";
 "700.ibShadowedToolTip" = "Sprawdź teraz dostępne aktualizacje.";
@@ -17,10 +17,10 @@
 "786.ibShadowedToolTip" = "Zobacz Preferencje -> Widok -> Lista Podglądu.";
 "787.title" = "Utwórz listę podglądu";
 "834.title" = "Przycisk";
-"930.ibShadowedToolTip" = "Click to copy version into clipboard.";
+"930.ibShadowedToolTip" = "Kliknij, aby skopiować wersję do schowka.";
 "931.title" = "Version: xxx";
-"935.ibShadowedToolTip" = "Click to copy version into clipboard.";
-"936.title" = "Build: ";
+"935.ibShadowedToolTip" = "Kliknij, aby skopiować wersję do schowka.";
+"936.title" = "Utworzono:";
 "1051.ibShadowedToolTip" = "jeśli masz jakiekolwiek inne pytanie.";
-"1053.title" = "Support";
-"yJs-2y-8Cb.title" = "Encrypt new messages by default";
+"1053.title" = "Pomoc";
+"yJs-2y-8Cb.title" = "Domyślnie szyfruj nowe wiadomości";

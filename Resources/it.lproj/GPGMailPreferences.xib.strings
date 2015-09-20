@@ -13,7 +13,7 @@
 "734.alternateTitle" = "Domande frequenti";
 "734.title" = "Knowledge Base";
 "744.title" = "Lettura";
-"781.title" = "Encrypt drafts";
+"781.title" = "Crittografare bozze";
 "786.ibShadowedToolTip" = "Controlla Preferenze -> Vista -> Anteprima Elenco";
 "787.title" = "Crea Anteprima Elenco";
 "834.title" = "Bottone";
@@ -23,4 +23,4 @@
 "936.title" = "Build: ";
 "1051.ibShadowedToolTip" = "Se hai altre domande.";
 "1053.title" = "Supporto";
-"yJs-2y-8Cb.title" = "Encrypt new messages by default";
+"yJs-2y-8Cb.title" = "Crittografare nuovi messaggi per impostazione predefinita";

@@ -16,7 +16,7 @@
 "257.title" = "Oprettet:";
 "259.title" = "Udløber:";
 "291.title" = "Signaturen kunne ikke bekræftes.";
-"293.title" = "Signaturen kunne ikke bekræftes, fordi den offentlige nøgle ikke er i din nøglering.\nHent nøglen med GPG Nøglering.";
+"293.title" = "The signature could not be verified because the public key is not in your keychain.\nPlease download the key using GPG Keychain.";
 "325.ibShadowedIsNilPlaceholder" = "Signaturen har ingen udløbsdato";
 "353.ibShadowedIsNilPlaceholder" = "Signaturen har ingen udløbsdato";
 "366.ibShadowedIsNilPlaceholder" = "Signaturen har ingen udløbsdato";

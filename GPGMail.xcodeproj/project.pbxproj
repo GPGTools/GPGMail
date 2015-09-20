@@ -3430,7 +3430,7 @@
 		30E75A661731A7F900C9E391 /* Libmacgpg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Libmacgpg.framework; path = /Library/Frameworks/Libmacgpg.framework; sourceTree = "<absolute>"; };
 		30FC04E614FFE61100AA19FE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
 		30FC04E714FFE61100AA19FE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPGAttachment.strings; sourceTree = "<group>"; };
-		30FC04E814FFE61100AA19FE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPGMail.strings; sourceTree = "<group>"; };
+		30FC04E814FFE61100AA19FE /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPGMail.strings; sourceTree = "<group>"; };
 		30FC04E914FFE61100AA19FE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/GPGMailPreferences.xib; sourceTree = "<group>"; };
 		30FC04EA14FFE61100AA19FE /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPGMailPreferences.xib.strings; sourceTree = "<group>"; };
 		30FC04EB14FFE61100AA19FE /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/GPGSignatureView.xib; sourceTree = "<group>"; };

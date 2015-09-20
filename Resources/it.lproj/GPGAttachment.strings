@@ -6,7 +6,7 @@
  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
  */
 "SIGNATURE_ERROR_GENERAL_TITLE" = "Verifica della firma fallita.";
-"SIGNATURE_ERROR_NO_PUBKEY_MESSAGE" = "The public key to verify the signature of this attachment is not in your keychain.\n\nPlease download the public key %@ using GPG Keychain.";
+"SIGNATURE_ERROR_NO_PUBKEY_MESSAGE" = "La chiave pubblica per verificare la firma di questo allegato non è nel tuo portachiavi.\n\nSi prega di scaricare la chiave pubblica %@ utilizzando il programma portachiavi GPG.";
 "DECRYPT_ERROR_GENERAL_TITLE" = "Decrittazione dell'allegato fallita.";
 "DECRYPT_ERROR_GENERAL_MESSAGE" = "La chiave segreta per decretare questo allegato non è nel tuo Portachiavi.";
 "ATTACHMENT_DECRYPTED_SUCCESSFULLY_TITLE" = "Allegato decrittato correttamente.";

@@ -1,37 +1,37 @@
 [main]
 host = https://www.transifex.com
  
-[GPGMail.General]
+[GPGMail.general]
 file_filter = Resources/<lang>.lproj/GPGMail.strings
 source_lang = en
 source_file = Resources/en.lproj/GPGMail.strings
 type = STRINGS
 
-[GPGMail.Preferences]
+[GPGMail.preferences]
 file_filter = Resources/<lang>.lproj/GPGMailPreferences.xib.strings
 source_lang = en
 source_file = Resources/en.lproj/GPGMailPreferences.xib.strings
 type = STRINGS
 
-[GPGMail.Attachment]
+[GPGMail.attachment]
 file_filter = Resources/<lang>.lproj/GPGAttachment.strings
 source_lang = en
 source_file = Resources/en.lproj/GPGAttachment.strings
 type = STRINGS
 
-[GPGMail.AttachmentsXib]
+[GPGMail.attachmentsxib]
 file_filter = Resources/<lang>.lproj/GPGAttachments.xib.strings
 source_lang = en
 source_file = Resources/en.lproj/GPGAttachments.xib.strings
 type = STRINGS
 
-[GPGMail.SignatureView]
+[GPGMail.signatureview]
 file_filter = Resources/<lang>.lproj/SignatureView.strings
 source_lang = en
 source_file = Resources/en.lproj/SignatureView.strings
 type = STRINGS
 
-[GPGMail.SignatureViewXib]
+[GPGMail.signatureviewxib]
 file_filter = Resources/<lang>.lproj/GPGSignatureView.xib.strings
 source_lang = en
 source_file = Resources/en.lproj/GPGSignatureView.xib.strings

@@ -398,7 +398,7 @@
 																	<object class="NSTextFieldCell" key="NSCell" id="312190895">
 																		<int key="NSCellFlags">68157504</int>
 																		<int key="NSCellFlags2">272761856</int>
-																		<string key="NSContents">Created:</string>
+																		<string key="NSContents">Vytvořeno:</string>
 																		<reference key="NSSupport" ref="26"/>
 																		<reference key="NSControlView" ref="56396529"/>
 																		<reference key="NSBackgroundColor" ref="840157489"/>

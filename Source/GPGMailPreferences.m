@@ -186,11 +186,15 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 
 - (BOOL)enableAutomaticChecks {
 	GPGOptions *options = [GPGOptions sharedOptions];
-	if (![options boolForKey:SUEnableAutomaticChecksKey]) {
+	NSNumber *interval = [options valueForKey:SUScheduledCheckIntervalKey];
+	if (interval && interval.integerValue == 0) {
+		return false;
+	}
+	NSNumber *value = [options valueForKey:SUEnableAutomaticChecksKey];
+	if (!value) {
 		return true;
 	}
-	NSNumber *interval = [options valueForKey:SUScheduledCheckIntervalKey];
-	return !interval || interval.integerValue > 0;
+	return value.boolValue;
 }
 - (void)setEnableAutomaticChecks:(BOOL)value {
 	GPGOptions *options = [GPGOptions sharedOptions];
@@ -198,7 +202,7 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 	if (value) {
 		NSNumber *interval = [options valueForKey:SUScheduledCheckIntervalKey];
 		if (interval && interval.integerValue == 0) {
-			[options setValue:nil forKey:SUScheduledCheckIntervalKey];
+			[options setValue:@86400 forKey:SUScheduledCheckIntervalKey];
 		}
 	}
 }
@@ -215,19 +219,33 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 		for (id account in accounts) {
 			if ([account respondsToSelector:@selector(storeDraftsOnServer)] && [account storeDraftsOnServer]) {
 				
-				NSAlert *alert = [NSAlert alertWithMessageText:localized(@"DISABLE_ENCRYPT_DRAFTS_TITLE")
-												 defaultButton:@"Cancel"
-											   alternateButton:localized(@"DISABLE_ENCRYPT_DRAFTS_CONFIRM")
-												   otherButton:nil
-									 informativeTextWithFormat:@"%@", localized(@"DISABLE_ENCRYPT_DRAFTS_MESSAGE")];
-				
 				NSWindow *window = [[NSPreferences sharedPreferences] valueForKey:@"_preferencesPanel"];
 				
-				[alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
-					[NSApp stopModalWithCode:returnCode];
-				}];
-				
-				if ([NSApp runModalForWindow:window] != NSAlertAlternateReturn) {
+				if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_9) {
+					NSAlert *unencryptedReplyAlert = [NSAlert new];
+					unencryptedReplyAlert.messageText = localized(@"DISABLE_ENCRYPT_DRAFTS_TITLE");
+					unencryptedReplyAlert.informativeText = localized(@"DISABLE_ENCRYPT_DRAFTS_MESSAGE");
+					[unencryptedReplyAlert addButtonWithTitle:localized(@"DISABLE_ENCRYPT_DRAFTS_CANCEL")];
+					[unencryptedReplyAlert addButtonWithTitle:localized(@"DISABLE_ENCRYPT_DRAFTS_CONFIRM")];
+					unencryptedReplyAlert.icon = [NSImage imageNamed:@"GPGMail"];
+
+					[unencryptedReplyAlert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
+						[NSApp stopModalWithCode:returnCode];
+					}];
+				} else {
+					NSBeginAlertSheet(localized(@"DISABLE_ENCRYPT_DRAFTS_TITLE"),
+									  localized(@"DISABLE_ENCRYPT_DRAFTS_CANCEL"),
+									  localized(@"DISABLE_ENCRYPT_DRAFTS_CONFIRM"),
+									  nil,
+									  window,
+									  self,
+									  @selector(disableEncryptDraftSheetDidEnd:returnCode:contextInfo:),
+									  nil,
+									  nil,
+									  @"%@", localized(@"DISABLE_ENCRYPT_DRAFTS_MESSAGE"));
+				}
+
+				if ([NSApp runModalForWindow:window] != NSAlertSecondButtonReturn) {
 					*value = @(YES);
 				}
 				break;
@@ -236,6 +254,12 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 	}
 	return YES;
 }
+- (void)disableEncryptDraftSheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
+	returnCode = returnCode == NSAlertAlternateReturn ? NSAlertSecondButtonReturn : NSAlertFirstButtonReturn;
+	[NSApp stopModalWithCode:returnCode];
+}
+
+
 - (BOOL)encryptDrafts {
 	return [self.options boolForKey:@"OptionallyEncryptDrafts"];
 }

@@ -344,7 +344,7 @@
 								<object class="NSButtonCell" key="NSCell" id="80202346">
 									<int key="NSCellFlags">-2080374784</int>
 									<int key="NSCellFlags2">0</int>
-									<string key="NSContents">Kryptér udkast</string>
+									<string key="NSContents">Krypter kladder</string>
 									<reference key="NSSupport" ref="706304668"/>
 									<string key="NSCellIdentifier">_NS:717</string>
 									<reference key="NSControlView" ref="915859109"/>
