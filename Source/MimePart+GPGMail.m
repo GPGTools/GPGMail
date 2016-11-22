@@ -790,8 +790,14 @@
     // Decrypt data should not run if Mail.app is generating snippets
     // and NeverCreateSnippetPreviews is set or the passphrase is not in cache
     // and CreatePreviewSnippets is not set.
-    if(![[(MimeBody *)[self mimeBody] message] shouldCreateSnippetWithData:encryptedData])    
+    @try {
+        if(![[(MimeBody *)[self mimeBody] message] shouldCreateSnippetWithData:encryptedData])
+            return nil;
+    }
+    @catch(GPGException *e) {
+        [self failedToSignForSender:sender gpgErrorCode:e.errorCode];
         return nil;
+    }
     
 	
 	NSData *deArmoredEncryptedData = nil;
