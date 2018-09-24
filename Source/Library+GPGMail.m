@@ -295,9 +295,7 @@ static NSMutableDictionary *messageDataAccessMap;
     }
     if(body != NULL && mimePart != NULL) {
         if(shouldProcessPGPData) {
-            if([[GPGMailBundle sharedInstance] hasActiveContract] || [[[GPGMailBundle sharedInstance] remainingTrialDays] integerValue] > 0) {
-                [mimePart setIvar:kMimePartAllowPGPProcessingKey value:@(YES)];
-            }            
+            [mimePart setIvar:kMimePartAllowPGPProcessingKey value:@(YES)];
         }
         MCMessageBody *messageBody = [mimePart messageBody];
         // Set the security features collected on topLevelMimePart on the message.

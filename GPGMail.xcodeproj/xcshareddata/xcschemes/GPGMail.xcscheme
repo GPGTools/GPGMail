@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0460"
+   LastUpgradeVersion = "1000"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1B46CFCB161555DF00CF9C5F"
+               BlueprintIdentifier = "1B2F2D6F214FF12A00740DD3"
                BuildableName = "org.gpgtools.Libmacgpg.xpc"
                BlueprintName = "org.gpgtools.Libmacgpg.xpc"
                ReferencedContainer = "container:Dependencies/Libmacgpg/Libmacgpg.xcodeproj">

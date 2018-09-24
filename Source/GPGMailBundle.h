@@ -178,14 +178,6 @@ extern NSString *gpgErrorIdentifier; // This identifier is used to set and find 
 
 + (NSString *)preferencesPanelName;
 
-/**
- * Support contract methods
- */
-- (void)checkSupportContractAndStartWizardIfNecessary;
-- (BOOL)hasActiveContract;
-- (NSNumber *)remainingTrialDays;
-- (NSDictionary *)fetchContractInformation;
-
 @property (readonly) GPGErrorCode gpgStatus;
 @property (readonly, strong) NSSet *allGPGKeys;
 @property (nonatomic, assign) BOOL accountExistsForSigning;

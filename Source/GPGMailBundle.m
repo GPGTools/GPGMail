@@ -267,8 +267,6 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 
 + (void)MA_mailApplicationDidFinishLaunching:(id)object {
     [self MA_mailApplicationDidFinishLaunching:object];
-    
-    [[GPGMailBundle sharedInstance] checkSupportContractAndStartWizardIfNecessary];
 }
 
 @end
@@ -831,97 +829,5 @@ static BOOL gpgMailWorks = NO;
     
     return mailError;
 }
-             
-#pragma mark Active Contract Helpers
-
-- (NSDictionary *)contractInformation {
-    if(!_activationInfo) {
-        NSDictionary *activationInfo = [self fetchContractInformation];
-        _activationInfo = activationInfo;
-    }
-    
-    return _activationInfo;
-}
-
-- (NSDictionary *)fetchContractInformation {
-    GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-    NSDictionary __autoreleasing *activationInfo = nil;
-    BOOL hasSupportContract = [xpc validSupportContractAvailableForProduct:@"GPGMail" activationInfo:&activationInfo];
-    NSLog(@"[GPGMail %@]: Support contract is valid? %@", [(GPGMailBundle *)[GPGMailBundle sharedInstance] version], hasSupportContract ? @"YES" : @"NO");
-    NSLog(@"[GPGMail %@]: Activation info: %@", [(GPGMailBundle *)[GPGMailBundle sharedInstance] version], activationInfo);
-    return activationInfo;
-}
-
-- (BOOL)hasActiveContract {
-    NSDictionary *contractInformation = [self contractInformation];
-    return [contractInformation[@"Active"] boolValue];
-}
-
-- (NSNumber *)remainingTrialDays {
-    NSDictionary *contractInformation = [self contractInformation];
-    if(!contractInformation[@"ActivationRemainingTrialDays"]) {
-        return @(30);
-    }
-    return contractInformation[@"ActivationRemainingTrialDays"];
-}
-
-- (void)startSupportContractWizard {
-    GMSupportPlanAssistantViewController *supportPlanAssistantViewController = [[GMSupportPlanAssistantViewController alloc] initWithNibName:@"GMSupportPlanAssistantView" bundle:[GPGMailBundle bundle]];
-    supportPlanAssistantViewController.delegate = self;
-    
-    GMSupportPlanAssistantWindowController *supportPlanAssistantWindowController = [[GMSupportPlanAssistantWindowController alloc] initWithSupportPlanActivationInformation:[self contractInformation]];
-    supportPlanAssistantWindowController.delegate = self;
-    supportPlanAssistantWindowController.contentViewController = supportPlanAssistantViewController;
-    
-    [[[NSApplication sharedApplication] windows][0] beginSheet:[supportPlanAssistantWindowController window]
-                                              completionHandler:^(NSModalResponse returnCode) {}];
-
-    [self setIvar:@"Window" value:supportPlanAssistantWindowController];
-    [self setIvar:@"View" value:supportPlanAssistantViewController];
-}
-
-- (void)checkSupportContractAndStartWizardIfNecessary {
-    if(![self hasActiveContract]) {
-        [self startSupportContractWizard];
-    }
-}
-             
-#pragma mark -
-
-- (void)supportPlanAssistant:(NSWindowController *)windowController email:(NSString *)email activationCode:(NSString *)activationCode {
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-        NSError __autoreleasing *error = nil;
-        BOOL isActivated = [xpc activateSupportContractWithEmail:email activationCode:activationCode error:&error];
-        NSError *finalError = error;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(isActivated) {
-                [(GMSupportPlanAssistantWindowController *)windowController activationDidCompleteWithSuccess];
-                NSMutableDictionary *activationInfo = [NSMutableDictionary dictionaryWithDictionary:_activationInfo];
-                [activationInfo setObject:@(YES) forKey:@"Active"];
-                _activationInfo = (NSDictionary *)activationInfo;
-            }
-            else {
-                [(GMSupportPlanAssistantWindowController *)windowController activationDidFailWithError:finalError];
-            }
-        });
-    });
-}
-
-- (void)supportPlanAssistantShouldStartTrial:(NSWindowController *)windowController {
-    if(![[NSUserDefaults standardUserDefaults] dictionaryForKey:@"__gme3_t_d"]) {
-        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"__gme3_t_d"];
-    }
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-        [xpc startTrial];
-    });
-}
-
-- (void)closeSupportPlanAssistant:(NSWindowController *)windowController {
-    [[[NSApplication sharedApplication] windows][0] endSheet:[windowController window]];
-}
-
-
 @end
 

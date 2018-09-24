@@ -87,11 +87,7 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 }
 
 - (NSString *)registrationDescription {
-    if([[GPGMailBundle sharedInstance] hasActiveContract]) {
-        NSDictionary *contractInformation = [[GPGMailBundle  sharedInstance] fetchContractInformation];
-        return [NSString stringWithFormat:@"Registered to: %@", [contractInformation valueForKey:@"ActivationEmail"]];
-    }
-    return @"Trial Version";
+    return @"OSS Version";
 }
 
 - (NSImage *)imageForPreferenceNamed:(NSString *)aName {
