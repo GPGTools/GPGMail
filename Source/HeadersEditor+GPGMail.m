@@ -28,7 +28,7 @@
  */
 
 #import <Libmacgpg/Libmacgpg.h>
-#import <NSObject+LPDynamicIvars.h>
+#import "NSObject+LPDynamicIvars.h"
 #import "CCLog.h"
 #import "MailAccount.h"
 #import "AddressAttachment.h"
