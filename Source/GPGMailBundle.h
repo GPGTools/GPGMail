@@ -63,6 +63,12 @@ extern NSString *gpgErrorIdentifier; // This identifier is used to set and find 
 }
 
 /**
+ Expose the initialize function to prevent Mail 12.x
+ rejecting the mailbundle as incompatible
+ */
++ (void)initialize;
+
+/**
  Checks for multiple installations of GPGMail.mailbundle in
  all Library folders.
  */
