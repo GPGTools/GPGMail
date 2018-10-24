@@ -52,7 +52,7 @@
                font sizes, causing incorrect cursor rects.
 */
 
-#import <Appkit/AppKit.h>
+#import <AppKit/AppKit.h>
 
 
 @protocol DSClickableURLTextField <NSTextFieldDelegate>
