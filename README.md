@@ -53,7 +53,7 @@ make
 ```
 
 #### Install
-Copy Libmacgpg.framework from Dependencies/Libmacgpg/build/Release/ to ~/Library/Frameworks.
+build and then copy Libmacgpg.framework from Dependencies/Libmacgpg/build/Release/ to ~/Library/Frameworks.
 
 After that copy the GPGMail.mailbundle file from build/Releases/GPGMail.mailbundle to ~/Libray/Mail/Bundles, re-start Mail.app and enjoy.
 
