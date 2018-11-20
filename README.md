@@ -44,6 +44,7 @@ It's necessary to clone the Libmacgpg repository first, before building GPGMail.
 ```bash
 cd Dependencies
 git clone https://github.com/GPGTools/Libmacgpg.git
+make # build Libmacgpgp dependency
 cd ..
 ```
 
