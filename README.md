@@ -44,6 +44,8 @@ It's necessary to clone the Libmacgpg repository first, before building GPGMail.
 ```bash
 cd Dependencies
 git clone https://github.com/GPGTools/Libmacgpg.git
+cd Libmacgpg
+make # build Libmacgpg dependency
 cd ..
 ```
 
@@ -55,7 +57,7 @@ make
 #### Install
 Copy Libmacgpg.framework from Dependencies/Libmacgpg/build/Release/ to ~/Library/Frameworks.
 
-After that copy the GPGMail.mailbundle file from build/Releases/GPGMail.mailbundle to ~/Libray/Mail/Bundles, re-start Mail.app and enjoy.
+After that copy the GPGMail.mailbundle file from build/Release/GPGMail.mailbundle to ~/Library/Mail/Bundles, re-start Mail.app and enjoy.
 
 
 System Requirements
