@@ -28,9 +28,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "MCMimeBody.h"
-
 @class GMMessageSecurityFeatures, MCMessage;
+
+@interface MCMimeBody : NSObject
+
+- (MCMimePart *)topLevelPart;
+
+@end
 
 @interface MimeBody_GPGMail : NSObject
 

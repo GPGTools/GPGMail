@@ -114,7 +114,7 @@
 
     DebugLog(@"Is document encrypted?: %@", isEncrypted ? @"YES" : @"NO");
     if(isEncrypted) {
-		if([webDocument respondsToSelector:@selector(setBlockRemoteContent:)]) {
+		/*if([webDocument respondsToSelector:@selector(setBlockRemoteContent:)]) {
 			[webDocument setBlockRemoteContent:YES];
 			// Apple's implementation allows the user to choose whether or not
 			// they want to load the remote content. We won't allow that, unless
@@ -123,11 +123,11 @@
 			// property is set to NO.
 			[webDocument setHasBlockedRemoteContent:NO];
 		}
-		else if([webDocument respondsToSelector:@selector(setHasBlockedMessageContent:)]) {
-			// From macOS Mojave 10.14.1b3, the Mail team has decided to rename these
-			// methods, even though for now they are still doing the exact same thing...
-			// Content-Type 1 means that the message contains encrypted content and should
-			// thus make sure that no remote content is loaded.
+		else */if([webDocument respondsToSelector:@selector(setHasBlockedMessageContent:)]) {
+            // From macOS Mojave 10.14.1b3, the Mail team has decided to rename these
+            // methods, even though for now they are still doing the exact same thing...
+            // Content-Type 1 means that the message contains encrypted content and should
+            // thus make sure that no remote content is loaded.
             // Interestingly enough Content-Type 2 seems to block the message from loading at all. This one is going to be interesting.
             if(isPGPEncrypted) {
                 DebugLog(@"Setting message content type to block to 1");
@@ -135,7 +135,7 @@
                 DebugLog(@"Setting setHasBlockedMessageContent to NO");
                 [webDocument setHasBlockedMessageContent:NO];
             }
-		}
+        }
     }
 }
 

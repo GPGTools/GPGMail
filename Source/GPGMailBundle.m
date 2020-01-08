@@ -46,6 +46,40 @@
 #import "GMSecurityControl.h"
 #import "ComposeViewController.h"
 
+#import "GMSupportPlanManager.h"
+#import "GMSupportPlan.h"
+#import "GMLoaderUpdater.h"
+
+#import "PlugInsViewController.h"
+#import "MailBundle.h"
+
+#import "NSArray+Functional.h"
+
+@interface PlugInsViewController_GPGMail : NSObject
+
+@end
+
+@implementation PlugInsViewController_GPGMail
+
+- (void)MAViewWillAppear {
+    [self MAViewWillAppear];
+
+    // To facilitate a GPG Mail Loader update without asking the user
+    // to re-activate it, two GPG Mail Loaders will be installed in parallel.
+    // The user however should never see two loaders, since that would be confusing.
+    // In order to make sure that only one is ever visible, all other GPG Mail Loaders
+    // are hidden and only the active ones is shown.
+    NSArray *bundlesToRemainVisible = [[self valueForKey:@"_bundles"] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MailBundle *mailBundle, __unused NSDictionary<NSString *,id> * _Nullable bindings) {
+        return ![GMLoaderUpdater isLoaderBundle:mailBundle] || [mailBundle state] == 2;
+    }]];
+
+    [self setValue:bundlesToRemainVisible forKey:@"_bundles"];
+    [[self valueForKey:@"_tableView"] reloadData];
+    [(PlugInsViewController *)self _updateApplyButton];
+}
+
+@end
+
 #import "NSObject+LPDynamicIvars.h"
 @interface CertificateBannerViewController_GPGMail : NSObject
 
@@ -210,7 +244,8 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 
 + (void)MA_mailApplicationDidFinishLaunching:(id)object {
     [self MA_mailApplicationDidFinishLaunching:object];
-    
+
+    [GMLoaderUpdater updateLoaderIfNecessary];
     [[GPGMailBundle sharedInstance] checkSupportContractAndStartWizardIfNecessary];
 }
 
@@ -270,6 +305,43 @@ decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     if([[[tabViewItem viewController] representedObject] isKindOfClass:[GPGMailPreferences class]]) {
         [[[tabViewItem viewController] representedObject] willBeDisplayed];
     }
+}
+
+- (BOOL)MAHandleMailToURL:(NSString *)url {
+    NSRange activationDataRange = [url rangeOfString:@"mailto:gmsp-activate+"];
+    if(activationDataRange.location == NSNotFound) {
+        return [self MAHandleMailToURL:url];
+    }
+
+    NSString *activationData = [url substringFromIndex:activationDataRange.location + activationDataRange.length];
+    activationDataRange = [activationData rangeOfString:@"@support-plan.gpgtools.org"];
+
+    if(activationDataRange.location == NSNotFound) {
+        return YES;
+    }
+
+    activationData = [activationData substringWithRange:NSMakeRange(0, activationDataRange.location)];
+    // Re-convert to proper base64, since normal base64 couldn contain =+/ which are not allowed
+    // in email addresses.
+    activationData = [activationData stringByReplacingOccurrencesOfString:@"_-_" withString:@"/"];
+    activationData = [activationData stringByReplacingOccurrencesOfString:@"_" withString:@"="];
+    activationData = [activationData stringByReplacingOccurrencesOfString:@"-" withString:@"+"];
+
+    activationData = [activationData GMSP_base64Decode];
+
+    if(![activationData length]) {
+        return YES;
+    }
+
+    NSArray *activationComponents = [activationData componentsSeparatedByString:@":"];
+
+    if([activationComponents count] != 2) {
+        return YES;
+    }
+
+    [[GPGMailBundle sharedInstance] startSupportContractWizardWithActivationCode:activationComponents[0] email:activationComponents[1]];
+
+    return YES;
 }
 
 @end
@@ -396,7 +468,7 @@ static BOOL gpgMailWorks = NO;
     
     // Initialize the bundle by swizzling methods, loading keys, ...
     GPGMailBundle *instance = [GPGMailBundle sharedInstance];
-    
+
     [[((MVMailBundle *)self) class] registerBundle];             // To force registering composeAccessoryView and preferences
 }
 
@@ -412,7 +484,7 @@ static BOOL gpgMailWorks = NO;
         
         // Set domain and register the main defaults.
         GPGOptions *options = [GPGOptions sharedOptions];
-        options.standardDomain = [GPGMailBundle bundle].bundleIdentifier;
+        options.standardDomain = @"org.gpgtools.gpgmail";
 		NSDictionary *defaultsDictionary = [NSDictionary dictionaryWithContentsOfFile:[myBundle pathForResource:@"GPGMailBundle" ofType:@"defaults"]];
         [(id)options registerDefaults:defaultsDictionary];
         
@@ -775,6 +847,15 @@ static BOOL gpgMailWorks = NO;
     return [info isOperatingSystemAtLeastVersion:requiredVersion];
 }
 
++ (BOOL)isCatalina {
+    NSProcessInfo *info = [NSProcessInfo processInfo];
+    if(![info respondsToSelector:@selector(isOperatingSystemAtLeastVersion:)])
+        return NO;
+    
+    NSOperatingSystemVersion requiredVersion = {10,15,0};
+    return [info isOperatingSystemAtLeastVersion:requiredVersion];
+}
+
 + (BOOL)hasPreferencesPanel {
     // LEOPARD Invoked on +initialize. Else, invoked from +registerBundle.
 	return YES;
@@ -822,109 +903,64 @@ static BOOL gpgMailWorks = NO;
              
 #pragma mark Active Contract Helpers
 
-- (NSDictionary *)contractInformation {
-    if(!_activationInfo) {
-        NSDictionary *activationInfo = [self fetchContractInformation];
-        _activationInfo = activationInfo;
-    }
-    
-    return _activationInfo;
-}
-
-- (NSDictionary *)fetchContractInformation {
-    GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-    NSDictionary __autoreleasing *activationInfo = nil;
-    BOOL hasSupportContract = [xpc validSupportContractAvailableForProduct:@"GPGMail" activationInfo:&activationInfo];
-//    NSLog(@"[GPGMail %@]: Support contract is valid? %@", [(GPGMailBundle *)[GPGMailBundle sharedInstance] version], hasSupportContract ? @"YES" : @"NO");
-//    NSLog(@"[GPGMail %@]: Activation info: %@", [(GPGMailBundle *)[GPGMailBundle sharedInstance] version], activationInfo);
-    return activationInfo;
-}
-
 - (BOOL)hasActiveContract {
-    NSDictionary *contractInformation = [self contractInformation];
-    return [contractInformation[@"Active"] boolValue];
+    return [[self supportPlanManager] supportPlanIsActive];
 }
 
 - (BOOL)hasActiveContractOrActiveTrial {
-    return [self hasActiveContract] || [[self remainingTrialDays] integerValue] > 0;
+    return [self hasActiveContract];
 }
 
 - (NSNumber *)remainingTrialDays {
-    NSDictionary *contractInformation = [self contractInformation];
-    if(!contractInformation[@"ActivationRemainingTrialDays"]) {
-        return @(30);
-    }
-    return contractInformation[@"ActivationRemainingTrialDays"];
+    return [[self supportPlanManager] remainingTrialDays];
 }
 
 - (void)startSupportContractWizard {
+    [self startSupportContractWizardWithActivationCode:nil email:nil];
+}
+
+- (void)startSupportContractWizardWithActivationCode:(NSString *)activationCode email:(NSString *)email {
+    // Check if an open SupportPlanAssistantWindowController exists and if so close
+    // it
+    GMSupportPlanAssistantWindowController *supportPlanAssistantWindowController = [self getIvar:@"SupportPlanAssistantWindowController"];
+    if(supportPlanAssistantWindowController) {
+        [self closeSupportPlanAssistant:supportPlanAssistantWindowController];
+    }
+
     GMSupportPlanAssistantViewController *supportPlanAssistantViewController = [[GMSupportPlanAssistantViewController alloc] initWithNibName:@"GMSupportPlanAssistantView" bundle:[GPGMailBundle bundle]];
+    supportPlanAssistantViewController.supportPlanManager = [self supportPlanManager];
     supportPlanAssistantViewController.delegate = self;
-    
-    GMSupportPlanAssistantWindowController *supportPlanAssistantWindowController = [[GMSupportPlanAssistantWindowController alloc] initWithSupportPlanActivationInformation:[self contractInformation]];
+
+    supportPlanAssistantWindowController = [[GMSupportPlanAssistantWindowController alloc] initWithSupportPlanManager:[self supportPlanManager]];
     supportPlanAssistantWindowController.delegate = self;
     supportPlanAssistantWindowController.contentViewController = supportPlanAssistantViewController;
     [[supportPlanAssistantWindowController window] setTitle:@"GPG Mail Support Plan"];
     [supportPlanAssistantWindowController showWindow:nil];
+    [[supportPlanAssistantWindowController window] makeKeyAndOrderFront:nil];
 
-    [self setIvar:@"Window" value:supportPlanAssistantWindowController];
-    [self setIvar:@"View" value:supportPlanAssistantViewController];
+    [self setIvar:@"SupportPlanAssistantWindowController" value:supportPlanAssistantWindowController];
+    [self setIvar:@"supportPlanAssistantWindowView" value:supportPlanAssistantViewController];
 
     if([self hasActivationCodeForAutomaticActivation]) {
         NSDictionary *supportPlanActivationInformation = [self supportPlanInformationForAutomaticActivation];
-        [supportPlanAssistantWindowController performAutomaticSupportPlanActivationWithActivationCode:supportPlanActivationInformation[kGMSupportPlanInformationActivationCodeKey] email:supportPlanActivationInformation[kGMSupportPlanInformationActivationEmailKey]];
+        email = supportPlanActivationInformation[kGMSupportPlanInformationActivationEmailKey];
+        activationCode = supportPlanActivationInformation[kGMSupportPlanInformationActivationCodeKey];
     }
-}
 
-- (BOOL)shouldShowSupportPlanActivationDialog {
-    if(![self hasActiveContractOrActiveTrial]) {
-        [self saveDateActivationDialogWasLastShown];
-        return YES;
+    if([email length] && [activationCode length]) {
+        supportPlanAssistantWindowController.closeWindowAfterError = YES;
+        [supportPlanAssistantWindowController performAutomaticSupportPlanActivationWithActivationCode:activationCode email:email];
     }
-    NSDictionary *contractInfo = [self contractInformation];
-    // Trial has never been started?
-    if(![contractInfo valueForKey:@"ActivationRemainingTrialDays"]) {
-        [self saveDateActivationDialogWasLastShown];
-        return YES;
-    }
-    NSDate *date = [[NSUserDefaults standardUserDefaults] objectForKey:@"__gme3_spd_last_shown_date"];
-    if(!date) {
-        [self saveDateActivationDialogWasLastShown];
-        return YES;
-    }
-    // Check if between date now and date last are 3 days.
-
-    NSDate *fromDateTime = date;
-    NSDate *toDateTime = [NSDate date];
-
-    NSDate *fromDate;
-    NSDate *toDate;
-
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-
-    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&fromDate
-                 interval:NULL forDate:fromDateTime];
-    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&toDate
-                 interval:NULL forDate:toDateTime];
-    
-    NSDateComponents *difference = [calendar components:NSCalendarUnitDay
-                                               fromDate:fromDate toDate:toDate options:0];
-    if([difference day] >= 3) {
-        [self saveDateActivationDialogWasLastShown];
-        return YES;
-    }
-    return NO;
-}
-
-- (void)saveDateActivationDialogWasLastShown {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"__gme3_spd_last_shown_date"];
 }
 
 - (void)checkSupportContractAndStartWizardIfNecessary {
-    if(![self hasActiveContract]) {
-        if([self hasActivationCodeForAutomaticActivation] || [self shouldShowSupportPlanActivationDialog]) {
-            [self startSupportContractWizard];
-        }
+    BOOL shouldPresentActivationDialog = [[self supportPlanManager] shouldPresentActivationDialog];
+    // If information is set for automatic activation, override shouldPresent.
+    if(!shouldPresentActivationDialog && [self hasActivationCodeForAutomaticActivation]) {
+        shouldPresentActivationDialog = YES;
+    }
+    if(shouldPresentActivationDialog) {
+        [self startSupportContractWizard];
     }
 }
 
@@ -946,28 +982,33 @@ static BOOL gpgMailWorks = NO;
     return activationInformation;
 }
 
-- (void *)removeSupportPlanInformationForAutomaticActivation {
+- (void)removeSupportPlanInformationForAutomaticActivation {
     [[GPGOptions sharedOptions] setValue:nil forKey:kGMSupportPlanAutomaticActivationActivationCodeKey];
     [[GPGOptions sharedOptions] setValue:nil forKey:kGMSupportPlanAutomaticActivationActivationCodeKey];
 }
 
+- (void)deactivateSupportContract {
+    [[self supportPlanManager] deactivateWithCompletionHandler:^(GMSupportPlan * _Nonnull supportPlan, NSDictionary *result, NSError * _Nonnull error) {
+        // Usually not necessary to wait for the report errors here.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // A new trial activation might be available, thus it is necessary to update the support plan state.
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"GMSupportPlanStateChangeNotification" object:self];
+        });
+    }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"GMSupportPlanStateChangeNotification" object:self];
+}
 
 #pragma mark -
 
 - (void)supportPlanAssistant:(NSWindowController *)windowController email:(NSString *)email activationCode:(NSString *)activationCode {
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-        NSError __autoreleasing *error = nil;
-        BOOL isActivated = [xpc activateSupportContractWithEmail:email activationCode:activationCode error:&error];
-        NSError *finalError = error;
+    [[self supportPlanManager] activateSupportPlanWithActivationCode:activationCode email:email completionHandler:^(GMSupportPlan * _Nonnull supportPlan, NSDictionary *result, NSError * _Nonnull error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(isActivated) {
-                [(GMSupportPlanAssistantWindowController *)windowController activationDidCompleteWithSuccess];
-                NSMutableDictionary *activationInfo = [NSMutableDictionary dictionaryWithDictionary:_activationInfo];
-                [activationInfo setObject:@(YES) forKey:@"Active"];
-                [activationInfo setObject:activationCode forKey:@"ActivationCode"];
-                [activationInfo setObject:email forKey:@"ActivationEmail"];
-                _activationInfo = (NSDictionary *)activationInfo;
+            if(!supportPlan) {
+                [(GMSupportPlanAssistantWindowController *)windowController activationDidFailWithError:error];
+                return;
+            }
+            if(supportPlan) {
+                [(GMSupportPlanAssistantWindowController *)windowController activationDidCompleteWithSuccessForSupportPlan:supportPlan];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"GMSupportPlanStateChangeNotification" object:self];
 
                 // Remove the info for automatic activation.
@@ -975,27 +1016,37 @@ static BOOL gpgMailWorks = NO;
                     [self removeSupportPlanInformationForAutomaticActivation];
                 }
             }
-            else {
-                [(GMSupportPlanAssistantWindowController *)windowController activationDidFailWithError:finalError];
-            }
         });
-    });
+    }];
 }
 
 - (void)supportPlanAssistantShouldStartTrial:(NSWindowController *)windowController {
-    if(![[NSUserDefaults standardUserDefaults] dictionaryForKey:@"__gme3_t_d"]) {
-        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:@"__gme3_t_d"];
-    }
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        GPGTaskHelperXPC *xpc = [[GPGTaskHelperXPC alloc] init];
-        [xpc startTrial];
-    });
+    // Start a new trial.
+    [[self supportPlanManager] startTrialWithCompletionHandler:^(GMSupportPlan * _Nullable supportPlan, NSDictionary * _Nullable result, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(!supportPlan) {
+                [(GMSupportPlanAssistantWindowController *)windowController activationDidFailWithError:error];
+                return;
+            }
+            [(GMSupportPlanAssistantWindowController *)windowController activationDidCompleteWithSuccessForSupportPlan:supportPlan];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"GMSupportPlanStateChangeNotification" object:self];
+        });
+    }];
 }
 
 - (void)closeSupportPlanAssistant:(NSWindowController *)windowController {
     [windowController close];
 }
 
+- (GMSupportPlanManager *)supportPlanManager {
+    static dispatch_once_t onceToken;
+    static GMSupportPlanManager *supportPlanManager;
+    dispatch_once(&onceToken, ^{
+        supportPlanManager = [[GMSupportPlanManager alloc] initWithApplicationID:[[GPGMailBundle bundle] bundleIdentifier] applicationInfo:[[GPGMailBundle bundle] infoDictionary]];
+    });
+
+    return supportPlanManager;
+}
 
 @end
 

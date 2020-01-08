@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MCMimeBody.h"
-
 @class GMMessageProtectionStatus;
 
 // TODO: Should probably be called security properties. 

@@ -31,8 +31,8 @@
 
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Signature key was revoked.";
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "The key which was used to sign this message was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";
-"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to this message signature is not in your GPG Keychain.";
-"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The message could not be verified, since the key which was used to sign this message is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain and import it to verify the message.";
+"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to verify this signature is not in GPG Keychain";
+"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The message could not be verified. The public key required to verify this signature is not in GPG Keychain.\n\nSearch the key server for fingerprint %@ or ask your contact for their public key. You can retry to verify the signature after adding their public key to GPG Keychain.";
 
 "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_TITLE" = "The message signature was created with an algorithm which is not supported.";
 "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This message could not be verified, since the signature was created with an algorithm which is not supported.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
@@ -40,7 +40,7 @@
 "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The signature of this message is invalid!";
 "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "This message might have been modified after the signature was created.\n\nPlease contact the sender to make sure the content of the message matches the original.\n\nPlease contact us at\nhttps://gpgtools.tenderapp.com/\nif you're sure the message was not modified.";
 
-"MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of message signature failed with unknown error!";
+"MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of signature failed with unknown error.";
 "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this message's signature.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
 
 "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Message signature data error!";
@@ -92,8 +92,8 @@
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Signature key was revoked.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "The key which was used to sign this attachment was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";
 
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The signature key is not in your GPG Keychain.";
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment signature could not be verified, since the key which was used to sign is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain and import it to verify the attachment.";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to verify this signature is not in GPG Keychain";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment could not be verified. The public key required to verify this signature is not in GPG Keychain.\n\nSearch the key server for fingerprint %@ or ask your contact for their public key. You can retry to verify the signature after adding their public key to GPG Keychain.";
 
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_TITLE" = "The attachment signature was created with an algorithm which is not supported.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This attachment could not be verified, since the key to the signature was created with an algorithm which is not supported.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
@@ -101,7 +101,7 @@
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The attachment signature is invalid!";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "This attachment might have been modified after the signature was created.\n\nPlease contact the sender and make sure the content of the attachment matches the original.\n\nPlease contact us at\nhttps://gpgtools.tenderapp.com/\n if you're sure the attachment was not modified.";
 
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Signature verification failed with unknown error!";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of signature failed with unknown error.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this attachment signature.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
 
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Signature data error!";
@@ -266,33 +266,97 @@ ACCESSIBILITY_SIGN_OFF_IMAGE = "Don't sign";
 /* Support Plan */
 "SUPPORT_PLAN_ACTIVATION_SUCCESS_TITLE" = "Support Plan Activated";
 "SUPPORT_PLAN_ACTIVATION_SUCCESS_MESSAGE" = "Thank you for your support!\n\nWe hope you enjoy using GPG Mail. Should you have any questions, don't hesitate to contact us via \"Report Problem\" in Mail › Preferences › GPG Mail";
-"SUPPORT_PLAN_ACTIVATION_FAILED_TITLE" = "Support Plan Activation Failed";
-"SUPPORT_PLAN_ACTIVATION_FAILED_INPUT_INVALID" = "The entered activation code is invalid. Please check the entered information and try again.";
+
 "SUPPORT_PLAN_ACTIVATION_FAILED_CONNECTTION_ERROR" = "We were unable to connect to the paddle.com API to verify your activation code.\nIf you are using any macOS firewall product (buil-in firewall, Little Snitch, etc.), please allow connections to paddle.com for the activation to complete. You can block any connections again once the activation is completed.\n\nPlease contact us at business@gpgtools.org if the problem persists.";
-"SUPPORT_PLAN_ACTIVATION_FAILED_CODE_INVALID" = "The entered activation code is invalid.\nPlease contact us at business@gpgtools.org if you are sure that you have entered your code correctly.";
-"SUPPORT_PLAN_ACTIVATION_FAILED_TOO_MANY_ACTIVATIONS" = "We are very sorry to inform you that you have exceeded the allowed number of activations.\nPlease contact us at business@gpgtools.org, if you believe that you should still have activations left.";
 "SUPPORT_PLAN_ACTIVATION_FAILED_GENERAL_ERROR" = "Unfortunately an unknown error has occurred. Please retry later or use 'System Preferences › GPG Suite › Send Report' to contact us";
 "SUPPORT_PLAN_HEADER_EXPIRED" = "Your 30-day-trial of GPG Mail has expired. Encrypting, signing and verifying messages will stop to work. Decrypting however will always continue to work.\nPurchase GPG Mail Support Plan to continue with full functionality.";
 "SUPPORT_PLAN_HEADER_TRIAL" = "You can test GPG Mail free for %@ days.\nSecure your emails now!";
-"SUPPORT_PLAN_HEADER_TRIAL_MORE" = "You can test GPG Mail free for %@ more days.\nSecure your emails now!";
-"SUPPORT_PLAN_DETAILS_MESSAGE" = "If you have already purchased a support plan, activate it now and enjoy GPG Mail!";
-"SUPPORT_PLAN_DETAILS_MESSAGE_HYPERLINK_PART" = "support plan";
-"SUPPORT_PLAN_BUY" = "Buy Now";
+
+
 "SUPPORT_PLAN_CLOSE" = "Continue";
 "SUPPORT_PLAN_CONTINUE_TRIAL"= "Continue Trial";
-"SUPPORT_PLAN_START_TRIAL" = "Start Trial";
-"SUPPORT_PLAN_BUY" = "Buy Now";
-"SUPPORT_PLAN_ACTIVATE" = "Activate";
+
 "SUPPORT_PLAN_TRIAL_EXPIRED_TITLE" = "GPG Mail Trial Expired";
 "SUPPORT_PLAN_TRIAL_EXPIRED_MESSAGE" = "Without an active GPG Mail Support Plan you will still be able to read any of your encrypted emails. However, you will no longer be able to sign, encrypt or verify emails.";
-"SUPPORT_PLAN_HEADER_WELCOME" = "Welcome to GPG Mail";
+
 "SUPPORT_PLAN_EMAIL_LABEL" = "Email";
 "SUPPORT_PLAN_LICENSE_LABEL" = "Activation Code";
 "SUPPORT_PLAN_GRAY_INFO" = "Your activation code can be found in the email you receive after completing your purchase.";
-"SUPPORT_PLAN_PROGRESS_LABEL" = "Activating your copy of GPG Mail";
 
 
+"SUPPORT_PLAN_DEACTIVATION_WARNING_TITLE" = "Deactivate your GPG Mail Support Plan";
+"SUPPORT_PLAN_DEACTIVATION_WARNING_MESSAGE" = "Are you sure you want to deactive your Support Plan on this device?\n\nIf you deactivate your GPG Mail Support Plan on this device, GPG Mail will revert to decrypt-only mode.\n\nOnce deactivated, it will no longer be possible to encrypt, verify or sign messages.\n\nYou will however always be able to read your encrypted messages.\n\nAfter GPG Mail is deactivated on this device, you can activate it on a new device.";
+"SUPPORT_PLAN_DEACTIVATION_WARNING_CANCEL" = "Cancel";
+"SUPPORT_PLAN_DEACTIVATION_WARNING_CONFIRM" = "Deactivate";
 
-
-
-
+/* Support Plan New */
+"SUPPORT_PLAN_NEW_TRIAL_NO_NEW_TRIAL_ALLOWED_TITLE" = "Failed to start new trial";
+"SUPPORT_PLAN_NEW_TRIAL_NO_NEW_TRIAL_ALLOWED_MESSAGE" =  "Unfortunately it is not possible to start a new trial at this point, since you have already started a trial in the past.";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_INPUT_INVALID" = "The entered activation code is invalid. Please check the entered information and try again.";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_TITLE" = "Support Plan Activation Failed";
+"SUPPORT_PLAN_NEW_ACTIVATION_UNABLE_TO_CONNECT_TO_API_TRIAL_TITLE" = "Unable to connect to activation server!";
+"SUPPORT_PLAN_NEW_ACTIVATION_UNABLE_TO_CONNECT_TO_API_TRIAL_MESSAGE" = "We were unable to connect to our support plan API in order to activate your trial.";
+"SUPPORT_PLAN_NEW_ACTIVATION_UNABLE_TO_CONNECT_TO_API_MESSAGE" = "We were unable to connect to our support plan API in order to activate your GPG Mail Support Plan.";
+"SUPPORT_PLAN_NEW_ACTIVATION_CONFIGURE_FIREWALL_MESSAGE" =  "If you are using any macOS firewall product (buil-in firewall, Little Snitch, etc.), please allow connections to support-plan.gpgtools.org for the activation to complete.\n\nPlease contact us at business@gpgtools.org if the problem persists or if you need offline activation.";
+"SUPPORT_PLAN_NEW_ACTIVATION_UNABLE_TO_CONNECT_TO_API_TRIAL_FALLBACK_MESSAGE" = "\n\nA fallback trial has been installed in the meantime which was created at build time and is valid for %@ days";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_CODE_INVALID_TITLE" = "Invalid Activation Code!";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_CODE_INVALID" = "The entered activation code is invalid.\nPlease contact us at business@gpgtools.org if you are sure that you have entered your code correctly.";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_TOO_MANY_ACTIVATIONS_TITLE" = "Allowed activations exhausted!";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_TOO_MANY_ACTIVATIONS" = "You have exhausted the number of devices your GPG Mail Support Plan can be activated on.\nPlease deactivate your GPG Mail Support Plan on other devices using \"Mail › Preferences › GPG Mail › Deactivate\"";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_GENERAL_ERROR_TITLE" = "Server error!";
+"SUPPORT_PLAN_NEW_ACTIVATION_FAILED_GENERAL_ERROR" = "The activation server returned an invalid response. Please retry later.\n\nIf the problem persists, please contact us via 'System Preferences › GPG Suite › Send Report'";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_LOCATE_ACTIVATION_CODE" = "Please find your activation code in the email you received after completing your purchase.";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_VERSION_3_COMPATIBILITY_INFO" = "GPG Mail 3 is compatible with macOS High Sierra (10.13) and maOS Mojave (10.14). There is no guarantee that future versions of macOS will be supported.";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_HEADER_WELCOME" = "Welcome to GPG Mail 3";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_VERSION_4_COMPATIBILITY_INFO" =  "GPG Mail 4 is compatible with macOS High Sierra (10.13), macOS Mojave (10.14) and macOS Catalina (10.15).";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_VERSION_COMPATIBILITY_NO_GUARANTEE_INFO" = "There is no guarantee that future versions of macOS will be supported.";
+"SUPPORT_PLAN_NEW_HEADER_WELCOME_4" = "Welcome to GPG Mail 4";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_HEADER_TRIAL_4" = "GPG Mail 4 Trial";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_SUBHEADER_TRIAL_EXPIRED" = "Your 30-day-trial of GPG Mail has expired";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_TRIAL_EXPIRED_DETAILS_TEXT" = "Since your trial has expired, it will no longer be possible to encrypt, verify or sign messages. You will however always be able to read your encrypted messages.\n\nIn order to benefit from all features of GPG Mail, please purchase a GPG Mail Support Plan.";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_TRIAL_ABOUT_TO_EXPIRE_SUBHEADER" = "Your trial of GPG Mail is about to expire soon.\nYou can test GPG Mail free for %@ more days";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_TRIAL_ABOUT_TO_EXPIRE_DETAILS_TEXT" = "Since your trial has expired, it will no longer be possible to encrypt, verify or sign messages. You will however always be able to read your encrypted messages.\n\nIn order to benefit from all features of GPG Mail, please purchase a GPG Mail Support Plan.";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_TRIAL_CONTINUE_SUBHEADER" = "You can test GPG Mail free for %@ more days.\nSecure your emails now!";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_INACTIVE_SUBHEADER" = "You can test GPG Mail free for %@ days.\nSecure your emails now!";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_PURCHASED_ALREADY_MESSAGE" = "If you have already purchased a support plan, activate it now and enjoy GPG Mail!";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_PURCHASED_ALREADY_HYPERLINK_PART" = "support plan";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_BUTTON_BUY" = "Buy Now";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_BUTTON_ACTIVATE" = "Activate";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_BUTTON_CLOSE" = "Close";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_BUTTON_CONTINUE_TRIAL"= "Continue Trial";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_BUTTON_START_TRIAL" = "Start Trial";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_EMAIL_LABEL" = "Email";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ACTIVATION_CODE_LABEL" = "Activation Code";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_PROGRESS_TEXT" = "Activating your GPG Mail Support Plan";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_SUBHEADER" = "Please upgrade your GPG Mail Support Plan";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_3TO4_VALID_V3" = "Your current GPG Mail Support Plan is valid for GPG Mail 3 which is not compatible with macOS Catalina.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_3TO4_EXPLANATION" = "To continue leveraging the full functionality of GPG Mail and benefit from the latest updates and features, upgrade your GPG Mail Support Plan now.\n\nAs a token of our appreciation we would like to offer you a %@ discount.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_3TO4_START_TRIAL_EXPLANATION" = "If you don't want to decide just yet, feel free to start a %@ day trial.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_BUTTON_UPGRADE" = "Upgrade Now!";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_4ORKEEP3_V4_AVAILABLE" = "GPG Mail 4 is available now.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_4ORKEEP3_EXPLANATION" = "Your GPG Mail Support Plan is valid for GPG Mail 3. To continue leveraging the full functionality of GPG Mail, benefit from the latest updates and features and be ready for macOS Catalina, upgrade your GPG Mail Support Plan now.\n\nAs a token of our appreciation we would like to offer you a %@ discount.\n\nIf you don't plan to upgrade your macOS version and rather want to wait for future features, feel free to keep using GPG Mail 3 for as long as you want.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_UPGRADE_4ORKEEP3_BUTTON_KEEP" = "Keep GPG Mail 3";
+"SUPPORT_PLAN_NEW_STATUS_UPDATE_DIALOG_EXPLANATION" = "We have detected an existing support plan for GPG Mail 3 and are currently checking our activation server to see if your support plan is already valid for GPG Mail 4. This might take a minute.";
+"SUPPORT_PLAN_NEW_STATUS_UPDATE_DIALOG_PROGRESS_TEXT" = "Checking the status of your support plan…";
+"SUPPORT_PLAN_NEW_THANKS_DIALOG_TRIAL_SUBHEADER" = "Your 30-day-trial of GPG Mail was\nactivated successfully!";
+"SUPPORT_PLAN_NEW_THANKS_DIALOG_TRIAL_SUCCESS_MESSAGE" = "We hope you enjoy using GPG Mail. Should you have any questions, don't hesitate to contact us via \"Report Problem\" in Mail › Preferences › GPG Mail";
+"SUPPORT_PLAN_NEW_THANKS_DIALOG_SUBHEADER" = "Your GPG Mail Support Plan was\nactivated successfully!";
+"SUPPORT_PLAN_NEW_THANKS_DIALOG_SUCCESS_MESSAGE" = "We hope you enjoy using GPG Mail. Should you have any questions, don't hesitate to contact us via \"Report Problem\" in Mail › Preferences › GPG Mail";
+"SUPPORT_PLAN_NEW_THANKS_DIALOG_EFFU_MESSAGE" = "Our records show that you have just recently purchased a support plan for GPG Mail 3 which qualifies you for a free GPG Mail 4 Support Plan upgrade. Your support plan has been automatically upgraded.";
+"SUPPORT_PLAN_NEW_DIALOG_BUTTON_CLOSE" = "Close";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_FETCHING_UPGRADE_URL_PROGRESS_TEXT" = "Fetching Upgrade URL…";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_ERROR_ALERT_VOLUME_TITLE" = "Volume purchase detected";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_ERROR_ALERT_VOLUME_MESSAGE" = "Your support plan is part of a volume purchase.\n\nPlease contact us at business@gpgtools.org to get a custom upgrade URL.\n\nIn the meantime please start a new trial.";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_ERROR_ALERT_SERVER_TITLE" = "GPG Mail Support Plan Server Error";
+"SUPPORT_PLAN_NEW_UPGRADE_DIALOG_ERROR_ALERT_SERVER_MESSAGE" = "Unfortunately our activation server responded with an error!\n\nPlease try again later. If this keeps happening, please contact us at business@gpgtools.org";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_START_TRIAL_PROGRESS_TEXT" = "Activating trial…";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ERROR_ALERT_ACTIVATED_TITLE" = "Activating GPG Mail Support Plan";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ERROR_ALERT_ACTIVATED_MESSAGE" = "Your GPG Mail Support Plan is already activated!\n\nIf you would like to activate a different Support Plan, you can deactivate your current one in Mail › Preferences › GPG Mail › Deactivate\n\nThank you for your support!";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ALERT_RESTARTING_V3_TITLE" = "Restarting Mail";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ALERT_RESTARTING_V3_MESSAGE" = "In order to load GPG Mail 3, Mail will now be relaunched.\nFeel free to upgrade to GPG Mail 4 at any time.\n\nShould you have any questions, don't hesitate to contact us via \"Report Problem\" in Mail › Preferences › GPG Mail";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ALERT_RESTARTING_V4_TITLE" = "Restarting Mail";
+"SUPPORT_PLAN_NEW_ACTIVATION_DIALOG_ALERT_RESTARTING_V4_MESSAGE" = "You are currently running GPG Mail 3 and just activated your GPG Mail Support Plan for GPG Mail 4. In order to load GPG Mail 4, Mail will now be relaunched.\n\nThank you for your support!";
+"SUPPORT_PLAN_NEW_WINDOW_CLOSE_ALERT_INACTIVE_TITLE" = "Important!";
+"SUPPORT_PLAN_NEW_WINDOW_CLOSE_ALERT_INACTIVE_MESSAGE" = "Without an active GPG Mail Support Plan you will not be able to sign, encrypt or verify emais. You will of course still be able to read any of your encrypted emails.";
+"SUPPORT_PLAN_NEW_WINDOW_CLOSE_ALERT_TRIAL_EXPIRED_TITLE" = "GPG Mail Trial Expired";
+"SUPPORT_PLAN_NEW_WINDOW_CLOSE_ALERT_TRIAL_EXPIRED_MESSAGE" = "Without an active GPG Mail Support Plan you will no longer be able to sign, encrypt or verify emais. You will of course still be able to read any of your encrypted emails.";

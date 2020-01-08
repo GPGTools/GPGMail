@@ -36,6 +36,9 @@
 #import "MFRemoteStoreAccount.h"
 #import "MailApp.h"
 
+#import "GMSupportPlanManager.h"
+#import "GMSupportPlan.h"
+
 #define localized(key) [GPGMailBundle localizedStringForKey:key]
 
 NSString *SUEnableAutomaticChecksKey = @"SUEnableAutomaticChecks";
@@ -46,6 +49,7 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 @property (nonatomic, weak) IBOutlet NSTextField *registrationDescriptionTextField;
 @property (nonatomic, weak) IBOutlet NSTextField *activationCodeTextField;
 @property (nonatomic, weak) IBOutlet NSButton *activateButton;
+@property (nonatomic, weak) IBOutlet NSButton *deactivateButton;
 @property (nonatomic, weak) IBOutlet NSButton *learnMoreButton;
 @property (nonatomic, weak) IBOutlet NSButton *reportProblemButton;
 @property (nonatomic, assign) BOOL preferencesDidLoad;
@@ -108,31 +112,67 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
     // the preferences are not currently being presented and so
     // there's no need to change the state.
     if(_activationCodeTextField != nil) {
-        [self setState:GPGMailPreferencesSupportPlanStateActiveState];
+        [self willBeDisplayed];
     }
 }
 
 - (NSString *)registrationCode {
-	if([[GPGMailBundle sharedInstance] hasActiveContract]) {
-		NSDictionary *contractInformation = [[GPGMailBundle  sharedInstance] contractInformation];
-		return [NSString stringWithFormat:@"Code: %@", contractInformation[@"ActivationCode"]];
-	}
-	return @"";
-}
-- (NSString *)registrationDescription {
-    if([[GPGMailBundle sharedInstance] hasActiveContract]) {
-        NSDictionary *contractInformation = [[GPGMailBundle  sharedInstance] contractInformation];
-        return [NSString stringWithFormat:@"Registered to: %@", contractInformation[@"ActivationEmail"]];
+    GMSupportPlanManager *supportPlanManager = [[GPGMailBundle sharedInstance] supportPlanManager];
+    if(![supportPlanManager supportPlanIsActive]) {
+        return @"";
     }
-    NSNumber *remainingDays = [[self bundle] remainingTrialDays];
-    return [NSString stringWithFormat:@"Trial Version%@", [remainingDays integerValue] <= 0 ? @" Expired" : [NSString stringWithFormat:@" (%@ days remaining)", remainingDays]];
+
+    GMSupportPlan *supportPlan = [supportPlanManager supportPlan];
+    if([supportPlan isKindOfTrial]) {
+        return @"";
+    }
+
+    return [NSString stringWithFormat:@"Code: %@", [supportPlanManager currentActivationCode]];
+}
+
+- (NSString *)registrationDescription {
+    GMSupportPlanManager *supportPlanManager = [[GPGMailBundle sharedInstance] supportPlanManager];
+    if(![supportPlanManager supportPlan] || (![supportPlanManager supportPlanIsActive] && [supportPlanManager supportPlanState] != GMSupportPlanStateTrialExpired)) {
+        return @"Decrypt Only Mode";
+    }
+
+    GMSupportPlan *supportPlan = [supportPlanManager supportPlan];
+    GMSupportPlanType type = [supportPlan type];
+
+    if([supportPlan isKindOfTrial]) {
+        NSNumber *remainingDays = [[self bundle] remainingTrialDays];
+        return [NSString stringWithFormat:@"Trial Version%@", [remainingDays integerValue] <= 0 ? @" Expired - Decrypt Only Mode" : [NSString stringWithFormat:@" (%@ days remaining)", remainingDays]];
+    }
+    else if(type == GMSupportPlanTypeTime) {
+        NSString *formattedDate = [NSDateFormatter localizedStringFromDate:[supportPlan expirationDate] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
+
+        return [NSString stringWithFormat:@"Registered to: %@ - valid until %@", [supportPlanManager currentEmail], formattedDate];
+    }
+
+    return [NSString stringWithFormat:@"Registered to: %@", [supportPlanManager currentEmail]];
 }
 
 - (IBAction)activateSupportPlan:(NSButton *)sender {
 	[[GPGMailBundle sharedInstance] startSupportContractWizard];
 }
+- (IBAction)deactivateSupportPlan:(NSButton *)sender {
+	NSWindow *window = [[(MailApp *)[NSClassFromString(@"MailApp") sharedApplication] preferencesController] window];
+	NSAlert *alert = [NSAlert new];
+	alert.messageText = localized(@"SUPPORT_PLAN_DEACTIVATION_WARNING_TITLE");
+	alert.informativeText = localized(@"SUPPORT_PLAN_DEACTIVATION_WARNING_MESSAGE");
+	[alert addButtonWithTitle:localized(@"SUPPORT_PLAN_DEACTIVATION_WARNING_CANCEL")];
+	[alert addButtonWithTitle:localized(@"SUPPORT_PLAN_DEACTIVATION_WARNING_CONFIRM")];
+	alert.icon = [NSImage imageNamed:@"GPGMail"];
+	
+	
+	[alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
+		if (returnCode == NSAlertSecondButtonReturn) {
+			[[GPGMailBundle sharedInstance] deactivateSupportContract];
+		}
+	}];
+}
 - (IBAction)learnMore:(NSButton *)sender {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://gpgtools.org/buy-support-plan"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://gpgtools.org/buy-support-plan?v4=1"]];
 }
 
 
@@ -145,7 +185,7 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 
 
 - (IBAction)openSupport:(id)sender {
-	BOOL success = [GPGTask showGPGSuitePreferencesTab:@"report" arguments:nil];
+    BOOL success = [GPGTask showGPGSuitePreferencesTab:@"report" arguments:nil];
 
 	if (!success) {
 		// Alternative if GPGPreferences could not be launched.
@@ -168,25 +208,39 @@ NSString *SUScheduledCheckIntervalKey = @"SUScheduledCheckInterval";
 
 - (void)willBeDisplayed {
     if([[GPGMailBundle sharedInstance] hasActiveContract]) {
-        [self setState:GPGMailPreferencesSupportPlanStateActiveState];
+        GMSupportPlanManager *supportPlanManager = [[GPGMailBundle sharedInstance] supportPlanManager];
+        GMSupportPlanState supportPlanState = [supportPlanManager supportPlanState];
+        if(supportPlanState == GMSupportPlanStateTrial) {
+            [self setState:GPGMailPreferencesSupportPlanStateTrialState forceUpdate:YES];
+        }
+        else {
+            [self setState:GPGMailPreferencesSupportPlanStateActiveState forceUpdate:YES];
+        }
     }
     else {
-        [self setState:GPGMailPreferencesSupportPlanStateTrialState];
+        [self setState:GPGMailPreferencesSupportPlanStateTrialState forceUpdate:YES];
     }
 }
 
-- (void)setState:(GPGMailPreferencesSupportPlanState)state {
-    if (_state != state) {
+- (void)setState:(GPGMailPreferencesSupportPlanState)state forceUpdate:(BOOL)forceUpdate {
+    if (_state != state || forceUpdate) {
         _state = state;
-        
+
         _activationCodeTextField.hidden = (state == GPGMailPreferencesSupportPlanStateTrialState);
         _reportProblemButton.hidden = (state == GPGMailPreferencesSupportPlanStateTrialState);
+        _deactivateButton.hidden = (state == GPGMailPreferencesSupportPlanStateTrialState);
         _activateButton.hidden = (state == GPGMailPreferencesSupportPlanStateActiveState);
         _learnMoreButton.hidden = (state == GPGMailPreferencesSupportPlanStateActiveState);
         _activationCodeTextField.stringValue = [self registrationCode];
-        _registrationDescriptionTextField.hidden = NO;
-        _registrationDescriptionTextField.stringValue = [self registrationDescription];
     }
+    // When GPG Mail is deactivated, at first it is displayed that GPG Mail is now in read only mode.
+    // But once the API call is completed a new trial activation might have been fetched.
+    _registrationDescriptionTextField.hidden = NO;
+    _registrationDescriptionTextField.stringValue = [self registrationDescription];
+}
+
+- (void)setState:(GPGMailPreferencesSupportPlanState)state {
+    [self setState:state forceUpdate:NO];
 }
 
 - (NSImage *)gpgStatusImage {

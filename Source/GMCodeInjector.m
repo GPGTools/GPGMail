@@ -626,7 +626,8 @@
                      },
              @"MailApp": @{
                      @"selectors": @[
-                             @"tabView:didSelectTabViewItem:"
+                             @"tabView:didSelectTabViewItem:",
+                             @"handleMailToURL:"
                              ]
                      }
      };
@@ -639,6 +640,50 @@
                              @"added": @[
                                      @"messageContentBlockingReason",
                                      @"hasBlockedMessageContent"
+                                     ]
+                             }
+                     },
+             @"PlugInsViewController": @{
+                     @"selectors": @[
+                             @"viewWillAppear"]
+                     }
+             };
+}
+
++ (NSDictionary *)hookChangesForCatalina {
+    return @{
+             @"ComposeBackEnd": @{
+                     @"selectors": @{
+                             @"replaced": @[
+                                     @[@"_makeMessageWithContents:isDraft:shouldSign:shouldEncrypt:shouldSkipSignature:shouldBePlainText:",
+                                       @"_makeMessageWithContents:isDraft:shouldSign:shouldEncrypt:shouldSkipSignature:"],
+                                     @[@"newOutgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:",
+                                       @"_newOutgoingMessageUsingWriter:contents:headers:isDraft:"]
+                                     ]
+                             }
+                     },
+             @"MFLibraryStore": @{
+                     @"selectors": @{
+                             @"replaced": @[
+                                 @[@"getTopLevelMimePart:headers:body:forMessage:fetchIfNotAvailable:updateFlags:allowPartial:",
+                                   @"getTopLevelMimePart:headers:body:forMessage:fetchIfNotAvailable:updateFlags:allowPartial:skipSignatureVerification:"]
+                                 ]
+                             }
+                     },
+             @"MCMemoryDataSource": @{
+                     @"selectors": @{
+                             @"replaced": @[
+                                     @[@"getTopLevelMimePart:headers:body:forMessage:fetchIfNotAvailable:updateFlags:allowPartial:",
+                                       @"getTopLevelMimePart:headers:body:forMessage:fetchIfNotAvailable:updateFlags:allowPartial:skipSignatureVerification:"]
+                                     ]
+                             }
+                     },
+             @"ComposeViewController": @{
+                     @"selectors": @{
+                             @"replaced": @[
+                                     @[@"backEndDidLoadInitialContent:",
+                                       @"backEndDidLoadInitialContent:mayUseDarkAppearance:"
+                                         ]
                                      ]
                              }
                      }
@@ -673,6 +718,9 @@
         if([GPGMailBundle isMojave]) {
             [self applyHookChangesForVersion:@"10.14" toHooks:hooks];
         }
+        if([GPGMailBundle isCatalina]) {
+            [self applyHookChangesForVersion:@"10.15" toHooks:hooks];
+        }
         
 		_hooks = [NSDictionary dictionaryWithDictionary:hooks];
 	});
@@ -695,6 +743,10 @@
     else if([osxVersion isEqualToString:@"10.14"]) {
         hookChanges = [self hookChangesForMojave];
     }
+    else if([osxVersion isEqualToString:@"10.15"]) {
+        hookChanges = [self hookChangesForCatalina];
+    }
+    
 	for(NSString *class in hookChanges) {
 		NSDictionary *hook = hookChanges[class];
         // class seems to be a protected identifier in lldb.

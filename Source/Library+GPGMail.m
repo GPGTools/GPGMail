@@ -35,7 +35,6 @@
 
 #import "MFLibrary.h"
 #import "MCMessage.h"
-#import "MCMimeBody.h"
 #import "MCMimePart.h"
 
 #import "MCAttachment.h"
@@ -52,19 +51,18 @@
 
 #import "MFEWSStore.h"
 #import "IMAPMessageDataSource-Protocol.h"
-#import "MCParsedMessage.h"
 #import "MFRemoteURLAttachmentDataSource.h"
 #import "MFLibraryAttachmentDataSource.h"
 #import "MFRemoteAttachmentDataSource.h"
 #import "MCDataAttachmentDataSource.h"
 #import "MCFileWrapperAttachmentDataSource.h"
 #import "MCFileURLAttachmentDataSource.h"
-#import "MCStationeryCompositeImage.h"
 
 #import "GPGMailBundle.h"
 
-// 10.13
-#import "NSData-MailCoreAdditions.h"
+#import "NSData-HFSDataConversion.h"
+
+#import "MCMessageBody.h"
 
 #import <sys/stat.h>
 
@@ -323,16 +321,33 @@ static NSMutableDictionary *messageDataAccessMap;
     __block NSData *messageData = nil;
     __block BOOL complete = YES;
 
-    @try {
-        [self exclusiveAccessToMessage:currentMessage withBlock:^{
-            messageData = [MFLibrary fullMessageDataForMessage:currentMessage];
-            if(!messageData) {
-                complete = NO;
-                messageData = [MFLibrary _messageDataAtPath:[MFLibrary _dataPathForMessage:currentMessage type:1]];
-            }
-        }];
+
+    if(@available(macOS 10.15, *)) {
+        MFLibrary *library = [MFLibrary defaultLibrary];
+        @try {
+            [self exclusiveAccessToMessage:currentMessage withBlock:^{
+                messageData = [library fullMessageDataForMessage:currentMessage];
+                if(!messageData) {
+                    complete = NO;
+                    messageData = [library _messageDataAtPath:[library _dataPathForMessage:currentMessage type:1]];
+                }
+            }];
+        }
+        @catch(NSException *exception) {}
+    
     }
-    @catch(NSException *exception) {}
+    else {
+        @try {
+            [self exclusiveAccessToMessage:currentMessage withBlock:^{
+                messageData = [MFLibrary fullMessageDataForMessage:currentMessage];
+                if(!messageData) {
+                    complete = NO;
+                    messageData = [MFLibrary _messageDataAtPath:[MFLibrary _dataPathForMessage:currentMessage type:1]];
+                }
+            }];
+        }
+        @catch(NSException *exception) {}
+    }
 
     if(isCompleteMessageAvailable != NULL) {
         *isCompleteMessageAvailable = complete;
@@ -374,7 +389,16 @@ static NSMutableDictionary *messageDataAccessMap;
         MFLibraryAttachmentDataSource *dataSource = nil;
         NSString *partNumber = [attachment mimePartNumber];
         if([attachment isRemotelyAccessed]) {
-            NSString *attachmentsDirectory = [MFLibrary attachmentsDirectoryForMessage:message partNumber:partNumber];
+            NSString *attachmentsDirectory = nil;
+            
+            if(@available(macOS 10.15, *)) {
+                MFLibrary *defaultLibrary = [MFLibrary defaultLibrary];
+                attachmentsDirectory = [defaultLibrary attachmentsDirectoryForMessage:message partNumber:partNumber];
+            }
+            else {
+                attachmentsDirectory = [MFLibrary attachmentsDirectoryForMessage:message partNumber:partNumber];
+            }
+            
             remoteDataSource = [[MFRemoteURLAttachmentDataSource alloc] initWithAttachment:attachment attachmentsDirectory:attachmentsDirectory];
         }
         else {

@@ -7,19 +7,48 @@
 
 #import <AppKit/AppKit.h>
 
+@class GMSupportPlanManager, GMSupportPlan;
+
 typedef enum : NSUInteger {
     GMSupportPlanViewControllerStateUninitialized,
     GMSupportPlanViewControllerStateBuy,
     GMSupportPlanViewControllerStateActivating,
-    GMSupportPlanViewControllerStateThanks
+	GMSupportPlanViewControllerStateThanks,
+	GMSupportPlanViewControllerStateInfo,
+    GMSupportPlanViewControllerStateCheckingSupportPlanStatus,
+    GMSupportPlanViewControllerStateActivatingTrial
 } GMSupportPlanAssistantViewControllerState;
 
 typedef enum : NSUInteger {
+    GMSupportPlanAssistantDialogTypeInactive,
+    GMSupportPlanAssistantDialogTypeCheckingSupportPlanStatus,
+    GMSupportPlanAssistantDialogTypeTrial,
+    GMSupportPlanAssistantDialogTypeTrialAboutToExpire,
+    GMSupportPlanAssistantDialogTypeTrialExpired,
+    GMSupportPlanAssistantDialogTypeTrialActivationComplete,
+    GMSupportPlanAssistantDialogTypeActivationComplete,
+    GMSupportPlanAssistantDialogTypeUpgrade,
+    GMSupportPlanAssistantDialogTypeUpgradeKeepPreviousVersion
+} GMSupportPlanAssistantDialogType;
+
+typedef enum : NSUInteger {
     GMSupportPlanAssistantBuyActivateButtonStateBuy,
-    GMSupportPlanAssistantBuyActivateButtonStateActivate
+    GMSupportPlanAssistantBuyActivateButtonStateActivate,
+    GMSupportPlanAssistantBuyActivateButtonStateUpgrade,
+    GMSupportPlanAssistantBuyActivateButtonStateKeepVersion3,
+    GMSupportPlanAssistantBuyActivateButtonStateClose
 } GMSupportPlanAssistantBuyActivateButtonState;
 
-
+typedef enum : NSUInteger {
+    GMSupportPlanAssistantButtonActionBuy,
+    GMSupportPlanAssistantButtonActionActivate,
+    GMSupportPlanAssistantButtonActionUpgrade,
+    GMSupportPlanAssistantButtonActionKeepVersion3,
+    GMSupportPlanAssistantButtonActionClose,
+    GMSupportPlanAssistantButtonActionStartTrial,
+    GMSupportPlanAssistantButtonActionContinueTrial,
+    GMSupportPlanAssistantButtonActionCloseWithWarning
+} GMSupportPlanAssistantButtonAction;
 
 @protocol GMSupportPlanAssistantDelegate <NSObject>
 
@@ -34,11 +63,12 @@ typedef enum : NSUInteger {
 
 @interface GMSupportPlanAssistantWindowController : NSWindowController
 @property (nonatomic, weak) id<GMSupportPlanAssistantDelegate> delegate;
-@property (nonatomic, copy) NSDictionary *supportPlanInformation;
+@property (nonatomic, assign) BOOL closeWindowAfterError;
+
 - (void)showActivationError;
-- (void)activationDidCompleteWithSuccess;
+- (void)activationDidCompleteWithSuccessForSupportPlan:(GMSupportPlan *)supportPlan;
 - (void)activationDidFailWithError:(NSError *)error;
-- (instancetype)initWithSupportPlanActivationInformation:(NSDictionary *)supportPlanInformation;
+- (instancetype)initWithSupportPlanManager:(GMSupportPlanManager *)supportPlanManager;
 - (void)performAutomaticSupportPlanActivationWithActivationCode:(NSString *)activationCode email:(NSString *)email;
 
 @end
@@ -46,11 +76,22 @@ typedef enum : NSUInteger {
 @interface GMSupportPlanAssistantViewController : NSViewController
 @property (weak) id<GMSupportPlanAssistantDelegate> delegate;
 @property (nonatomic) GMSupportPlanAssistantViewControllerState state;
+@property (nonatomic) GMSupportPlanAssistantViewControllerState previousState;
 
 @property (nonatomic) NSString *email;
 @property (nonatomic) NSString *activationCode;
+@property (nonatomic) BOOL showDontAskAgain;
+@property (nonatomic) BOOL dontAskAgain;
+@property (atomic, retain) GMSupportPlanManager *supportPlanManager;
 
 - (void)performAutomaticSupportPlanActivationWithActivationCode:(NSString *)activationCode email:(NSString *)email;
+- (void)configureTextForState:(GMSupportPlanAssistantViewControllerState)state;
+
+- (void)hideLoadingSpinner;
+- (void)setState:(GMSupportPlanAssistantViewControllerState)state forceUpdate:(BOOL)forceUpdate;
+- (BOOL)windowShouldClose:(id)sender;
+
+- (void)showGPGMail4ExplanationAndRelaunchMail;
 
 @end
 

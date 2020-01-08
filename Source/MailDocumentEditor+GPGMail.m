@@ -119,6 +119,28 @@ NSString * const kComposeViewControllerPreventAutoSave = @"ComposeViewController
     [self MABackEndDidLoadInitialContent:content];
 }
 
+// Bug #1058: Switcher for S/MIME | OpenPGP has no effect
+//
+// The switcher was not working properly as the delegate was never set.
+- (void)MABackEndDidLoadInitialContent:(id)content mayUseDarkAppearance:(BOOL)mayUseDarkAppearance {
+    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
+        [self MABackEndDidLoadInitialContent:content mayUseDarkAppearance:mayUseDarkAppearance];
+        return;
+    }
+    if(![GPGMailBundle isElCapitan]) {
+        [(NSNotificationCenter *)[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didExitFullScreen:) name:@"NSWindowDidExitFullScreenNotification" object:nil];
+    }
+
+    // Setup security method hint accessory view in top right corner of the window.
+    [self setupSecurityMethodHintAccessoryView];
+
+    ComposeBackEnd *backEnd = MAIL_SELF(self).backEnd;
+    GPGMAIL_SECURITY_METHOD securityMethod = ((ComposeBackEnd_GPGMail *)MAIL_SELF(self).backEnd).preferredSecurityProperties.securityMethod;
+    [self updateSecurityMethod:securityMethod];
+
+    [self MABackEndDidLoadInitialContent:content mayUseDarkAppearance:mayUseDarkAppearance];
+}
+
 - (void)setupSecurityMethodHintAccessoryView {
 	// On El Capitan there's no more space on top of the title bar, so
 	// the security method accessory view is inserted as toolbar item in
@@ -177,6 +199,13 @@ NSString * const kComposeViewControllerPreventAutoSave = @"ComposeViewController
 	BOOL isForward = [(ComposeBackEnd_GPGMail *)backEnd messageIsBeingForwarded];
     BOOL originalMessageIsEncrypted = securityProperties.referenceMessageIsEncrypted;
     BOOL replyShouldBeEncrypted = securityProperties.shouldEncryptMessage;
+
+    // If GPG Mail is installed but expired, the original Mail methods are called
+    // to check for encryption keys, and thus securityProperties will not properly
+    // the encryption status of the message. Instead use `-[HeadersEditor messageIsToBeEncrypted]`
+    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
+        replyShouldBeEncrypted = [[MAIL_SELF(self) headersEditor] messageIsToBeEncrypted];
+    }
 
 	// If checklist contains the unencryptedReplyToEncryptedMessage item, it means
 	// that the user decided to send the message regardless of our warning.

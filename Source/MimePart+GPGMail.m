@@ -47,10 +47,8 @@
 //#import <MessageWriter.h>
 //#import <MimeBody.h>
 //#import <MutableMessageHeaders.h>
-#import "MCParsedMessage.h"
 #import "GPGMailBundle.h"
-#import "NSData-MailCoreAdditions.h"
-#import "NSString-MailCoreAdditions.h"
+
 #import "MCMutableMessageHeaders.h"
 #import "MCDataAttachmentDataSource.h"
 #import "MCAttachment.h"
@@ -59,6 +57,9 @@
 #import "GMMessageSecurityFeatures.h"
 #import "MCMessageBody.h"
 #import "GMMessageProtectionStatus.h"
+
+#import "NSString-MCFormatFlowedSupport.h"
+#import "NSData-HFSDataConversion.h"
 
 #define MAIL_SELF(self) ((MCMimePart *)(self))
 
@@ -1048,8 +1049,10 @@ NSString * const kMimePartAllowPGPProcessingKey = @"MimePartAllowPGPProcessingKe
         [self GMHandleDetachedSignatureWithSignedPart:signedPart];
         return nil;
     }
-
-    isEncrypted = [attachmentData mightContainPGPEncryptedDataOrSignatures] || [attachmentData hasPGPEncryptionDataPackets];
+    // Check explicitly for inline encrypted data. Previously the check also accepted
+    // inline signatures, which doesn't make sense, but the assumption was, that any
+    // signatures would already be handled by the above checks.
+    isEncrypted = /*[attachmentData rangeOfPGPInlineEncryptedData].location == 0 || */[attachmentData hasPGPEncryptionDataPackets];
     
     if(!isSigned && !isEncrypted) {
         return nil;
@@ -1590,7 +1593,7 @@ NSString * const kMimePartAllowPGPProcessingKey = @"MimePartAllowPGPProcessingKe
             if(signature.status != GPGErrorNoError) {
                 errorCode = signature.status;
                 signatureWithError = signature;
-				signatureKeyID = [signature.fingerprint shortKeyID];
+				signatureKeyID = signature.fingerprint;
 				signatureKeyIDString = [NSString stringWithFormat:@"0x%@", signatureKeyID];
                 break;
             }
@@ -1918,6 +1921,9 @@ NSString * const kMimePartAllowPGPProcessingKey = @"MimePartAllowPGPProcessingKe
 #pragma mark Methods for verification
 
 - (void)verifyData:(NSData *)signedData signatureData:(NSData *)signatureData {
+    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
+        return;
+    }
     // In order to protect against EFAIL type of attacks, only verify part data
     // if there's no parent multipart/related involved, since in that case
     // it is very easy to hide the signed part and insert non-signed content.
@@ -1925,10 +1931,11 @@ NSString * const kMimePartAllowPGPProcessingKey = @"MimePartAllowPGPProcessingKe
     // first part following. So the rule is, if any parent is multipart/mixed
     // and this is a multipart/signed part which is not the first child part,
     // don't verify.
-    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
-        return;
-    }
-    if([self GMAnyParentMatchesType:@"multipart" subtype:nil]) {
+
+    // Bug #1053: Detached signature recognized but not verified - results in (null) in security header
+    // If however this is a attachment detached signature part, do verify it.
+    MCMimePart *signedPart = [self signedPartForDetachedSignaturePart:MAIL_SELF(self)];
+    if([self GMAnyParentMatchesType:@"multipart" subtype:nil] && !signedPart) {
         if([[MAIL_SELF(self) parentPart] firstChildPart] != MAIL_SELF(self)) {
             return;
         }

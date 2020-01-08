@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0460"
+   LastUpgradeVersion = "1120"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -67,34 +67,32 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       displayScaleIsEnabled = "NO"
       displayScale = "1.00"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
-      debugDocumentVersioning = "YES"
+      debugDocumentVersioning = "NO"
       debugXPCServices = "NO"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "NO">
       <PathRunnable
          runnableDebuggingMode = "0"
          BundleIdentifier = "com.apple.mail"
-         FilePath = "/Applications/Mail.app">
+         FilePath = "/System/Applications/Mail.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8DC2EF4F0486A6940098B216"
-            BuildableName = "Libmacgpg.framework"
-            BlueprintName = "Libmacgpg"
-            ReferencedContainer = "container:Dependencies/Libmacgpg/Libmacgpg.xcodeproj">
+            BlueprintIdentifier = "8D5B49AC048680CD000E48DA"
+            BuildableName = "GPGMail.mailbundle"
+            BlueprintName = "GPGMail"
+            ReferencedContainer = "container:GPGMail.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <CommandLineArguments>
@@ -104,7 +102,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = ""
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>

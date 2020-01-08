@@ -28,7 +28,6 @@
  */
 
 #import "MCMimePart.h"
-#import "MCMimeBody.h"
 #import "MCMessage.h"
 
 @class GMMessageSecurityFeatures;

@@ -31,8 +31,8 @@
 
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Parašo raktas buvo panaikintas.";
 "MESSAGE_BANNER_PGP_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "The key which was used to sign this message was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";
-"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to this message signature is not in your GPG Keychain.";
-"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The message could not be verified, since the key which was used to sign this message is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain and import it to verify the message.";
+"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to verify this signature is not in GPG Keychain";
+"MESSAGE_BANNER_PGP_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The message could not be verified. The public key required to verify this signature is not in GPG Keychain.\n\nSearch the key server for fingerprint %@ or ask your contact for their public key. You can retry to verify the signature after adding their public key to GPG Keychain.";
 
 "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_TITLE" = "The message signature was created with an algorithm which is not supported.";
 "MESSAGE_BANNER_PGP_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This message could not be verified, since the signature was created with an algorithm which is not supported.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
@@ -40,7 +40,7 @@
 "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "ATTENTION: The signature of this message is invalid!";
 "MESSAGE_BANNER_PGP_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "This message might have been modified after the signature was created.\n\nPlease contact the sender to make sure the content of the message matches the original.\n\nPlease contact us at\nhttps://gpgtools.tenderapp.com/\nif you're sure the message was not modified.";
 
-"MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of message signature failed with unknown error!";
+"MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of signature failed with unknown error.";
 "MESSAGE_BANNER_PGP_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this message's signature.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
 
 "MESSAGE_BANNER_PGP_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Laiško parašo duomenų klaida!";
@@ -92,8 +92,8 @@
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_TITLE" = "Parašo raktas buvo panaikintas.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_REVOKED_CERTIFICATE_ERROR_MESSAGE" = "The key which was used to sign this attachment was revoked.\n\nYou should refresh the key with key ID %@ in GPG Keychain to check if a new one is available. If the new one is still revoked, check with the sender why the key was revoked.";
 
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The signature key is not in your GPG Keychain.";
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment signature could not be verified, since the key which was used to sign is not in your GPG Keychain.\n\nSearch for the key with ID %@ in GPG Keychain and import it to verify the attachment.";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_TITLE" = "The key to verify this signature is not in GPG Keychain";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_NO_PUBKEY_ERROR_MESSAGE" = "The attachment could not be verified. The public key required to verify this signature is not in GPG Keychain.\n\nSearch the key server for fingerprint %@ or ask your contact for their public key. You can retry to verify the signature after adding their public key to GPG Keychain.";
 
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_TITLE" = "The attachment signature was created with an algorithm which is not supported.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_ALGORITHM_ERROR_MESSAGE" = "This attachment could not be verified, since the key to the signature was created with an algorithm which is not supported.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
@@ -101,7 +101,7 @@
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_TITLE" = "DĖMESIO: Priedo parašas yra neteisingas!";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_BAD_SIGNATURE_ERROR_MESSAGE" = "This attachment might have been modified after the signature was created.\n\nPlease contact the sender and make sure the content of the attachment matches the original.\n\nPlease contact us at\nhttps://gpgtools.tenderapp.com/\n if you're sure the attachment was not modified.";
 
-"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Signature verification failed with unknown error!";
+"MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_TITLE" = "Verification of signature failed with unknown error.";
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_SYSTEM_ERROR_MESSAGE" = "An unknown error occurred while verifying this attachment signature.\n\nPlease contact us at https://gpgtools.tenderapp.com/";
 
 "MESSAGE_BANNER_PGP_ATTACHMENT_VERIFY_CORRUPTED_DATA_ERROR_TITLE" = "Parašo duomenų klaida!";

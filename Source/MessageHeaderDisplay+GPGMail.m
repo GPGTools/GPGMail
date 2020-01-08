@@ -8,8 +8,6 @@
 
 #import <AppKit/NSColor.h>
 #import <MCMimePart.h>
-#import <MCMimeBody.h>
-#import <NSAttributedString-FontAdditions.h>
 //#import <MessageHeaderDisplay.h>
 //#import <MessageViewingState.h>
 //#import <NSAlert-MFErrorSupport.h>
@@ -241,11 +239,11 @@
 }
 
 - (id)MA_displayStringForSecurityKey {
-    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
+    //if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
 		// MA_displayStringForSecurityKey no longer exists on High Sierra or Mojave,
 		// so return nil instead.
-		return nil;
-    }
+    // return nil;
+    //}
     GM_CAST_CLASS(MCMessage *, id) message = (Message_GPGMail *)[(ConversationMember *)[(HeaderViewController *)self representedObject] originalMessage];
     
     GMMessageSecurityFeatures *securityProperties = [message securityFeatures];
@@ -321,8 +319,14 @@
                                                                                                   offset:0.0];
         if([GPGMailBundle isMavericks])
             [securityHeader appendAttributedString:[NSAttributedString attributedStringWithString:@" "]];
-        else
-            [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@" " attributes:[NSAttributedString headerAttributes]]];
+        else {
+            if(@available(macOS 10.15, *)) {
+                [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@" " attributes:nil]];
+            }
+            else {
+                [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@" " attributes:[NSAttributedString headerAttributes]]];
+            }
+        }
         
         [securityHeader appendAttributedString:encryptAttachmentString];
         
@@ -330,8 +334,14 @@
         GMLocalizedString(@"MESSAGE_IS_PGP_ENCRYPTED")];
         if([GPGMailBundle isMavericks])
             [securityHeader appendAttributedString:[NSAttributedString attributedStringWithString:encryptedString]];
-        else
-            [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:encryptedString attributes:[NSAttributedString headerAttributes]]];
+        else {
+            if(@available(macOS 10.15, *)) {
+                [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:encryptedString attributes:nil]];
+            }
+            else {
+                [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@" " attributes:[NSAttributedString headerAttributes]]];
+            }
+        }
     }
     if(isPGPSigned) {
         NSAttributedString *securityHeaderSignaturePart = [self securityHeaderSignaturePartForMessage:message];
@@ -341,8 +351,14 @@
         if(isPGPEncrypted) {
             if([GPGMailBundle isMavericks])
                 [securityHeader appendAttributedString:[NSAttributedString attributedStringWithString:@", "]];
-            else
-                [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@", " attributes:[NSAttributedString headerAttributes]]];
+            else {
+                if(@available(macOS 10.15, *)) {
+                    [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@", " attributes:nil]];
+                }
+                else {
+                    [securityHeader appendAttributedString:[[NSAttributedString alloc] initWithString:@", " attributes:[NSAttributedString headerAttributes]]];
+                }
+            }
         }
         
         [securityHeader appendAttributedString:securityHeaderSignaturePart];
@@ -370,7 +386,17 @@
     NSMutableAttributedString *securityHeaderAttachmentsPart = [[NSMutableAttributedString alloc] init];
     NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
     [textAttachment setIvar:@"ShowAttachmentPanel" value:@YES];
-    [securityHeaderAttachmentsPart appendAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment image:[NSImage imageNamed:@"attachment_header"] link:[GPGMailBundle isMavericks] ? nil : @"gpgmail://show-attachments" offset:-3.0]];
+    NSImage *attachmentIcon = [NSImage imageNamed:@"attachment_header"];
+    float iconOffset = -3.0;
+
+    // On macOS Mojave 10.14.6 attachment_header no longer exists. Instead
+    // the icon is now called MessageListAttachmentTemplate.
+    if(!attachmentIcon) {
+        attachmentIcon = [NSImage imageNamed:@"MessageListAttachmentTemplate"];
+        iconOffset = -1.0;
+    }
+
+    [securityHeaderAttachmentsPart appendAttributedString:[NSAttributedString attributedStringWithAttachment:textAttachment image:attachmentIcon link:[GPGMailBundle isMavericks] ? nil : @"gpgmail://show-attachments" offset:iconOffset]];
 
     for(MimePart_GPGMail *attachment in [securityFeatures PGPAttachments]) {
         hasEncryptedAttachments |= [attachment PGPEncrypted];
@@ -396,10 +422,20 @@
     }
 
     NSString *encryptionString = [NSString stringWithFormat:@"%li %@", (long)[securityFeatures numberOfPGPAttachments], attachmentPart];
+    if(![NSImage imageNamed:@"attachment_header"]) {
+        encryptionString = [@" " stringByAppendingString:encryptionString];
+    }
+    
     if([GPGMailBundle isMavericks])
         [securityHeaderAttachmentsPart appendAttributedString:[NSAttributedString attributedStringWithString:encryptionString]];
-    else
-        [securityHeaderAttachmentsPart appendAttributedString:[[NSAttributedString alloc] initWithString:encryptionString attributes:[NSAttributedString headerAttributes]]];
+    else {
+        if(@available(macOS 10.15, *)) {
+            [securityHeaderAttachmentsPart appendAttributedString:[[NSAttributedString alloc] initWithString:encryptionString attributes:nil]];
+        }
+        else {
+            [securityHeaderAttachmentsPart appendAttributedString:[[NSAttributedString alloc] initWithString:encryptionString attributes:[NSAttributedString headerAttributes]]];
+        }
+    }
 
     return securityHeaderAttachmentsPart;
 }
@@ -487,8 +523,14 @@
     
     if([GPGMailBundle isMavericks])
         [securityHeaderSignaturePart appendAttributedString:[NSAttributedString attributedStringWithString:signerLabelsString]];
-    else
-        [securityHeaderSignaturePart appendAttributedString:[[NSAttributedString alloc] initWithString:signerLabelsString attributes:[NSAttributedString headerAttributes]]];
+    else {
+        if(@available(macOS 10.15, *)) {
+            [securityHeaderSignaturePart appendAttributedString:[[NSAttributedString alloc] initWithString:signerLabelsString attributes:nil]];
+        }
+        else {
+            [securityHeaderSignaturePart appendAttributedString:[[NSAttributedString alloc] initWithString:signerLabelsString attributes:[NSAttributedString headerAttributes]]];
+        }
+    }
     
     return securityHeaderSignaturePart;
 }

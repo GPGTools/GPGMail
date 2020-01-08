@@ -67,6 +67,8 @@
 - (void)updateSender:(NSString *)sender;
 - (void)updateRecipients:(NSArray *)recipients replyToAddresses:(NSArray *)replyToAddresses;
 
+- (void)clearKeyCache;
+
 // Security method the the key status represents. Either OpenPGP or S/MIME
 @property (nonatomic, assign) GPGMAIL_SECURITY_METHOD securityMethod;
 
@@ -127,6 +129,9 @@
 
 // Returns the current sender address.
 - (NSString *)sender {
+    if(![[self.senderKey allKeys] count]) {
+        return nil;
+    }
     return [self.senderKey allKeys][0];
 }
 
@@ -211,10 +216,10 @@
         // Apple Mail team has added a possibility to display errors, if macOS fails to read
         // a signing identity.
         if([MCKeychainManager respondsToSelector:@selector(copySigningIdentityForAddress:error:)]) {
-            signingIdentity = (__bridge id)[MCKeychainManager copySigningIdentityForAddress:address error:&invalidSigningIdentityError];
+        signingIdentity = [MCKeychainManager copySigningIdentityForAddress:address error:&invalidSigningIdentityError];
         }
         else {
-            signingIdentity = (__bridge id)[MCKeychainManager copySigningIdentityForAddress:address];
+            signingIdentity = (__bridge id)[MCKeychainManager copySigningIdentityForAddress:address error:&invalidSigningIdentityError];
         }
         self.invalidSigningIdentityError = invalidSigningIdentityError;
         return signingIdentity;
@@ -313,6 +318,15 @@
     }];
 
     return [recipients copy];
+}
+
+- (void)clearKeyCache {
+    // In case the keyring is updated it is necessary to clear the key caches.
+    [self.encryptionKeys removeAllObjects];
+    [self.signingKeys removeAllObjects];
+    [self.senderKey removeAllObjects];
+    [self.recipientKeys removeAllObjects];
+    [self.signingKeySenderMap removeAllObjects];
 }
 
 @end
@@ -590,12 +604,14 @@ NSString * const kGMComposeMessagePreferredSecurityPropertiesHeaderValueSMIME = 
     // necessary type (S/MIME lookups would evict any GPGKey entries, GPG lookups
     // would evict any S/MIME certificate entries).
     [self.PGPKeyStatus updateSender:sender];
-    if(self.PGPKeyStatus.canSign || allowEncryptEvenIfNoSigningKeyIsAvailable) {
-        [self.PGPKeyStatus updateRecipients:recipients replyToAddresses:replyToAddresses];
-    }
-    else {
-        [self.PGPKeyStatus updateRecipients:@[] replyToAddresses:replyToAddresses];
-    }
+    // Bug #1060: Display error tooltip if no signing key is available
+    //
+    // Always refresh recipient key status as well, in order to show
+    // proper tooltips when hovering over the encryption security button.
+    // Previously, if no signing key was available the tooltip would show
+    // that no recipients where entered yet.
+    [self.PGPKeyStatus updateRecipients:recipients replyToAddresses:replyToAddresses];
+
     // SMIME only allows encryption if a signing certificate exists.
     [self.SMIMEKeyStatus updateSender:sender];
     if(self.SMIMEKeyStatus.canSign) {
@@ -613,7 +629,7 @@ NSString * const kGMComposeMessagePreferredSecurityPropertiesHeaderValueSMIME = 
         signFlags |= GPGMAIL_SIGN_FLAG_SMIME;
     
     GPGMAIL_ENCRYPT_FLAG encryptFlags = 0;
-    if(self.PGPKeyStatus.canEncrypt)
+    if(self.PGPKeyStatus.canEncrypt && (self.PGPKeyStatus.canSign || allowEncryptEvenIfNoSigningKeyIsAvailable))
         encryptFlags |= GPGMAIL_ENCRYPT_FLAG_OPENPGP;
     if(self.SMIMEKeyStatus.canEncrypt)
         encryptFlags |= GPGMAIL_ENCRYPT_FLAG_SMIME;
@@ -629,6 +645,21 @@ NSString * const kGMComposeMessagePreferredSecurityPropertiesHeaderValueSMIME = 
     // statuses are already stored in the drafts header. See
     // `[ComposeBackEnd_GPGMail configureFromDraftHeaders:]` for details.
     if(_messageIsDraft) {
+        // If this is a draft which was created before install GPG Mail,
+        // the security method might be undetermined. In that case, set
+        // it to the default.
+        // Bug #1061: Restore the security method configured on the draft
+        //
+        // Due to a missing check if the security method is undetermined or
+        // if the user actively selected a security method, the security method
+        // was set to the default security method when a draft was continued.
+        //
+        // Now the default security is only set if not enough information
+        // is available from the draft itself.
+        if(_securityMethod == GPGMAIL_SECURITY_METHOD_UNDETERMINDED && !_userDidChooseSecurityMethod) {
+            _securityMethod = securityOptions.securityMethod;
+        }
+
         return;
     }
     // In case of a reply or a forward, the reference message will determine
@@ -649,6 +680,12 @@ NSString * const kGMComposeMessagePreferredSecurityPropertiesHeaderValueSMIME = 
     // DON'T use self.securityMethod. The property is only supposed to be used from outside, since
     // it also sets the userDidChooseSecurityMethod value.
     _securityMethod = securityMethod;
+}
+
+- (void)resetKeyStatus {
+    @synchronized (self) {
+        [self.PGPKeyStatus clearKeyCache];
+    }
 }
 
 - (GMComposeMessageSecurityKeyStatus *)keyStatus {

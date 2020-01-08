@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="activateButton" destination="lO8-KU-tpl" id="v7s-ft-jbC"/>
                 <outlet property="activationCodeTextField" destination="TUL-r9-9jA" id="XQI-Mk-djS"/>
+                <outlet property="deactivateButton" destination="e0H-Pk-h4R" id="4Zy-6h-tqW"/>
                 <outlet property="learnMoreButton" destination="dW7-T8-3kz" id="S8e-zQ-NSR"/>
                 <outlet property="preferencesView" destination="9" id="23"/>
                 <outlet property="registrationDescriptionTextField" destination="aZa-FD-lCE" id="HlT-gm-Agu"/>
@@ -261,19 +262,32 @@
                             <action selector="learnMore:" target="-2" id="EMk-7j-EiJ"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="e0H-Pk-h4R">
+                        <rect key="frame" x="324" y="9" width="164" height="32"/>
+                        <buttonCell key="cell" type="push" title="Deactivate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UGW-TM-AN7">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="deactivateSupportPlan:" target="-2" id="4kW-ZL-IXz"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="VxY-Gt-nbh" secondAttribute="trailing" constant="16" id="1A5-7q-Q56"/>
                     <constraint firstAttribute="bottom" secondItem="1051" secondAttribute="bottom" constant="16" id="1mY-2M-Q78"/>
                     <constraint firstItem="aZa-FD-lCE" firstAttribute="leading" secondItem="o6s-jm-KF4" secondAttribute="leading" id="85B-G9-EaY"/>
+                    <constraint firstItem="dW7-T8-3kz" firstAttribute="width" secondItem="e0H-Pk-h4R" secondAttribute="width" id="C8W-QE-A0s"/>
                     <constraint firstItem="1051" firstAttribute="top" secondItem="TUL-r9-9jA" secondAttribute="bottom" constant="8" id="DrN-kj-zyr"/>
                     <constraint firstItem="dW7-T8-3kz" firstAttribute="leading" secondItem="lO8-KU-tpl" secondAttribute="trailing" constant="12" id="GC1-h0-E0G"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aZa-FD-lCE" secondAttribute="trailing" constant="15" id="IE2-4n-06J"/>
                     <constraint firstItem="733" firstAttribute="top" secondItem="as5-13-kZu" secondAttribute="bottom" constant="10" id="KE4-dl-9K2"/>
+                    <constraint firstItem="e0H-Pk-h4R" firstAttribute="baseline" secondItem="1051" secondAttribute="baseline" id="Mlw-qP-UC7"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="TUL-r9-9jA" secondAttribute="trailing" constant="15" id="PPE-tv-I2n"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bGp-uF-sOg" secondAttribute="trailing" constant="16" id="Pqp-Do-xOL"/>
                     <constraint firstItem="dW7-T8-3kz" firstAttribute="width" secondItem="rdO-C4-tzA" secondAttribute="width" id="VAB-L1-scV"/>
                     <constraint firstItem="aZa-FD-lCE" firstAttribute="top" secondItem="o6s-jm-KF4" secondAttribute="bottom" constant="8" id="VFn-2K-9ud"/>
+                    <constraint firstItem="e0H-Pk-h4R" firstAttribute="leading" secondItem="1051" secondAttribute="trailing" constant="13" id="WTS-tg-qvV"/>
                     <constraint firstItem="lO8-KU-tpl" firstAttribute="leading" secondItem="o6s-jm-KF4" secondAttribute="leading" id="aof-jj-ag1"/>
                     <constraint firstItem="TUL-r9-9jA" firstAttribute="leading" secondItem="o6s-jm-KF4" secondAttribute="leading" id="ayP-Ge-Afq"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0ZT-4F-EIF" secondAttribute="trailing" constant="16" id="d0h-Ds-a5J"/>

@@ -26,7 +26,6 @@
  */
 
 #import "MCMessage.h"
-#import "MCMimeBody.h"
 #import "CCLog.h"
 #import "NSObject+LPDynamicIvars.h"
 #import "MimePart+GPGMail.h"

@@ -52,6 +52,8 @@ typedef enum {
 - (NSDictionary *)secureDraftHeaders;
 - (NSArray *)secureDraftHeadersKeys;
 
+- (void)resetKeyStatus;
+
 @property (nonatomic, readonly, assign) BOOL canSign;
 @property (nonatomic, readonly, assign) BOOL canEncrypt;
 

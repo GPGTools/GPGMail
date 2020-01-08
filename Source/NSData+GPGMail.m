@@ -32,7 +32,7 @@
 #import <Libmacgpg/Libmacgpg.h>
 //#import <NSString-NSStringUtils.h>
 #import "NSData+GPGMail.h"
-#import "NSData-MailCoreAdditions.h"
+#import "NSData-HFSDataConversion.h"
 
 @implementation NSData (GPGMail)
 
@@ -145,6 +145,8 @@
     
     return isMatched;
 }
+
+
 
 - (NSRange)rangeOfPGPPublicKey {
     NSString *signatureRegex = [NSString stringWithFormat:@"(?sm)(%@.*?%@)",

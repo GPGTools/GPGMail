@@ -32,6 +32,8 @@
 #import <Libmacgpg/Libmacgpg.h>
 #import "GMSupportPlanAssistantWindowController.h"
 
+#import "GMSupportPlanManager.h"
+
 #if !__has_feature(nullability)
 #define nullable
 #endif
@@ -41,6 +43,8 @@
 
 extern NSString *GPGMailKeyringUpdatedNotification;
 extern NSString *gpgErrorIdentifier; // This identifier is used to set and find GPGErrorCodes in NSData.
+
+extern kGMSupportPlanManagerUpgradeState;
 
 @class Message, GMMessageRulesApplier, GMKeyManager;
 
@@ -105,6 +109,7 @@ extern NSString *gpgErrorIdentifier; // This identifier is used to set and find 
 + (BOOL)isSierra;
 + (BOOL)isHighSierra;
 + (BOOL)isMojave;
++ (BOOL)isCatalina;
 
 /**
  Schedules a message which should have rules applied.
@@ -187,7 +192,8 @@ extern NSString *gpgErrorIdentifier; // This identifier is used to set and find 
 - (BOOL)hasActiveContract;
 - (BOOL)hasActiveContractOrActiveTrial;
 - (NSNumber *)remainingTrialDays;
-- (NSDictionary *)fetchContractInformation;
+- (void)deactivateSupportContract;
+
 
 @property (readonly) GPGErrorCode gpgStatus;
 @property (readonly, strong) NSSet *allGPGKeys;
@@ -198,6 +204,8 @@ extern NSString *gpgErrorIdentifier; // This identifier is used to set and find 
 
 @property (readonly) BOOL allowDecryptionOfPotentiallyDangerousMessagesWithoutMDC;
 @property (readonly) BOOL shouldNotConvertPGPPartitionedMessages;
+
+- (void)startSupportContractWizardWithActivationCode:(NSString *)activationCode email:(NSString *)email;
 
 @end
 

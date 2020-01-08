@@ -157,9 +157,9 @@
             else
                 // For some reason a signature might not have an email set.
                 // This happens if the public key is not available (not downloaded or imported
-                // from the signature server yet). In that case, display the user id.
+                // from the signature server yet). In that case, display the fingerprint.
                 // Also, add an appropriate warning.
-                email = [NSString stringWithFormat:@"0x%@", [signature.fingerprint shortKeyID]];
+                email = [NSString stringWithFormat:@"0x%@", signature.fingerprint];
         }
         [signerLabels addObject:email];
     }

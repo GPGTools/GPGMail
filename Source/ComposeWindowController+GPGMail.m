@@ -29,14 +29,10 @@
 
 #import "NSObject+LPDynamicIvars.h"
 #import "GMSecurityMethodAccessoryView.h"
-#import "TabBarView.h"
 #import "ComposeWindowController.h"
 #import "ComposeWindowController+GPGMail.h"
-#import "FullScreenModalCapableWindow.h"
 #import "MessageViewer.h"
-#import "FullScreenWindowController.h"
 #import "ComposeViewController.h"
-#import "ComposeTabViewItem.h"
 #import "ComposeWindow.h"
 #import "GPGMailBundle.h"
 

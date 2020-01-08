@@ -49,18 +49,42 @@ cd ..
 
 #### Build
 ```bash
+
+# Catalina 10.15.1 + Xcode 11.2b2 
+# -------------------------------
+# In first grant Full Disk Access for Terminal and xcode application :
+# choose Apple menu  > System Preferences, click Security & Privacy, then select the Privacy tab.
+# Scroll down and click Full Disk Access, then add the parent process (Terminal and xcode)
+#
+# Change Build Settings / Linking / Bundle Loader :
+# /System/Applications/Mail.app/Contents/MacOS/Mail
+# (add /System)
+#
+# Add Build Settings / Linking / Runpath Search Paths :
+# /System/Library/Frameworks (After /Library/Frameworks)
+#
+# Add Build Settings / Search Paths / Framework Search Paths:
+# /System/Library/Frameworks (After /Library/Frameworks)
+#
+# There is a problem with Build phase when it's a partial build and the generation of .plist and DSYM file (custom fill info plist order)
+# for pass thrue it you need to clean all before build all
+#
+# in mail.app if you don't have the "manage bundle/plug-ins button" you need to do :  
+# sudo defaults write "/Library/Preferences/com.apple.mail" EnableBundles 1
+
+make clean
 make
 ```
 
 #### Install
 Copy Libmacgpg.framework from Dependencies/Libmacgpg/build/Release/ to ~/Library/Frameworks.
 
-After that copy the GPGMail.mailbundle file from build/Releases/GPGMail.mailbundle to ~/Libray/Mail/Bundles, re-start Mail.app and enjoy.
+After that copy the GPGMail.mailbundle file from build/Release/GPGMail.mailbundle to ~/Library/Mail/Bundles, re-start Mail.app and enjoy.
 
 
 System Requirements
 -------------------
 
-* Mac OS X >= 10.9 (macOS Sierra is not yet supported!)
+* Mac OS X >= 10.12 (Sierra  and more)
 * Libmacgpg
 * GnuPG

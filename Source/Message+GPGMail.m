@@ -32,7 +32,6 @@
 #import "NSObject+LPDynamicIvars.h"
 #import "CCLog.h"
 #import <MCMimePart.h>
-#import <MCMimeBody.h>
 #import "MFLibraryMessage.h"
 //#import <MessageStore.h>
 //#import <ActivityMonitor.h>

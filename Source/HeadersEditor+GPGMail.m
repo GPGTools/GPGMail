@@ -236,18 +236,41 @@ const NSString *kHeadersEditorFromControlParentItemKey = @"HeadersEditorFromCont
             // Apple only shows the buttons to toggle sign and encrypt if signing is possible.
             // OpenPGP does work if only sign or encrypt is available, so we'll also show the buttons
             // if sign is not is possible, but only encrypt.
-            [tomailself(strongSelf) _setVisibilityForEncryptionAndSigning:(canSign || invalidSigningIdentityError != nil) || canEncrypt];
+            // We always show the buttons since that is a much better user experience.
+            GMComposeMessagePreferredSecurityProperties *preferredSecurityProperties = [(ComposeBackEnd_GPGMail *)backEnd preferredSecurityProperties];
+            // Bug #1060: Display error tooltip if no signing key is available
+            //
+            // Always show the security buttons if the current security method is OpenPGP to show
+            // better tool tips.
+            if(preferredSecurityProperties.securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
+                [tomailself(strongSelf) _setVisibilityForEncryptionAndSigning:YES];
+            }
+            else {
+                [tomailself(strongSelf) _setVisibilityForEncryptionAndSigning:(canSign || invalidSigningIdentityError != nil) || canEncrypt];
+            }
+
             if([tomailself(strongSelf) respondsToSelector:@selector(setSignButtonEnabled:)]) {
                 [tomailself(strongSelf) setSignButtonEnabled:(canSign || invalidSigningIdentityError != nil)];
                 [tomailself(strongSelf) setEncryptButtonEnabled:canEncrypt];
                 if(invalidSigningIdentityError != nil) {
-                    [[tomailself(strongSelf) signButton] setSelectedSegment:NSNotFound];
+                    // Bug #1047: GPG Mail crashes if an expired S/MIME certificate is installed
+                    //
+                    // Due to a misinterpretation of the disassembly, previously
+                    // `-[NSSegmentedController setSelectedSegment:]` was called with NSNotFound,
+                    // which as result triggers an assertion and crashes Mail.
+                    //
+                    // The disassembly shows that the right value to use is -1 instead.
+                    // Note: -[NSSegmentedController setSelectedSegment:] seems to be private API
+                    //       so it's not documented what passing -1 does exactly.
+                    [[tomailself(strongSelf) signButton] setSelectedSegment:-1];
                 }
             }
+            /*
             else {
                 [tomailself(strongSelf) setCanSign:canSign];
                 [tomailself(strongSelf) setCanEncrypt:canEncrypt];
             }
+            */
             
             // For reference, the original Apple code follows below.
             // Apple uses standard defaults to remember the last set status of sign and encrypt.
@@ -259,7 +282,7 @@ const NSString *kHeadersEditorFromControlParentItemKey = @"HeadersEditorFromCont
             // BOOL encryptIfPossible = canEncrypt ? [app encryptOutgoingMessages] : NO;
             //
             // GPGMail Code:
-            GMComposeMessagePreferredSecurityProperties *preferredSecurityProperties = [(ComposeBackEnd_GPGMail *)backEnd preferredSecurityProperties];
+
             BOOL signIfPossible = preferredSecurityProperties.shouldSignMessage;
             BOOL encryptIfPossible = preferredSecurityProperties.shouldEncryptMessage;
             
@@ -755,8 +778,17 @@ const NSString *kHeadersEditorFromControlParentItemKey = @"HeadersEditorFromCont
 	}
 
 	ComposeBackEnd *backEnd = [GPGMailBundle backEndFromObject:self];
-	GPGMAIL_SECURITY_METHOD securityMethod = ((ComposeBackEnd_GPGMail *)backEnd).preferredSecurityProperties.securityMethod;
+    GMComposeMessagePreferredSecurityProperties *securityProperties = ((ComposeBackEnd_GPGMail *)backEnd).preferredSecurityProperties;
+	GPGMAIL_SECURITY_METHOD securityMethod = securityProperties.securityMethod;
     if(securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
+        // Bug #1059: Internal key state not properly refreshed if key ring changes
+        //
+        // Due to the caching of key lookups introduced in GPG Mail 4.0 key ring
+        // changes were no longer properly picked up in existing composer windows.
+        //
+        // Clear the cache whenever a key ring change is detected to make sure
+        // composer windows also worked with the most current key data.
+        [securityProperties resetKeyStatus];
         [self _updateSecurityControls];
     }
 }
@@ -897,6 +929,12 @@ const NSString *kHeadersEditorFromControlParentItemKey = @"HeadersEditorFromCont
         if([sender length] == 0 && [button.itemArray count])
             sender = [[(button.itemArray)[0] representedObject] gpgNormalizedEmail];
         
+        // If sender is still nil, which can be the case if no from menu is displayed
+        // as only one account is setup, use the sender currently set on the back end.
+        if([sender length] == 0) {
+            sender = [[[[mailself composeViewController] backEnd] sender] gpgNormalizedEmail];
+        }
+
         toolTip = [NSString stringWithFormat:GMLocalizedString(@"COMPOSE_WINDOW_TOOLTIP_CAN_NOT_PGP_SIGN"), sender];
     }
     else {

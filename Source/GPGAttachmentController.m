@@ -408,13 +408,14 @@
 }
 
 - (void)awakeFromNib {
-    // Get attachment for row.
-    NSDictionary *attachment = attachments[0];
-	if ([attachment valueForKey:@"error"]) {
-        [scrollView setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:0.9451 blue:0.6074 alpha:1.0]];
-	} else {
-        [scrollView setBackgroundColor:[NSColor whiteColor]];
-	}
+	// Do not use a special background color for errors, until a dark mode compatible color is defined.
+//    // Get attachment for row.
+//    NSDictionary *attachment = attachments[0];
+//	if ([attachment valueForKey:@"error"]) {
+//        [scrollView setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:0.9451 blue:0.6074 alpha:1.0]];
+//	} else {
+//        [scrollView setBackgroundColor:[NSColor whiteColor]];
+//	}
 	initialHeight = self.window.contentView.frame.size.height;
 }
 
@@ -439,13 +440,14 @@
 }
 
 - (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)rowIndex {
-    // Get attachment for row.
-    NSDictionary *attachment = attachments[rowIndex];
-    if([attachment valueForKey:@"error"])
-        [scrollView setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:0.9451 blue:0.6074 alpha:1.0]];
-    else
-        [scrollView setBackgroundColor:[NSColor whiteColor]];
-    
+	// Do not use a special background color for errors, until a dark mode compatible color is defined.
+//    // Get attachment for row.
+//    NSDictionary *attachment = attachments[rowIndex];
+//    if([attachment valueForKey:@"error"])
+//        [scrollView setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:0.9451 blue:0.6074 alpha:1.0]];
+//    else
+//        [scrollView setBackgroundColor:[NSColor whiteColor]];
+	
     return YES;
 }
 

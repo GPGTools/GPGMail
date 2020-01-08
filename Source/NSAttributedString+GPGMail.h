@@ -48,4 +48,7 @@
  */
 + (NSAttributedString *)attributedStringWithString:(NSString *)string;
 
+// Only < macOS 10.15
++ (id)headerAttributes;
+
 @end

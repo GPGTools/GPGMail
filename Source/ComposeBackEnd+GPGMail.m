@@ -9,9 +9,7 @@
 #import "objc/runtime.h"
 #import <AppKit/AppKit.h>
 #import <MCOutgoingMessage.h>
-#import <_MCOutgoingMimeBody.h>
 //#import <MessageBody.h>
-#import <MCMimeBody.h>
 #import <MCMimePart.h>
 #import <MCMessageGenerator.h>
 //#import <NSString-EmailAddressString.h>
@@ -51,6 +49,7 @@
 
 #import "GMComposeMessagePreferredSecurityProperties.h"
 
+
 #define MAIL_SELF ((ComposeBackEnd *)self)
 
 extern NSString * const kComposeViewControllerPreventAutoSave;
@@ -62,7 +61,7 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
 
 @interface ComposeBackEnd_GPGMail ()
 
-@property (nonatomic, retain) NSLock *preferredSecurityPropertiesAccessLock;
+@property (nonatomic, retain) NSRecursiveLock *preferredSecurityPropertiesAccessLock;
 
 @end
 
@@ -72,6 +71,134 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
 - (id)MA_makeMessageWithContents:(WebComposeMessageContents *)contents isDraft:(BOOL)isDraft shouldSign:(BOOL)shouldSign shouldEncrypt:(BOOL)shouldEncrypt shouldSkipSignature:(BOOL)shouldSkipSignature shouldBePlainText:(BOOL)shouldBePlainText {
     if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
         return [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:shouldSign shouldEncrypt:shouldEncrypt shouldSkipSignature:shouldSkipSignature shouldBePlainText:shouldBePlainText];
+    }
+    GMComposeMessagePreferredSecurityProperties *securityProperties = self.preferredSecurityProperties;
+
+    GPGMAIL_SECURITY_METHOD securityMethod = securityProperties.securityMethod;
+
+    BOOL bailOut = NO;
+
+    // Currently there are three cases where it's time to bail out early.
+    // 1.) securityMethod is SMIME
+    // 2.) The message is a calendar event which is sent from iCal without user interaction.
+    //     In this case, `userShouldSignMessage` and `userShouldEncryptMessage` will be set to `ThreeStateBooleanUndetermined`
+    // 3.) The message is neither a draft nor should it be encrypted or signed.
+    bailOut = securityMethod != GPGMAIL_SECURITY_METHOD_OPENPGP;
+    if(!bailOut) {
+        bailOut = [self sentActionInvokedFromiCalWithContents:contents] && securityProperties.userShouldSignMessage == ThreeStateBooleanUndetermined && securityProperties.userShouldEncryptMessage == ThreeStateBooleanUndetermined;
+    }
+    if(!bailOut) {
+        bailOut = !isDraft && !shouldSign && !shouldEncrypt;
+    }
+
+    if(bailOut) {
+        return [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:shouldSign shouldEncrypt:shouldEncrypt shouldSkipSignature:shouldSkipSignature shouldBePlainText:shouldBePlainText];
+    }
+
+    // OpenPGP Drafts are encrypted by default (unless the user disabled that feature. In that case
+    // shouldEncrypt is set to YES regardless of its current value.
+    // It's important however to store the original values for shouldEncrypt and shouldSign in case of a draft,
+    // since these values are automatically restored once the draft is continued by the user.
+    BOOL userWantsDraftsEncrypted = [[GPGOptions sharedOptions] boolForKey:@"OptionallyEncryptDrafts"];
+    BOOL userWantsInlinePGP = [[GPGOptions sharedOptions] boolForKey:@"UseOpenPGPInlineToSend"];
+
+    // TODO: Find out how to port the flagging of keys to the new method based on certificates and no longer on NSStrings.
+
+    // First handle PGP/MIME, since that requires less manual changes (at the moment).
+
+
+    // Fix up text to be signed.
+    if(shouldSign) {
+        contents.plainText = [self plainTextFixedForSigning:[contents.plainText mutableCopy] shouldAddNewLine:shouldSign && !shouldEncrypt];
+    }
+
+    // TODO: Remove before release.
+    // FOR STEVE ONLY.
+    //  NSAssert(!shouldSign, @"Yeah, I can't allow you to sign this message. Also, we want to test the crash reporter.");
+
+    // Before the message is created in -[ComposeBackEnd outgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:]
+    // additional headers have to be added. If they're added here, they might disappear.
+    // In order for the headers not to be removed, they have to be added in -[ComposeBackEnd outgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:].
+    // Since the following values are not all available in that method, they are attached to the contents object, and later add to the headers.
+    // This is later checked, to determine the real isDraft value.
+    [contents setIvar:@"IsDraft" value:@(isDraft)];
+    // For drafts, Mail doesn't pass in the real states of the encrypt and sign buttons, so they are fetched from the
+    // security properties.
+    [contents setIvar:@"ShouldEncrypt" value:@(securityProperties.shouldEncryptMessage)];
+    [contents setIvar:@"ShouldSign" value:@(securityProperties.shouldSignMessage)];
+
+    // TODO: Find out how to properly handle encryption of drafts in regards to available keys and stuff.
+    BOOL encryptDraft = userWantsDraftsEncrypted;
+
+    // On to creating the actual message.
+    // Drafts and "normal" outgoing messages are handled a bit differently.
+    // Drafts are *never* signed, otherwise the user would have to enter their passphrase everytime a draft is created,
+    // depending on the cache time set.
+    // Also by default Mail doesn't encrypt or sign drafts. In addition, Mail only creates a very basic MIME tree for drafts,
+    // which would be unsuitable for PGP/MIME processed messages.
+    // In order to force Mail to encrypt messages even if a draft is created, isDraft is always passed as NO to the native
+    // method.
+    BOOL signMessage = isDraft ? NO : securityProperties.shouldSignMessage;
+    BOOL encryptMessage = isDraft ? encryptDraft : securityProperties.shouldEncryptMessage;
+
+    MCOutgoingMessage *outgoingMessage = [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:signMessage shouldEncrypt:encryptMessage shouldSkipSignature:shouldSkipSignature shouldBePlainText:shouldBePlainText];
+
+    // NOTE: The monitor is set on the threadDictionary of the current thread. So as long as any error which
+    //       might occur during message creation is set on the same thread, it's reliably matching this message.
+    NSError *creationError = [(MCActivityMonitor *)[MCActivityMonitor currentMonitor] error];
+    // When message creation failed, `outgoingMessage` will be `nil`.
+    // It's however also possible that the user cancelled the pinentry dialog, in which case
+    // `outgoingMessage` contains a valid message but an error is set on the current activity monitor.
+
+    // Bug #999: GPG Mail randomly displays an error alert during message creation
+    //
+    // In case `creationError` was not nil, GPG Mail falsely assumed that an error
+    // in relation to encrypting or signing the message had occurred and would return nil
+    // instead of a valid outgoing message. As a result the user would be presented with an error dialog.
+    //
+    // In most reported cases, the error was related to Mail temporarily being unable to contact a mail server.
+    //
+    // In order to properly handle these cases, GPG Mail must compare the error code
+    // of errors set on the current monitor against the error codes for
+    // signing or encryption errors.
+    // Only if the error is either a signing or encryption error, nil is returned
+    // instead of an outgoing message object to have Mail present an error alert to
+    // the user if necessary.
+    if([creationError code] != 1035 && [creationError code] != 1036) {
+        // The error is not relevant for GPG Mail. Mail will deal with it when checking
+        // [[MCActivityMonitor currentMonitor] error]
+        creationError = nil;
+    }
+    BOOL messageCreationSucceeded = outgoingMessage != nil && !creationError;
+    if(!messageCreationSucceeded) {
+        // If a draft should have been created, the user is presented with an error message and
+        // is allowed to continue editing the message, after reacting to the error message.
+        BOOL signingCancelled = [creationError.userInfo[@"GPGErrorCode"] integerValue] == GPGErrorCancelled;
+
+        if(isDraft) {
+            // It should also be possible to simply cancel the activity monitor.
+            // TODO: Properly test this!.
+            [[MCActivityMonitor currentMonitor] cancel];
+            // Cancel saving to prevent the default error message.
+            //[self setIvar:@"cancelSaving" value:(id)kCFBooleanTrue];
+
+            // In case an error occured due to the user cancelling out the pinentry request, no error is displayed.
+            if(!signingCancelled) {
+                // The error message should be set on the current activity monitor, so we
+                // simply have to fetch it.
+                GM_CAST_CLASS(NSError *, id) error = (NSError *)[(MCActivityMonitor *)[MCActivityMonitor currentMonitor] error];
+                [self performSelectorOnMainThread:@selector(didCancelMessageDeliveryForError:) withObject:error waitUntilDone:NO];
+            }
+        }
+        return nil;
+    }
+
+    return outgoingMessage;
+}
+
+- (id)MA_makeMessageWithContents:(WebComposeMessageContents *)contents isDraft:(BOOL)isDraft shouldSign:(BOOL)shouldSign shouldEncrypt:(BOOL)shouldEncrypt shouldSkipSignature:(BOOL)shouldSkipSignature {
+    if(![[GPGMailBundle sharedInstance] hasActiveContractOrActiveTrial]) {
+        return [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:shouldSign shouldEncrypt:shouldEncrypt shouldSkipSignature:shouldSkipSignature];
     }
     GMComposeMessagePreferredSecurityProperties *securityProperties = self.preferredSecurityProperties;
     
@@ -93,7 +220,7 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
     }
     
     if(bailOut) {
-        return [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:shouldSign shouldEncrypt:shouldEncrypt shouldSkipSignature:shouldSkipSignature shouldBePlainText:shouldBePlainText];
+        return [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:shouldSign shouldEncrypt:shouldEncrypt shouldSkipSignature:shouldSkipSignature];
     }
     
     // OpenPGP Drafts are encrypted by default (unless the user disabled that feature. In that case
@@ -142,7 +269,7 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
     BOOL signMessage = isDraft ? NO : securityProperties.shouldSignMessage;
     BOOL encryptMessage = isDraft ? encryptDraft : securityProperties.shouldEncryptMessage;
     
-    MCOutgoingMessage *outgoingMessage = [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:signMessage shouldEncrypt:encryptMessage shouldSkipSignature:shouldSkipSignature shouldBePlainText:shouldBePlainText];
+    MCOutgoingMessage *outgoingMessage = [self MA_makeMessageWithContents:contents isDraft:isDraft shouldSign:signMessage shouldEncrypt:encryptMessage shouldSkipSignature:shouldSkipSignature];
     
     // NOTE: The monitor is set on the threadDictionary of the current thread. So as long as any error which
     //       might occur during message creation is set on the same thread, it's reliably matching this message.
@@ -280,74 +407,160 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
  draft if "Store drafts on server" is activated.
  We hook into this message, to force the draft setting to be on for drafts, AFTER the encrypt and sign flags are set.
  This way, the messages remain actual drafts, and GMail is satisfied as well and behaves as it should.
- 
+
  On Mavericks the method is called: newOutgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:
  On (Mountain)Lion the method is called: outgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:
- 
+
  GMCodeInjector makes sure, that the correct method is overridden by our own.
  */
 - (id)MAOutgoingMessageUsingWriter:(id)writer contents:(id)contents headers:(id)headers isDraft:(BOOL)isDraft shouldBePlainText:(BOOL)shouldBePlainText NS_RETURNS_RETAINED {
     // Mail doesn't pass in the sign status, when saving a draft, so we have to get it ourselves.
     // For encrypt we also use the state of the button, shouldEncrypt is overriden by our own
     // logic to always encrypt drafts if possible.
+
     GMComposeMessagePreferredSecurityProperties *securityProperties = [self preferredSecurityProperties];
+    NSDictionary *secureDraftHeaders = nil;
+    GPGMAIL_SECURITY_METHOD securityMethod = GPGMAIL_SECURITY_METHOD_OPENPGP;
+
+    @try {
+        [self.preferredSecurityPropertiesAccessLock lock];
+        if(isDraft) {
+            secureDraftHeaders = [[securityProperties secureDraftHeaders] copy];
+        }
+        securityMethod = securityProperties.securityMethod;
+    }
+    @catch(NSException *error) {
+        NSLog(@"-[ComposeBackEnd MAOutgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:] - error creating outgoing message: %@", error);
+        return [self MAOutgoingMessageUsingWriter:writer contents:contents headers:headers isDraft:isDraft shouldBePlainText:shouldBePlainText];
+    }
+    @finally {
+        [self.preferredSecurityPropertiesAccessLock unlock];
+    }
 
     if(isDraft) {
-		// Prevent hang on 10.10 when restoring drafts.
-		// Mail on 10.10 needs the "x-apple-mail-remote-attachments" header in every draft mail.
-		// See: https://gpgtools.lighthouseapp.com/projects/65764-gpgmail/tickets/871
-		[headers setHeader:self.GMShouldDownloadRemoteAttachments ? @"YES" : @"NO" forKey:@"x-apple-mail-remote-attachments"];
+        // Prevent hang on 10.10 when restoring drafts.
+        // Mail on 10.10 needs the "x-apple-mail-remote-attachments" header in every draft mail.
+        // See: https://gpgtools.lighthouseapp.com/projects/65764-gpgmail/tickets/871
+        [headers setHeader:self.GMShouldDownloadRemoteAttachments ? @"YES" : @"NO" forKey:@"x-apple-mail-remote-attachments"];
 
-        NSDictionary *secureDraftHeaders = [securityProperties secureDraftHeaders];
-        for(NSString *headerKey in [securityProperties secureDraftHeaders]) {
+        for(NSString *headerKey in secureDraftHeaders) {
             [headers setHeader:[secureDraftHeaders objectForKey:headerKey] forKey:headerKey];
         }
 
-		// MailTags seems to duplicate our mail headers, if the message is to be encrypted.
-		// This behaviour is worked around in [MCMessageGenerator _newDataForMimePart:withPartData:]
-		// by removing the duplicate mail headers.
-		// We should however only interfere, if a draft is being created, since this workaround might not be suitable
-		// for every type of message.
-		// In order for the MCMessageGenerator instance to know if a draft is being created,
-		// we add a flag to it.
-		[writer setIvar:@"IsDraft" value:@(YES)];
+        // MailTags seems to duplicate our mail headers, if the message is to be encrypted.
+        // This behaviour is worked around in [MCMessageGenerator _newDataForMimePart:withPartData:]
+        // by removing the duplicate mail headers.
+        // We should however only interfere, if a draft is being created, since this workaround might not be suitable
+        // for every type of message.
+        // In order for the MCMessageGenerator instance to know if a draft is being created,
+        // we add a flag to it.
+        [writer setIvar:@"IsDraft" value:@(YES)];
 
-        if(securityProperties.securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
+        if(securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
             // If a draft is being created which should be encrypted, but not encryptionCertificates are setup
             // on the writer, a fitting certificate is added at this point.
             BOOL userWantsDraftsEncrypted = [[GPGOptions sharedOptions] boolForKey:@"OptionallyEncryptDrafts"];
-            id smimeLock = [self valueForKey:@"_smimeLock"];
             // Bug #957: Adapt GPGMail to the S/MIME changes introduced in Mail for 10.13.2b3
             //
             // _smimeLock is no longer a simple object to be used with @synchronized but instead
             // a real NSLock.
-            if([smimeLock isKindOfClass:[NSLock class]]) {
-                @try {
-                    [smimeLock lock];
-                    [self GMConfigureEncryptionCertificatesForMessageGenerator:writer shouldEncryptDraft:userWantsDraftsEncrypted];
-                }
-                @catch(NSException *e) {}
-                @finally {
-                    [smimeLock unlock];
-                }
-            }
-            else {
-                @synchronized (smimeLock) {
-                    [self GMConfigureEncryptionCertificatesForMessageGenerator:writer shouldEncryptDraft:userWantsDraftsEncrypted];
-                }
-            }
+            [self runBlockProtectedBySMIMELock:^{
+                [self GMConfigureEncryptionCertificatesForMessageGenerator:writer shouldEncryptDraft:userWantsDraftsEncrypted];
+            }];
         }
-	}
-	else {
+    }
+    else {
         for(NSString *headerKey in [securityProperties secureDraftHeadersKeys]) {
             [headers removeHeaderForKey:headerKey];
         }
-	}
+    }
 
     // Store the security method on the writer.
-    [writer setIvar:kMCMessageGeneratorSecurityMethodKey value:@(securityProperties.securityMethod)];
+    [writer setIvar:kMCMessageGeneratorSecurityMethodKey value:@(securityMethod)];
 
-	return [self MAOutgoingMessageUsingWriter:writer contents:contents headers:headers isDraft:isDraft shouldBePlainText:shouldBePlainText];
+    return [self MAOutgoingMessageUsingWriter:writer contents:contents headers:headers isDraft:isDraft shouldBePlainText:shouldBePlainText];
+}
+
+/**
+ makeMessageWithContents:isDraft:shouldSign:shouldEncrypt:shouldSkipSignature:shouldBePlainText: sets the encrpyt and sign flags
+ internal on the message write. For drafts however, these flags are not set, which leads to unencrypted, unsigned drafts.
+ Our workaround forces drafts to be encrypted and/or signed by disabling the draft setting.
+ The problem is, while that works for normal IMAP accounts, it doesn't for GMail, which creates a new message for each
+ draft if "Store drafts on server" is activated.
+ We hook into this message, to force the draft setting to be on for drafts, AFTER the encrypt and sign flags are set.
+ This way, the messages remain actual drafts, and GMail is satisfied as well and behaves as it should.
+ 
+ On Mavericks the method is called: newOutgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:
+ On (Mountain)Lion the method is called: outgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:
+ 
+ GMCodeInjector makes sure, that the correct method is overridden by our own.
+ */
+- (id)MA_newOutgoingMessageUsingWriter:(id)writer contents:(id)contents headers:(id)headers isDraft:(BOOL)isDraft NS_RETURNS_RETAINED {
+    // Mail doesn't pass in the sign status, when saving a draft, so we have to get it ourselves.
+    // For encrypt we also use the state of the button, shouldEncrypt is overriden by our own
+    // logic to always encrypt drafts if possible.
+
+    GMComposeMessagePreferredSecurityProperties *securityProperties = [self preferredSecurityProperties];
+    NSDictionary *secureDraftHeaders = nil;
+    GPGMAIL_SECURITY_METHOD securityMethod = GPGMAIL_SECURITY_METHOD_OPENPGP;
+
+    @try {
+        [self.preferredSecurityPropertiesAccessLock lock];
+        if(isDraft) {
+            secureDraftHeaders = [[securityProperties secureDraftHeaders] copy];
+        }
+        securityMethod = securityProperties.securityMethod;
+    }
+    @catch(NSException *error) {
+        NSLog(@"-[ComposeBackEnd MAOutgoingMessageUsingWriter:contents:headers:isDraft:shouldBePlainText:] - error creating outgoing message: %@", error);
+        return [self MA_newOutgoingMessageUsingWriter:writer contents:contents headers:headers isDraft:isDraft];
+    }
+    @finally {
+        [self.preferredSecurityPropertiesAccessLock unlock];
+    }
+
+    if(isDraft) {
+        // Prevent hang on 10.10 when restoring drafts.
+        // Mail on 10.10 needs the "x-apple-mail-remote-attachments" header in every draft mail.
+        // See: https://gpgtools.lighthouseapp.com/projects/65764-gpgmail/tickets/871
+        [headers setHeader:self.GMShouldDownloadRemoteAttachments ? @"YES" : @"NO" forKey:@"x-apple-mail-remote-attachments"];
+
+        for(NSString *headerKey in secureDraftHeaders) {
+            [headers setHeader:[secureDraftHeaders objectForKey:headerKey] forKey:headerKey];
+        }
+
+        // MailTags seems to duplicate our mail headers, if the message is to be encrypted.
+        // This behaviour is worked around in [MCMessageGenerator _newDataForMimePart:withPartData:]
+        // by removing the duplicate mail headers.
+        // We should however only interfere, if a draft is being created, since this workaround might not be suitable
+        // for every type of message.
+        // In order for the MCMessageGenerator instance to know if a draft is being created,
+        // we add a flag to it.
+        [writer setIvar:@"IsDraft" value:@(YES)];
+
+        if(securityMethod == GPGMAIL_SECURITY_METHOD_OPENPGP) {
+            // If a draft is being created which should be encrypted, but not encryptionCertificates are setup
+            // on the writer, a fitting certificate is added at this point.
+            BOOL userWantsDraftsEncrypted = [[GPGOptions sharedOptions] boolForKey:@"OptionallyEncryptDrafts"];
+            // Bug #957: Adapt GPGMail to the S/MIME changes introduced in Mail for 10.13.2b3
+            //
+            // _smimeLock is no longer a simple object to be used with @synchronized but instead
+            // a real NSLock.
+            [self runBlockProtectedBySMIMELock:^{
+                [self GMConfigureEncryptionCertificatesForMessageGenerator:writer shouldEncryptDraft:userWantsDraftsEncrypted];
+            }];
+        }
+    }
+    else {
+        for(NSString *headerKey in [securityProperties secureDraftHeadersKeys]) {
+            [headers removeHeaderForKey:headerKey];
+        }
+    }
+
+    // Store the security method on the writer.
+    [writer setIvar:kMCMessageGeneratorSecurityMethodKey value:@(securityMethod)];
+
+    return [self MA_newOutgoingMessageUsingWriter:writer contents:contents headers:headers isDraft:isDraft];
 }
 
 - (void)GMConfigureEncryptionCertificatesForMessageGenerator:(MCMessageGenerator *)messageGenerator shouldEncryptDraft:(BOOL)shouldEncryptDraft {
@@ -389,23 +602,10 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
     //
     // _smimeLock is no longer a simple object to be used with @synchronized but instead
     // a real NSLock.
-    id smimeLock = [self valueForKey:@"_smimeLock"];
-    NSMutableArray *nonEligibleRecipients = [NSMutableArray array];
-    if([smimeLock isKindOfClass:[NSLock class]]) {
-        @try {
-            [smimeLock lock];
-            nonEligibleRecipients = [self _GMRecipientsThatHaveNoKeyForEncryption];
-        }
-        @catch(NSException *e) {}
-        @finally {
-            [smimeLock unlock];
-        }
-    }
-    else {
-        @synchronized(smimeLock) {
-            nonEligibleRecipients = [self _GMRecipientsThatHaveNoKeyForEncryption];
-        }
-    }
+    __block NSArray *nonEligibleRecipients = [NSArray array];
+    [self runBlockProtectedBySMIMELock:^{
+        nonEligibleRecipients = [self _GMRecipientsThatHaveNoKeyForEncryption];
+    }];
 
     return nonEligibleRecipients;
 }
@@ -473,7 +673,17 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
     sender = [MAIL_SELF sender];
     NSArray *recipients = [self GMRealRecipients];
 
-    if(sender) {
+    // Bug #1048: Encryption button stays checked and active even if all
+    //           recipient fields are empty.
+    //
+    // Previously the encryption button stayed enabled and checked, since the
+    // sender is always added to the list of recipients (encrypt-to-self).
+    //
+    // When a new composing window is created however, the encryption button is
+    // disabled. So to make the state consistent, don't add the sender to the
+    // recipients if the recipient fields are empty which results in the encryption
+    // button being disabled, if all recipient fields are emptied.
+    if([recipients count] > 0 && sender) {
         recipients = [recipients arrayByAddingObject:sender];
     }
 
@@ -525,33 +735,38 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
                 [self.preferredSecurityPropertiesAccessLock unlock];
             }
         };
-
-        id smimeLock = [self valueForKey:@"_smimeLock"];
-        // Bug #957: Adapt GPGMail to the S/MIME changes introduced in Mail for 10.13.2b3
-        //
-        // _smimeLock is no longer a simple object to be used with @synchronized but instead
-        // a real NSLock.
-        if([smimeLock isKindOfClass:[NSLock class]]) {
-            @try {
-                [smimeLock lock];
-                checkCertificates();
-            }
-            @catch(NSException *e) {}
-            @finally {
-                [smimeLock unlock];
-            }
-        }
-        else {
-            @synchronized(smimeLock) {
-                checkCertificates();
-            }
-        }
+        [self runBlockProtectedBySMIMELock:^{
+            checkCertificates();
+        }];
         
         // We have our certificate information, now onto running the UI code.
         if(onComplete) {
             onComplete();
         }
     }];
+}
+
+- (void)runBlockProtectedBySMIMELock:(dispatch_block_t)block {
+    id smimeLock = [self valueForKey:@"_smimeLock"];
+    // Bug #957: Adapt GPGMail to the S/MIME changes introduced in Mail for 10.13.2b3
+    //
+    // _smimeLock is no longer a simple object to be used with @synchronized but instead
+    // a real NSLock.
+    if([smimeLock isKindOfClass:[NSLock class]]) {
+        @try {
+            [smimeLock lock];
+            block();
+        }
+        @catch(NSException *e) {}
+        @finally {
+            [smimeLock unlock];
+        }
+    }
+    else {
+        @synchronized(smimeLock) {
+            block();
+        }
+    }
 }
 
 - (NSArray *)GMRealRecipients {
@@ -585,7 +800,8 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
 // prevented from running, until the user has made any changes.
 - (void)MASetIsUndeliverable:(BOOL)isUndeliverable {
     if(isUndeliverable) {
-        [[MAIL_SELF delegate] setIvar:kComposeViewControllerPreventAutoSave value:@(YES)];
+        
+        [(NSObject *)[MAIL_SELF delegate] setIvar:kComposeViewControllerPreventAutoSave value:@(YES)];
     }
     [self MASetIsUndeliverable:isUndeliverable];
 }
@@ -603,17 +819,17 @@ NSString * const kComposeBackEndPreferredSecurityPropertiesAccessLockKey = @"Com
     // The access to the security properties will be guarded by
     // a lock. The _smimeLock doesn't work here, since it might
     // be used recursively by mistake.
-    NSLock *accessLock = [NSLock new];
+    NSRecursiveLock *accessLock = [NSRecursiveLock new];
     object.preferredSecurityPropertiesAccessLock = accessLock;
 
     return self;
 }
 
-- (NSLock *)preferredSecurityPropertiesAccessLock {
+- (NSRecursiveLock *)preferredSecurityPropertiesAccessLock {
     return [self getIvar:kComposeBackEndPreferredSecurityPropertiesAccessLockKey];
 }
 
-- (void)setPreferredSecurityPropertiesAccessLock:(NSLock *)preferredSecurityPropertiesAccessLock {
+- (void)setPreferredSecurityPropertiesAccessLock:(NSRecursiveLock *)preferredSecurityPropertiesAccessLock {
     [self setIvar:kComposeBackEndPreferredSecurityPropertiesAccessLockKey value:preferredSecurityPropertiesAccessLock];
 }
 
